@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+    base: '/FTDNA/',
   title: 'FT DNA',
   description: 'Fast Track Component library',
   appearance: 'dark',
