@@ -1,0 +1,179 @@
+/* FastTrack Design System Tokens */
+@import '../../../dist/tokens.css';
+
+/* Override VitePress brand colors with FastTrack palette */
+:root {
+  /* Brand hierarchy: pink-400 is the primary brand colour */
+  --vp-c-brand-1: #E96092;   /* pink-400 — main brand (links, badges) */
+  --vp-c-brand-2: #D52454;   /* pink-500 — hover variation */
+  --vp-c-brand-3: #C21030;   /* pink-600 — darkest accent */
+  --vp-c-brand-soft: rgba(233, 96, 146, 0.25);
+  --vp-home-hero-name-color: #E96092;
+  --vp-nav-logo-height: 40px;
+
+  /* CTA button states: idle (pink-400) → hover (pink-500) → active (pink-600) */
+  --vp-button-brand-bg: var(--vp-c-brand-1);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-bg: var(--vp-c-brand-3);
+}
+
+/* Swatch grid for color pages */
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 16px 0 32px;
+}
+.swatch {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+}
+.swatch-color {
+  height: 72px;
+  width: 100%;
+}
+.swatch-info {
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  background: var(--vp-c-bg-soft);
+}
+.swatch-info .name {
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  display: block;
+  margin-bottom: 2px;
+}
+.swatch-info .value {
+  color: var(--vp-c-text-3);
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+}
+
+/* Typography preview */
+.type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.type-row:last-child { border-bottom: none; }
+.type-label {
+  min-width: 160px;
+  font-size: 12px;
+  font-family: var(--vp-font-family-mono);
+  color: var(--vp-c-text-3);
+  flex-shrink: 0;
+}
+.type-sample {
+  font-family: 'Inter', sans-serif;
+  color: var(--vp-c-text-1);
+}
+.type-meta {
+  font-size: 11px;
+  color: var(--vp-c-text-3);
+  font-family: var(--vp-font-family-mono);
+  margin-left: auto;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+/* Component status badges */
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-badge.coded {
+  background: #CDEACC;
+  color: #034B02;
+}
+.status-badge.figma-only {
+  background: #FAD7E4;
+  color: #91003F;
+}
+.status-badge.partial {
+  background: #FFF6C9;
+  color: #FDBC25;
+}
+
+/* Semantic token preview row */
+.semantic-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.semantic-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  border: 1px solid var(--vp-c-divider);
+}
+.semantic-name {
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  font-weight: 500;
+  flex: 1;
+}
+.semantic-desc {
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+  flex: 1;
+}
+
+/* Sidebar POC badge — marks wired components */
+.VPSidebarItem .poc-ready {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-radius: 3px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+/* Component demo containers */
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  margin: 16px 0;
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+}
+.demo--col {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.demo-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--vp-c-text-3);
+  width: 100%;
+  margin-bottom: 4px;
+}
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}

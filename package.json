@@ -1,0 +1,28 @@
+{
+  "name": "@fasttrack-solutions/design-system",
+  "version": "1.0.0",
+  "description": "FastTrack Design System — tokens, documentation, and tooling",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fasttrack-solutions/design-system.git"
+  },
+  "scripts": {
+    "build:tokens": "node scripts/build-tokens.js",
+    "dev": "vitepress dev docs",
+    "build:docs": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fasttrack-solutions/design-system/issues"
+  },
+  "homepage": "https://github.com/fasttrack-solutions/design-system#readme",
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.27"
+  }
+}

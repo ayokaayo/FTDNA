@@ -1,0 +1,373 @@
+{
+  "$schema": "https://tokens.studio/json-schema/draft-2023-07-20/schema.json",
+  "$metadata": {
+    "name": "FastTrack Design Tokens - Semantic",
+    "description": "Semantic token aliases — updated to reference Figma-aligned color numbers",
+    "version": "2.0.0",
+    "lastEdited": "2026-02-07",
+    "author": "FastTrack Design System Team",
+    "license": "MIT"
+  },
+  "semantic": {
+    "color": {
+      "primary": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.brand.blue.700}",
+          "$description": "Primary brand color for main actions and highlights"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.brand.blue.800}",
+          "$description": "Darker variant of primary color for hover states"
+        },
+        "darker": {
+          "$type": "color",
+          "$value": "{color.brand.blue.900}",
+          "$description": "Darkest variant of primary color for active states"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.brand.blue.600}",
+          "$description": "Light variant of primary color"
+        },
+        "lighter": {
+          "$type": "color",
+          "$value": "{color.secondary.denim.600}",
+          "$description": "Lighter variant of primary color (#88B3DC)"
+        },
+        "lightest": {
+          "$type": "color",
+          "$value": "{color.brand.blue.100}",
+          "$description": "Lightest variant of primary color for backgrounds"
+        }
+      },
+      "secondary": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.brand.pink.500}",
+          "$description": "Secondary brand color for accents and alternative actions"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.brand.pink.600}",
+          "$description": "Darker variant of secondary color"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.brand.pink.400}",
+          "$description": "Light variant of secondary color"
+        },
+        "lightest": {
+          "$type": "color",
+          "$value": "{color.brand.pink.200}",
+          "$description": "Lightest variant of secondary color"
+        }
+      },
+      "tertiary": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.brand.purple.700}",
+          "$description": "Tertiary brand color for additional emphasis"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.brand.purple.800}",
+          "$description": "Darker variant of tertiary color"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.brand.purple.600}",
+          "$description": "Light variant of tertiary color"
+        }
+      },
+      "success": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.secondary.green.400}",
+          "$description": "Color for successful operations and positive feedback"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.secondary.green.500}",
+          "$description": "Darker variant for success states"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.secondary.green.300}",
+          "$description": "Light variant for success backgrounds"
+        },
+        "lightest": {
+          "$type": "color",
+          "$value": "{color.secondary.green.200}",
+          "$description": "Lightest variant for success backgrounds"
+        }
+      },
+      "warning": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.brand.yellow.500}",
+          "$description": "Color for warnings and caution messaging"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.brand.yellow.700}",
+          "$description": "Darker variant for warning states"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.brand.yellow.600}",
+          "$description": "Light variant for warning backgrounds"
+        },
+        "lightest": {
+          "$type": "color",
+          "$value": "{color.brand.yellow.300}",
+          "$description": "Lightest variant for warning backgrounds"
+        }
+      },
+      "error": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.brand.red.700}",
+          "$description": "Color for errors and destructive actions"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.brand.red.800}",
+          "$description": "Darker variant for error states"
+        },
+        "darker": {
+          "$type": "color",
+          "$value": "{color.brand.red.900}",
+          "$description": "Darkest variant for error states"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.brand.red.600}",
+          "$description": "Light variant for error backgrounds"
+        },
+        "lightest": {
+          "$type": "color",
+          "$value": "{color.brand.red.200}",
+          "$description": "Lightest variant for error backgrounds"
+        }
+      },
+      "info": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.secondary.aqua.700}",
+          "$description": "Color for informational content"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.secondary.aqua.800}",
+          "$description": "Darker variant for info states"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.secondary.aqua.600}",
+          "$description": "Light variant for info backgrounds"
+        },
+        "lightest": {
+          "$type": "color",
+          "$value": "{color.secondary.aqua.400}",
+          "$description": "Lightest variant for info backgrounds"
+        }
+      },
+      "neutral": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.600}",
+          "$description": "Default neutral color for primary text"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.700}",
+          "$description": "Dark neutral for emphasis"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.500}",
+          "$description": "Light neutral for secondary text"
+        },
+        "lighter": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.400}",
+          "$description": "Lighter neutral for tertiary text"
+        },
+        "lightest": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.200}",
+          "$description": "Lightest neutral for disabled or muted text"
+        }
+      },
+      "surface": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.white.50}",
+          "$description": "Default background/surface color"
+        },
+        "secondary": {
+          "$type": "color",
+          "$value": "{color.neutral.white.100}",
+          "$description": "Secondary surface/container background"
+        },
+        "tertiary": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.200}",
+          "$description": "Tertiary surface for nested content"
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{color.neutral.black.900}",
+          "$description": "Inverse surface for contrast"
+        }
+      },
+      "on-surface": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.700}",
+          "$description": "Default text color on light surfaces"
+        },
+        "secondary": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.600}",
+          "$description": "Secondary text on light surfaces"
+        },
+        "tertiary": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.500}",
+          "$description": "Tertiary text on light surfaces"
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.400}",
+          "$description": "Disabled text on light surfaces"
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{color.neutral.white.50}",
+          "$description": "Text color on dark surfaces"
+        }
+      },
+      "on-primary": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.white.50}",
+          "$description": "Text/content color on primary backgrounds"
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.brand.blue.100}",
+          "$description": "Subtle text on primary backgrounds"
+        }
+      },
+      "on-secondary": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.white.50}",
+          "$description": "Text/content color on secondary backgrounds"
+        }
+      },
+      "on-success": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.white.50}",
+          "$description": "Text/content color on success backgrounds"
+        }
+      },
+      "on-error": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.white.50}",
+          "$description": "Text/content color on error backgrounds"
+        }
+      },
+      "border": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.300}",
+          "$description": "Default border color"
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.200}",
+          "$description": "Subtle border color for lighter separation"
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{color.neutral.gray.500}",
+          "$description": "Strong border color for emphasis"
+        },
+        "focus": {
+          "$type": "color",
+          "$value": "{color.brand.blue.700}",
+          "$description": "Border color for focused interactive elements"
+        }
+      },
+      "focus-ring": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.brand.blue.700}",
+          "$description": "Focus ring color for keyboard navigation"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "{color.brand.blue.400}",
+          "$description": "Light variant of focus ring"
+        }
+      },
+      "accent": {
+        "primary": {
+          "$type": "color",
+          "$value": "{color.brand.orange.500}",
+          "$description": "Primary accent color for highlights"
+        },
+        "secondary": {
+          "$type": "color",
+          "$value": "{color.secondary.magenta.700}",
+          "$description": "Secondary accent color"
+        }
+      },
+      "link": {
+        "base": {
+          "$type": "color",
+          "$value": "{color.brand.blue.700}",
+          "$description": "Default link color"
+        },
+        "hover": {
+          "$type": "color",
+          "$value": "{color.brand.blue.800}",
+          "$description": "Link color on hover"
+        },
+        "active": {
+          "$type": "color",
+          "$value": "{color.brand.blue.900}",
+          "$description": "Link color when active/visited"
+        },
+        "visited": {
+          "$type": "color",
+          "$value": "{color.secondary.lilac.700}",
+          "$description": "Visited link color"
+        }
+      },
+      "overlay": {
+        "base": {
+          "$type": "color",
+          "$value": "rgba(0, 0, 0, 0.5)",
+          "$description": "Default overlay/backdrop color"
+        },
+        "light": {
+          "$type": "color",
+          "$value": "rgba(0, 0, 0, 0.3)",
+          "$description": "Light overlay for subtle dimming"
+        },
+        "dark": {
+          "$type": "color",
+          "$value": "rgba(0, 0, 0, 0.7)",
+          "$description": "Dark overlay for strong dimming"
+        }
+      }
+    }
+  }
+}

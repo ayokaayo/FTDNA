@@ -1,0 +1,163 @@
+# FastTrack Vue Components Library — AI Rules
+# This file is automatically loaded by Cursor IDE and compatible VS Code extensions.
+# For the complete reference, see .fasttrack/rules.md
+
+## Project Context
+
+You are working on the FastTrack Design System, a Vue 3 + TypeScript component library.
+
+- Package: @fasttrack-solutions/vue-components-lib
+- Design system: @fasttrack-solutions/design-system
+- Registry: GitHub Packages (private, npm.pkg.github.com)
+- Documentation: VitePress (in docs/ directory)
+- Figma library: DSP-Master (839 components across 29 sections)
+- Icons: Font Awesome (duotone preferred, prefix fad)
+
+## ABSOLUTE RULES — Never Break These
+
+1. COMPONENT PREFIX: Every component MUST use the FT prefix. FTButton, FTCard, FTInput, FTModal. No exceptions.
+
+2. NO HARDCODED VALUES: Never write a hex color (#D52454), pixel value, or font name directly in a component. Always use CSS custom properties:
+   - Colors: var(--ft-color-primary-base), var(--ft-color-error-dark)
+   - Typography: var(--ft-font-family-text), var(--ft-font-weight-bold)
+   - Component tokens: var(--ft-btn-height), var(--ft-card-radius)
+
+3. SEMANTIC TOKENS FIRST: Use var(--ft-color-primary-base) not var(--ft-color-brand-blue-700). The semantic layer exists so we can change the underlying palette without touching components.
+
+4. COMPOSITION API: Default to <script setup lang="ts"> for all new components.
+
+5. BOOLEAN PROPS: Use <FTButton primary> not <FTButton variant="primary">. Style variants are boolean props.
+
+## Token System
+
+Design tokens are the single source of truth for all visual values.
+
+Files:
+- tokens/colors.tokens.json → 67 colors (W3C format)
+- tokens/typography.tokens.json → 17 text styles
+- tokens/semantic.tokens.json → Functional aliases
+- dist/tokens.css → 159 CSS custom properties (--ft-* prefix)
+- dist/tokens.scss → SCSS variables + maps
+- dist/useTokens.ts → Vue 3 composable + TypeScript types
+
+Color families: pink, purple, blue, yellow, red, orange (brand); magenta, thunderbird, lilac, aqua, denim, apple (secondary); black, gray, white (neutral)
+Shade scale: 100-900 where 700 is the base shade.
+
+Semantic roles:
+- primary = blue (--ft-color-primary-base → blue-700)
+- secondary = pink (--ft-color-secondary-base → pink-700)
+- tertiary = purple (--ft-color-tertiary-base → purple-700)
+- success = apple green (--ft-color-success-base → apple-700)
+- warning = yellow (--ft-color-warning-base → yellow-500)
+- error = red (--ft-color-error-base → red-700)
+- info = aqua (--ft-color-info-base → aqua-700)
+
+Typography: Inter (text), Noto Sans Mono (code). Two weights: Regular (400), Bold (700).
+
+## Component Conventions
+
+### Vue SFC Structure
+
+<template>
+  <div :class="['ft-{name}', { 'ft-{name}--primary': primary }]" :aria-disabled="disabled">
+    <slot />
+  </div>
+</template>
+
+<script setup lang="ts">
+interface FT{Name}Props {
+  primary?: boolean
+  secondary?: boolean
+  disabled?: boolean
+  loading?: boolean
+}
+const props = withDefaults(defineProps<FT{Name}Props>(), {
+  primary: false,
+  disabled: false,
+})
+</script>
+
+<style scoped>
+.ft-{name} {
+  --ft-{name}-bg: var(--ft-color-surface-base);
+  --ft-{name}-fg: var(--ft-color-on-surface-base);
+  background: var(--ft-{name}-bg);
+  color: var(--ft-{name}-fg);
+  font-family: var(--ft-font-family-text);
+  transition: all 150ms ease;
+}
+</style>
+
+### Props Patterns
+
+Style variants (boolean, mutually exclusive): primary, secondary, tertiary, action, warning, success, info, error
+State props (boolean): loading, disabled, active
+Icon props: icon (string, FA icon name), iconOnly (boolean), iconSmall/iconMedium/iconBig (boolean)
+Tooltip: tooltip (string), tooltipPosition (string: top|bottom|left|right)
+
+### CSS Architecture
+
+- BEM-like classes: .ft-button, .ft-button__icon, .ft-button--primary
+- Component CSS variables: --ft-{component}-{property}-{state}
+  Example: --ft-btn-height, --ft-btn-main-bg-default, --ft-btn-main-bg-hover
+- Variables reference semantic tokens: --ft-btn-bg: var(--ft-color-primary-base)
+- Transitions: 150ms ease for all interactive states
+
+## Accessibility (Non-Negotiable)
+
+- Keyboard: Enter/Space for buttons, Escape to close overlays, Arrow keys for lists
+- Focus ring: 2px solid var(--ft-color-focus-ring-base) with 2px offset
+- Labels: Every form element needs aria-label, aria-labelledby, or visible <label>
+- Contrast: WCAG 2.1 AA minimum (4.5:1 text, 3:1 large text/UI)
+- Disabled: aria-disabled="true", tabindex="-1", opacity 0.5
+- Loading: aria-busy="true", spinner with role="status" and aria-label="Loading"
+
+## Documentation (VitePress)
+
+Each component gets a page at docs/components/{name}.md with these sections:
+1. Title + description
+2. Usage (Composition API + Options API examples)
+3. Styles (variant descriptions)
+4. States (disabled, loading)
+5. Props table (Name | Type | Default | Description)
+6. CSS variables table (Variable | Default Value)
+
+Reference: docs/components/button.md is the gold standard.
+
+## Testing (Vitest + Vue Test Utils)
+
+Test file: {ComponentName}.test.ts
+Required tests:
+1. Renders correctly (snapshot)
+2. Each prop variant applies correct class
+3. Events emit correctly
+4. Keyboard interaction works
+5. ARIA attributes present
+6. CSS variables applied
+
+## Figma Translation
+
+Figma naming: Type=value, Status=value, Size=value (parameterized)
+94% of 839 Figma components follow this pattern.
+
+Translation process:
+1. Figma variant properties → Vue prop names
+2. Boolean (2 values) → boolean prop; 3+ values → string enum prop
+3. Colors → map to --ft-color-* semantic tokens
+4. Spacing/sizing → CSS variables
+
+## File Structure
+
+src/components/FT{Name}/
+  FT{Name}.vue       # Component
+  FT{Name}.test.ts   # Tests
+  FT{Name}.css       # Styles (if not scoped in SFC)
+  index.ts           # Barrel export
+
+docs/components/{name}.md  # Documentation
+
+## Commands
+
+npm run build:tokens    # Rebuild CSS/SCSS/TS from token JSON files
+npm run dev             # VitePress dev server (localhost:5173)
+npm run build:docs      # Build static documentation site

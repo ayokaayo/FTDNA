@@ -1,0 +1,396 @@
+{
+  "metadata": {
+    "generatedDate": "2026-02-06",
+    "sourceLibrary": "DSP-Master Figma Design System",
+    "vuePlaybook": "components.fasttrack.dev",
+    "totalFigmaComponents": 839,
+    "totalVueComponents": 20,
+    "totalVueComposables": 1,
+    "vuePrefix": "FT"
+  },
+  "components": [
+    {
+      "name": "Alert",
+      "figmaSection": "Alert",
+      "figmaVariantCount": 7,
+      "vueComponent": "FTAlert",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Figma has 7 alert variants. Vue component exists but needs review for status/variant alignment (success, error, warning, info)"
+    },
+    {
+      "name": "Button",
+      "figmaSection": "Buttons",
+      "figmaVariantCount": 40,
+      "vueComponent": "FTButton",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "critical",
+      "notes": "Figma has 40 variants with Type, Status, Size, Leading icon parameters. Vue has primary/secondary/tertiary/action props. Comprehensive audit needed for variant coverage"
+    },
+    {
+      "name": "Checkbox",
+      "figmaSection": "Selection",
+      "figmaVariantCount": 53,
+      "vueComponent": "FTCheckbox",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Selection section includes checkboxes with various states. Vue component exists; verify coverage of all state variants"
+    },
+    {
+      "name": "Confirm Dialog",
+      "figmaSection": "Modals",
+      "figmaVariantCount": 3,
+      "vueComponent": "FTConfirm",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Figma has 3 modal variants. Vue Confirm component exists; ensure alignment with modal patterns"
+    },
+    {
+      "name": "Datepicker",
+      "figmaSection": "Input Fields",
+      "figmaVariantCount": 38,
+      "vueComponent": "FTDatepicker",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Input Fields section covers text, email, number, password, select. Datepicker likely subset. Need to verify coverage"
+    },
+    {
+      "name": "Dropdown",
+      "figmaSection": "Dropdown-base",
+      "figmaVariantCount": 54,
+      "vueComponent": "FTSelect",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "critical",
+      "notes": "Figma has Dropdown-base (54) and Specific Dropdown (17) sections. Vue Select component exists but may need variants for different dropdown types"
+    },
+    {
+      "name": "Dropdown - Specific",
+      "figmaSection": "Specific Dropdown",
+      "figmaVariantCount": 17,
+      "vueComponent": "FTSelect",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Specialized dropdown implementations (category, country, language, role, etc.). May need dedicated components or variant props in FTSelect"
+    },
+    {
+      "name": "Floating Label Input",
+      "figmaSection": "Input Fields",
+      "figmaVariantCount": 38,
+      "vueComponent": "FTFloatingLabel",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Input Fields section includes floating label patterns. Vue component exists; verify all input states covered"
+    },
+    {
+      "name": "Image Picker",
+      "figmaSection": "Image Picker",
+      "figmaVariantCount": 40,
+      "vueComponent": null,
+      "vueExists": false,
+      "status": "figma-only",
+      "priority": "medium",
+      "notes": "40 variants in Figma. No corresponding Vue component. Evaluate need and create if essential for FastTrack"
+    },
+    {
+      "name": "Input Field",
+      "figmaSection": "Input Fields",
+      "figmaVariantCount": 38,
+      "vueComponent": "FTInput",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "critical",
+      "notes": "38 variants with Type (text, email, number, password, select) and State parameters. Vue has FTInput; verify all input types covered"
+    },
+    {
+      "name": "Navigation Bar",
+      "figmaSection": "Nav bars",
+      "figmaVariantCount": 39,
+      "vueComponent": "FTNavbar",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "39 nav bar variants. Vue Navbar exists; ensure responsive variants and positioning options align"
+    },
+    {
+      "name": "Modal",
+      "figmaSection": "Modals",
+      "figmaVariantCount": 3,
+      "vueComponent": "FTModal",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Only 3 modal variants in Figma. Vue Modal component exists; may need more variants or composition patterns"
+    },
+    {
+      "name": "Notification",
+      "figmaSection": "Alert",
+      "figmaVariantCount": 7,
+      "vueComponent": null,
+      "vueExists": false,
+      "vueComposable": "useNotification",
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Alert section maps to Notification composable in Vue. FTAlert component likely used; verify composable integration"
+    },
+    {
+      "name": "Options Selector",
+      "figmaSection": "Quick access items",
+      "figmaVariantCount": 76,
+      "vueComponent": "FTOptionsSelector",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "76 quick access item variants. Vue component exists; verify option types and selection patterns"
+    },
+    {
+      "name": "Pagination",
+      "figmaSection": "Pagination",
+      "figmaVariantCount": 6,
+      "vueComponent": "FTPaging",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "medium",
+      "notes": "6 pagination variants. Vue Paging component exists; verify variant coverage for different page states"
+    },
+    {
+      "name": "Panel",
+      "figmaSection": "Panel",
+      "figmaVariantCount": 13,
+      "vueComponent": "FTPanel",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "medium",
+      "notes": "13 panel variants. Vue Panel component exists; verify container and layout options"
+    },
+    {
+      "name": "Placeholder",
+      "figmaSection": "Placeholders",
+      "figmaVariantCount": 6,
+      "vueComponent": null,
+      "vueExists": false,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "6 placeholder/skeleton variants in Figma. No Vue component. Consider if skeleton loaders needed"
+    },
+    {
+      "name": "Radio Button",
+      "figmaSection": "Selection",
+      "figmaVariantCount": 53,
+      "vueComponent": "FTRadio",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Selection section includes radio buttons. Vue component exists; verify all state variants"
+    },
+    {
+      "name": "Sliding Panel",
+      "figmaSection": "Panel",
+      "figmaVariantCount": 13,
+      "vueComponent": "FTSlidingPanel",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "medium",
+      "notes": "Part of Panel section. Verify sliding/drawer behavior implementation"
+    },
+    {
+      "name": "Split View",
+      "figmaSection": "Panel",
+      "figmaVariantCount": 13,
+      "vueComponent": "FTSplitView",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "medium",
+      "notes": "Part of Panel section. Verify layout and resizing capabilities"
+    },
+    {
+      "name": "Spinner",
+      "figmaSection": "Smaller components",
+      "figmaVariantCount": 10,
+      "vueComponent": "FTSpinner",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "medium",
+      "notes": "10 smaller components include spinner/loader. Vue component exists; verify animation variants"
+    },
+    {
+      "name": "Table",
+      "figmaSection": "Table",
+      "figmaVariantCount": 25,
+      "vueComponent": "FTTable",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "25 table variants with column and state parameters. Vue component exists; verify sortable, paginated, row-action variants"
+    },
+    {
+      "name": "Tabs",
+      "figmaSection": "Tabs",
+      "figmaVariantCount": 32,
+      "vueComponent": "FTTabs",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "32 tab variants. Vue component exists; verify vertical/horizontal, disabled, and badge support"
+    },
+    {
+      "name": "Tag",
+      "figmaSection": "Tags and statuses",
+      "figmaVariantCount": 49,
+      "vueComponent": null,
+      "vueExists": false,
+      "status": "figma-only",
+      "priority": "medium",
+      "notes": "49 tag and status variants. No dedicated Vue component. Consider if separate Tag component needed or part of other components"
+    },
+    {
+      "name": "Tooltip",
+      "figmaSection": "Tooltips + Data Balloons",
+      "figmaVariantCount": 41,
+      "vueComponent": "FTTooltip",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "41 tooltip and data balloon variants. Vue component exists; verify positioning, triggers, and content types"
+    },
+    {
+      "name": "Toggle",
+      "figmaSection": "Toggles for modal",
+      "figmaVariantCount": 12,
+      "vueComponent": null,
+      "vueExists": false,
+      "status": "figma-only",
+      "priority": "medium",
+      "notes": "12 toggle switch variants for modals. No dedicated Vue component. Verify if needed as standalone or modal-specific"
+    },
+    {
+      "name": "Card",
+      "figmaSection": "Cards",
+      "figmaVariantCount": 17,
+      "vueComponent": null,
+      "vueExists": false,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "17 card component layouts. No Vue component. Could be composition of Panel + other components"
+    },
+    {
+      "name": "Flag",
+      "figmaSection": "Flags",
+      "figmaVariantCount": 261,
+      "vueComponent": null,
+      "vueExists": false,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "261 country flag components. Likely used as assets/icons. Consider image-based or icon-library approach"
+    },
+    {
+      "name": "Quick Access Item",
+      "figmaSection": "Quick access items",
+      "figmaVariantCount": 76,
+      "vueComponent": "FTOptionsSelector",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "76 quick access variants. Maps to FTOptionsSelector; verify all item types and interactions"
+    }
+  ],
+  "unmappedFigmaSections": [
+    {
+      "section": "activity conversion",
+      "componentCount": null,
+      "vueCounterpart": null,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "Utility section for activity/conversion tracking. Evaluate if business logic components needed"
+    },
+    {
+      "section": "dynamic variables",
+      "componentCount": null,
+      "vueCounterpart": null,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "Utility section for dynamic content. May be config-driven rather than component-based"
+    },
+    {
+      "section": "filter by tags",
+      "componentCount": null,
+      "vueCounterpart": null,
+      "status": "figma-only",
+      "priority": "medium",
+      "notes": "Tag filtering interface. Could use FTInput + FTTag + FTOptionsSelector composition"
+    },
+    {
+      "section": "local time zone + system language",
+      "componentCount": null,
+      "vueCounterpart": null,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "Localization-related. Likely config-driven, not component-based"
+    },
+    {
+      "section": "player origins",
+      "componentCount": null,
+      "vueCounterpart": null,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "Domain-specific to FastTrack. Evaluate if needs dedicated components"
+    },
+    {
+      "section": "translations",
+      "componentCount": null,
+      "vueCounterpart": null,
+      "status": "figma-only",
+      "priority": "low",
+      "notes": "Translation/i18n components. Likely not UI components but configuration"
+    },
+    {
+      "section": "widget dropdown - suggestion",
+      "componentCount": null,
+      "vueCounterpart": null,
+      "status": "figma-only",
+      "priority": "medium",
+      "notes": "Widget-specific dropdown. Could be FTSelect variant or composition"
+    }
+  ],
+  "vueOnlyComponents": [
+    {
+      "name": "Confirm",
+      "vueComponent": "FTConfirm",
+      "figmaCounterpart": "Modals",
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Vue has specific Confirm component. Verify if distinct from FTModal or if it's a Modal variant"
+    }
+  ],
+  "summary": {
+    "totalMappedComponents": 20,
+    "figmaOnlyComponents": 9,
+    "vueOnlyComponents": 1,
+    "syncStatus": {
+      "synced": 0,
+      "existsNeedsAudit": 20,
+      "figmaOnly": 9,
+      "vueOnly": 1,
+      "deprecated": 0
+    },
+    "priorityBreakdown": {
+      "critical": 3,
+      "high": 15,
+      "medium": 9,
+      "low": 4
+    },
+    "coverageMetrics": {
+      "vueComponentsCovered": "20/20 (100%)",
+      "figmaComponentsCovered": "610/839 (72.7%)",
+      "unmappedFigmaComponents": 229,
+      "overallCoverage": "72.7%"
+    }
+  }
+}

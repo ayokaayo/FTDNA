@@ -1,0 +1,89 @@
+<template>
+  <div
+    :class="[
+      'ft-{{componentName}}',
+      {
+        'ft-{{componentName}}--primary': primary,
+        'ft-{{componentName}}--secondary': secondary,
+        'ft-{{componentName}}--tertiary': tertiary,
+        'ft-{{componentName}}--disabled': disabled,
+        'ft-{{componentName}}--loading': loading,
+      }
+    ]"
+    :aria-disabled="disabled || undefined"
+    :aria-busy="loading || undefined"
+  >
+    <slot />
+  </div>
+</template>
+
+<script setup lang="ts">
+/**
+ * FT{{ComponentName}} - {{description}}
+ * @package @fasttrack-solutions/vue-components-lib
+ */
+
+export interface FT{{ComponentName}}Props {
+  /** Apply primary style variant */
+  primary?: boolean
+  /** Apply secondary style variant */
+  secondary?: boolean
+  /** Apply tertiary style variant */
+  tertiary?: boolean
+  /** Disable the component */
+  disabled?: boolean
+  /** Show loading state */
+  loading?: boolean
+}
+
+const props = withDefaults(defineProps<FT{{ComponentName}}Props>(), {
+  primary: false,
+  secondary: false,
+  tertiary: false,
+  disabled: false,
+  loading: false,
+})
+
+const emit = defineEmits<{
+  (e: 'click', event: MouseEvent): void
+}>()
+</script>
+
+<style scoped>
+.ft-{{componentName}} {
+  /* Component-level CSS variables — reference semantic tokens */
+  --ft-{{componentName}}-bg: var(--ft-color-surface-base);
+  --ft-{{componentName}}-fg: var(--ft-color-on-surface-base);
+  --ft-{{componentName}}-border: var(--ft-color-border-base);
+  --ft-{{componentName}}-radius: 4px;
+
+  background: var(--ft-{{componentName}}-bg);
+  color: var(--ft-{{componentName}}-fg);
+  border: 1px solid var(--ft-{{componentName}}-border);
+  border-radius: var(--ft-{{componentName}}-radius);
+  font-family: var(--ft-font-family-text);
+  transition: all 150ms ease;
+}
+
+.ft-{{componentName}}--primary {
+  --ft-{{componentName}}-bg: var(--ft-color-primary-base);
+  --ft-{{componentName}}-fg: var(--ft-color-on-primary-base);
+  --ft-{{componentName}}-border: var(--ft-color-primary-base);
+}
+
+.ft-{{componentName}}--secondary {
+  --ft-{{componentName}}-bg: var(--ft-color-secondary-base);
+  --ft-{{componentName}}-fg: var(--ft-color-on-secondary-base);
+  --ft-{{componentName}}-border: var(--ft-color-secondary-base);
+}
+
+.ft-{{componentName}}--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ft-{{componentName}}:focus-visible {
+  outline: 2px solid var(--ft-color-focus-ring-base);
+  outline-offset: 2px;
+}
+</style>

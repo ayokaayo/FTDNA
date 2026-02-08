@@ -1,0 +1,54 @@
+# {{ComponentName}}
+
+The `FT{{ComponentName}}` component {{description}}.
+
+## Usage
+
+### Composition api (script setup)
+
+```vue
+<script setup lang="ts">
+  import { FT{{ComponentName}} } from '@fasttrack-solutions/vue-components-lib';
+</script>
+
+<template>
+  <FT{{ComponentName}}>Example</FT{{ComponentName}}>
+</template>
+```
+
+### Options api
+
+```vue
+<script>
+  import { FT{{ComponentName}} } from '@fasttrack-solutions/vue-components-lib';
+  export default {
+    components: { FT{{ComponentName}} }
+  }
+</script>
+
+<template>
+  <FT{{ComponentName}}>Example</FT{{ComponentName}}>
+</template>
+```
+
+## Styles
+
+{{#styles}}
+- **{{name}}** - {{description}}
+{{/styles}}
+
+## Props
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+{{#props}}
+| `{{name}}` | {{type}} | {{default}} | {{description}} |
+{{/props}}
+
+## CSS
+
+| CSS variable | Default Value |
+|-------------|--------------|
+{{#cssVars}}
+| `{{name}}` | {{value}} |
+{{/cssVars}}

@@ -1,0 +1,239 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$metadata": {
+    "name": "FastTrack Typography Tokens",
+    "version": "1.0.0",
+    "source": "Typography System proposal (2026-02-06)",
+    "notes": [
+      "Corrected body-s-bold weight from Regular to Bold (assumed typo)",
+      "Corrected caption-s weight from Bold to Regular (assumed typo — matched naming convention)",
+      "Units: size and line-height in px, letter-spacing in px (negative = tighter)"
+    ]
+  },
+
+  "font": {
+    "family": {
+      "text": {
+        "$type": "fontFamily",
+        "$value": "Inter",
+        "$description": "Primary text font for all UI content"
+      },
+      "code": {
+        "$type": "fontFamily",
+        "$value": "Noto Sans Mono",
+        "$description": "Monospace font for code blocks and technical content"
+      }
+    },
+    "weight": {
+      "regular": {
+        "$type": "fontWeight",
+        "$value": 400,
+        "$description": "Regular weight for body and general text"
+      },
+      "bold": {
+        "$type": "fontWeight",
+        "$value": 700,
+        "$description": "Bold weight for emphasis and headings"
+      }
+    }
+  },
+
+  "text": {
+    "variant": {
+      "link": {
+        "$type": "typography",
+        "$value": {
+          "fontWeight": "{font.weight.regular}",
+          "textDecoration": "underline"
+        },
+        "$description": "Hyperlink text variant"
+      },
+      "cta": {
+        "$type": "typography",
+        "$value": {
+          "fontSize": "12px",
+          "fontWeight": "{font.weight.bold}",
+          "letterSpacing": "0px"
+        },
+        "$description": "Call-to-action text variant"
+      }
+    },
+
+    "display": {
+      "l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "72px",
+          "lineHeight": "72px",
+          "letterSpacing": "-4px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Display Large — hero sections, major page titles"
+      },
+      "m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "38px",
+          "lineHeight": "38px",
+          "letterSpacing": "-2px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Display Medium — section headers, feature titles"
+      }
+    },
+
+    "heading": {
+      "m-bold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "20px",
+          "lineHeight": "24px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Heading Medium Bold — subsection titles, card headers"
+      },
+      "s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "16px",
+          "lineHeight": "20px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.regular}"
+        },
+        "$description": "Heading Small — list headers, sidebar titles"
+      },
+      "s-bold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "16px",
+          "lineHeight": "20px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Heading Small Bold — emphasized list headers"
+      }
+    },
+
+    "body": {
+      "l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "15px",
+          "lineHeight": "24px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.regular}"
+        },
+        "$description": "Body Large — long-form content, descriptions"
+      },
+      "l-bold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "15px",
+          "lineHeight": "24px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Body Large Bold — emphasized paragraphs, key info"
+      },
+      "m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.regular}"
+        },
+        "$description": "Body Medium — default body text, form labels"
+      },
+      "bold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Body Bold (Medium) — emphasized default text"
+      },
+      "s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "12px",
+          "lineHeight": "16px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.regular}"
+        },
+        "$description": "Body Small — helper text, metadata"
+      },
+      "s-bold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "12px",
+          "lineHeight": "16px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Body Small Bold — emphasized helper text, badges"
+      }
+    },
+
+    "caption": {
+      "m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "12px",
+          "lineHeight": "16px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.regular}"
+        },
+        "$description": "Caption Medium — table footnotes, timestamps"
+      },
+      "m-bold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "12px",
+          "lineHeight": "16px",
+          "letterSpacing": "0px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Caption Medium Bold — table column headers, labels"
+      },
+      "s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "10px",
+          "lineHeight": "12px",
+          "letterSpacing": "0.2px",
+          "fontWeight": "{font.weight.regular}"
+        },
+        "$description": "Caption Small — fine print, legal text"
+      },
+      "s-bold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.text}",
+          "fontSize": "10px",
+          "lineHeight": "12px",
+          "letterSpacing": "0.2px",
+          "fontWeight": "{font.weight.bold}"
+        },
+        "$description": "Caption Small Bold — emphasized fine print"
+      }
+    }
+  }
+}

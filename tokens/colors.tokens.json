@@ -1,0 +1,464 @@
+{
+  "$schema": "https://tokens.studio/json-schema/draft-2023-07-20/schema.json",
+  "$metadata": {
+    "name": "FastTrack Design Tokens - Colors",
+    "description": "Color palette aligned to Figma variable naming. Figma uses a compact 200-500 scale for brand colors; extended shades at 600+.",
+    "version": "2.0.0",
+    "lastEdited": "2026-02-07",
+    "author": "FastTrack Design System Team",
+    "figmaAlignment": "Numbers match Figma Brand Colours variable names (e.g. pink/400 = token pink-400)"
+  },
+  "color": {
+    "brand": {
+      "pink": {
+        "200": {
+          "$type": "color",
+          "$value": "#FAD7E4",
+          "$description": "Figma pink/200 — lightest, locked-disabled state"
+        },
+        "300": {
+          "$type": "color",
+          "$value": "#F4B0C8",
+          "$description": "Figma pink/300 — light, disabled state"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#E96092",
+          "$description": "Figma pink/400 — medium, default state"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#D52454",
+          "$description": "Figma pink/500 — dark, hover / locked-default state"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#C21030",
+          "$description": "Extended darker pink"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#91003F",
+          "$description": "Extended darkest pink"
+        }
+      },
+      "purple": {
+        "100": {
+          "$type": "color",
+          "$value": "#F1E4F0",
+          "$description": "Purple lightest variant"
+        },
+        "200": {
+          "$type": "color",
+          "$value": "#C693C2",
+          "$description": "Purple light variant"
+        },
+        "300": {
+          "$type": "color",
+          "$value": "#E0C6E0",
+          "$description": "Purple very light variant"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#E2C9E0",
+          "$description": "Purple lightest"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#C18EC0",
+          "$description": "Purple very light"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#9A5594",
+          "$description": "Purple light"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#783171",
+          "$description": "Purple primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#440743",
+          "$description": "Purple dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#230123",
+          "$description": "Purple darkest"
+        }
+      },
+      "blue": {
+        "100": {
+          "$type": "color",
+          "$value": "#D8EDF9",
+          "$description": "Blue lightest variant"
+        },
+        "200": {
+          "$type": "color",
+          "$value": "#B0DAF2",
+          "$description": "Blue light variant"
+        },
+        "300": {
+          "$type": "color",
+          "$value": "#C3D9ED",
+          "$description": "Blue light grey variant"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#63B6E6",
+          "$description": "Figma blue/400 — status tag blue"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#2782CF",
+          "$description": "Blue medium"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#1369B9",
+          "$description": "Blue medium-dark"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#105DBA",
+          "$description": "Blue primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#012B86",
+          "$description": "Blue dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#001261",
+          "$description": "Blue darkest"
+        }
+      },
+      "yellow": {
+        "300": {
+          "$type": "color",
+          "$value": "#FFF6C9",
+          "$description": "Yellow very light"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#F9D18F",
+          "$description": "Yellow light tint"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#FFDB14",
+          "$description": "Yellow bright primary"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#F4A321",
+          "$description": "Yellow light variant"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#FDBC25",
+          "$description": "Yellow primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#FEED93",
+          "$description": "Yellow dark variant"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#FCE8C7",
+          "$description": "Yellow darkest (lightest in palette)"
+        }
+      },
+      "red": {
+        "200": {
+          "$type": "color",
+          "$value": "#EDC4C4",
+          "$description": "Red lightest — locked-disabled state"
+        },
+        "300": {
+          "$type": "color",
+          "$value": "#DA8A89",
+          "$description": "Red light — disabled state"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#E54F35",
+          "$description": "Figma red/400 — default state (coral)"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#CD1913",
+          "$description": "Red medium-dark — hover state"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#C21030",
+          "$description": "Red dark"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#B61615",
+          "$description": "Red darker"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#820202",
+          "$description": "Red very dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#5D0000",
+          "$description": "Red darkest"
+        }
+      },
+      "orange": {
+        "100": {
+          "$type": "color",
+          "$value": "#F9D3CC",
+          "$description": "Orange lightest (salmon)"
+        },
+        "200": {
+          "$type": "color",
+          "$value": "#F2A699",
+          "$description": "Orange light (salmon)"
+        },
+        "300": {
+          "$type": "color",
+          "$value": "#FCA122",
+          "$description": "Orange medium-light (golden)"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#F4A321",
+          "$description": "Figma orange/400 — default state (amber)"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#E9681A",
+          "$description": "Orange medium-dark (burnt orange)"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#E54F35",
+          "$description": "Orange dark (coral)"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#DF4317",
+          "$description": "Orange darkest"
+        }
+      }
+    },
+    "secondary": {
+      "magenta": {
+        "500": {
+          "$type": "color",
+          "$value": "#EFC4DF",
+          "$description": "Magenta very light"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#E96092",
+          "$description": "Magenta light"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#C0087F",
+          "$description": "Magenta primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#831F82",
+          "$description": "Magenta dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#91003F",
+          "$description": "Magenta darkest"
+        }
+      },
+      "thunderbird": {
+        "600": {
+          "$type": "color",
+          "$value": "#DA8A89",
+          "$description": "Thunderbird light"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#B61615",
+          "$description": "Thunderbird primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#C21030",
+          "$description": "Thunderbird dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#6D001F",
+          "$description": "Thunderbird darkest"
+        }
+      },
+      "lilac": {
+        "600": {
+          "$type": "color",
+          "$value": "#E0C6E0",
+          "$description": "Lilac light"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#C18EC0",
+          "$description": "Lilac primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#783171",
+          "$description": "Lilac dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#440743",
+          "$description": "Lilac darkest"
+        }
+      },
+      "aqua": {
+        "400": {
+          "$type": "color",
+          "$value": "#E1F2F2",
+          "$description": "Aqua lightest"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#C4E5E4",
+          "$description": "Aqua very light"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#89CCCA",
+          "$description": "Aqua light"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#4AA3A0",
+          "$description": "Aqua primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#4AA3A0",
+          "$description": "Aqua dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#28827F",
+          "$description": "Aqua darkest"
+        }
+      },
+      "denim": {
+        "600": {
+          "$type": "color",
+          "$value": "#88B3DC",
+          "$description": "Denim light"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#1369B9",
+          "$description": "Denim primary base color"
+        },
+        "800": {
+          "$type": "color",
+          "$value": "#012B86",
+          "$description": "Denim dark"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "#001261",
+          "$description": "Denim darkest"
+        }
+      },
+      "green": {
+        "200": {
+          "$type": "color",
+          "$value": "#CDEACC",
+          "$description": "Figma green/200 — lightest, locked-disabled state"
+        },
+        "300": {
+          "$type": "color",
+          "$value": "#9CD499",
+          "$description": "Green light — disabled state"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#3AAA35",
+          "$description": "Figma green/400 — default state"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#0D710B",
+          "$description": "Green dark — hover state"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#034B02",
+          "$description": "Green darkest"
+        }
+      }
+    },
+    "neutral": {
+      "black": {
+        "900": {
+          "$type": "color",
+          "$value": "#000000",
+          "$description": "Pure black — Figma mono-black"
+        }
+      },
+      "gray": {
+        "200": {
+          "$type": "color",
+          "$value": "#F5F5F5",
+          "$description": "Figma mono-200 — very light gray"
+        },
+        "300": {
+          "$type": "color",
+          "$value": "#E5E5E5",
+          "$description": "Figma mono-300 — light gray"
+        },
+        "400": {
+          "$type": "color",
+          "$value": "#CACACA",
+          "$description": "Figma mono-400 — medium-light gray"
+        },
+        "500": {
+          "$type": "color",
+          "$value": "#959595",
+          "$description": "Figma mono-500 — medium gray"
+        },
+        "600": {
+          "$type": "color",
+          "$value": "#666666",
+          "$description": "Medium-dark gray (between Figma 500 and 700)"
+        },
+        "700": {
+          "$type": "color",
+          "$value": "#2C2C2C",
+          "$description": "Figma mono-700 — dark gray"
+        }
+      },
+      "white": {
+        "100": {
+          "$type": "color",
+          "$value": "#FAFAFA",
+          "$description": "Figma mono-100 — off-white"
+        },
+        "50": {
+          "$type": "color",
+          "$value": "#FFFFFF",
+          "$description": "Figma mono-white — pure white"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import FT{{ComponentName}} from './FT{{ComponentName}}.vue'
+
+describe('FT{{ComponentName}}', () => {
+  it('renders correctly', () => {
+    const wrapper = mount(FT{{ComponentName}})
+    expect(wrapper.exists()).toBe(true)
+    expect(wrapper.classes()).toContain('ft-{{componentName}}')
+  })
+
+  it('applies primary variant', () => {
+    const wrapper = mount(FT{{ComponentName}}, {
+      props: { primary: true }
+    })
+    expect(wrapper.classes()).toContain('ft-{{componentName}}--primary')
+  })
+
+  it('applies secondary variant', () => {
+    const wrapper = mount(FT{{ComponentName}}, {
+      props: { secondary: true }
+    })
+    expect(wrapper.classes()).toContain('ft-{{componentName}}--secondary')
+  })
+
+  it('handles disabled state', () => {
+    const wrapper = mount(FT{{ComponentName}}, {
+      props: { disabled: true }
+    })
+    expect(wrapper.classes()).toContain('ft-{{componentName}}--disabled')
+    expect(wrapper.attributes('aria-disabled')).toBe('true')
+  })
+
+  it('handles loading state', () => {
+    const wrapper = mount(FT{{ComponentName}}, {
+      props: { loading: true }
+    })
+    expect(wrapper.classes()).toContain('ft-{{componentName}}--loading')
+    expect(wrapper.attributes('aria-busy')).toBe('true')
+  })
+
+  it('renders slot content', () => {
+    const wrapper = mount(FT{{ComponentName}}, {
+      slots: { default: 'Test content' }
+    })
+    expect(wrapper.text()).toContain('Test content')
+  })
+})

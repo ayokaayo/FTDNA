@@ -1,0 +1,100 @@
+{
+  "$description": "Maps Figma variable names to the code token pipeline. Since v2.0.0, token numbers match Figma variable names directly — no translation needed.",
+  "$version": "2.0.0",
+  "$lastUpdated": "2026-02-08",
+  "$usage": "Figma variable 'pink/400' → CSS var '--ft-color-brand-pink-400'. The number is the same in both systems.",
+
+  "pink": {
+    "200": { "hex": "#FAD7E4", "tokenVar": "--ft-color-brand-pink-200", "note": "Lightest — locked-disabled state" },
+    "300": { "hex": "#F4B0C8", "tokenVar": "--ft-color-brand-pink-300", "note": "Light — disabled state" },
+    "400": { "hex": "#E96092", "tokenVar": "--ft-color-brand-pink-400", "note": "Medium — default state" },
+    "500": { "hex": "#D52454", "tokenVar": "--ft-color-brand-pink-500", "note": "Dark — hover / locked-default state" },
+    "600": { "hex": "#C21030", "tokenVar": "--ft-color-brand-pink-600" },
+    "700": { "hex": "#91003F", "tokenVar": "--ft-color-brand-pink-700" }
+  },
+
+  "blue": {
+    "100": { "hex": "#D8EDF9", "tokenVar": "--ft-color-brand-blue-100" },
+    "200": { "hex": "#B0DAF2", "tokenVar": "--ft-color-brand-blue-200" },
+    "300": { "hex": "#C3D9ED", "tokenVar": "--ft-color-brand-blue-300" },
+    "400": { "hex": "#63B6E6", "tokenVar": "--ft-color-brand-blue-400", "note": "Status tag blue — default state" },
+    "500": { "hex": "#2782CF", "tokenVar": "--ft-color-brand-blue-500" },
+    "600": { "hex": "#1369B9", "tokenVar": "--ft-color-brand-blue-600" },
+    "700": { "hex": "#105DBA", "tokenVar": "--ft-color-brand-blue-700", "note": "Primary brand blue" },
+    "800": { "hex": "#012B86", "tokenVar": "--ft-color-brand-blue-800" },
+    "900": { "hex": "#001261", "tokenVar": "--ft-color-brand-blue-900" }
+  },
+
+  "red": {
+    "200": { "hex": "#EDC4C4", "tokenVar": "--ft-color-brand-red-200", "note": "Lightest — locked-disabled state" },
+    "300": { "hex": "#DA8A89", "tokenVar": "--ft-color-brand-red-300", "note": "Light — disabled state" },
+    "400": { "hex": "#E54F35", "tokenVar": "--ft-color-brand-red-400", "note": "Coral — default state" },
+    "500": { "hex": "#CD1913", "tokenVar": "--ft-color-brand-red-500", "note": "Hover state" },
+    "600": { "hex": "#C21030", "tokenVar": "--ft-color-brand-red-600" },
+    "700": { "hex": "#B61615", "tokenVar": "--ft-color-brand-red-700" },
+    "800": { "hex": "#820202", "tokenVar": "--ft-color-brand-red-800" },
+    "900": { "hex": "#5D0000", "tokenVar": "--ft-color-brand-red-900" }
+  },
+
+  "orange": {
+    "100": { "hex": "#F9D3CC", "tokenVar": "--ft-color-brand-orange-100", "note": "Lightest (salmon)" },
+    "200": { "hex": "#F2A699", "tokenVar": "--ft-color-brand-orange-200" },
+    "300": { "hex": "#FCA122", "tokenVar": "--ft-color-brand-orange-300", "note": "Golden" },
+    "400": { "hex": "#F4A321", "tokenVar": "--ft-color-brand-orange-400", "note": "Amber — default state" },
+    "500": { "hex": "#E9681A", "tokenVar": "--ft-color-brand-orange-500", "note": "Burnt orange — hover state" },
+    "600": { "hex": "#E54F35", "tokenVar": "--ft-color-brand-orange-600" },
+    "700": { "hex": "#DF4317", "tokenVar": "--ft-color-brand-orange-700" }
+  },
+
+  "green": {
+    "200": { "hex": "#CDEACC", "tokenVar": "--ft-color-secondary-green-200", "note": "Lightest — locked-disabled state" },
+    "300": { "hex": "#9CD499", "tokenVar": "--ft-color-secondary-green-300", "note": "Light — disabled state" },
+    "400": { "hex": "#3AAA35", "tokenVar": "--ft-color-secondary-green-400", "note": "Default state" },
+    "500": { "hex": "#0D710B", "tokenVar": "--ft-color-secondary-green-500", "note": "Dark — hover state" },
+    "600": { "hex": "#034B02", "tokenVar": "--ft-color-secondary-green-600" }
+  },
+
+  "purple": {
+    "100": { "hex": "#F1E4F0", "tokenVar": "--ft-color-brand-purple-100" },
+    "200": { "hex": "#C693C2", "tokenVar": "--ft-color-brand-purple-200" },
+    "300": { "hex": "#E0C6E0", "tokenVar": "--ft-color-brand-purple-300" },
+    "400": { "hex": "#E2C9E0", "tokenVar": "--ft-color-brand-purple-400" },
+    "500": { "hex": "#C18EC0", "tokenVar": "--ft-color-brand-purple-500" },
+    "600": { "hex": "#9A5594", "tokenVar": "--ft-color-brand-purple-600" },
+    "700": { "hex": "#783171", "tokenVar": "--ft-color-brand-purple-700", "note": "Tertiary brand purple" },
+    "800": { "hex": "#440743", "tokenVar": "--ft-color-brand-purple-800" },
+    "900": { "hex": "#230123", "tokenVar": "--ft-color-brand-purple-900" }
+  },
+
+  "monochrome": {
+    "white":  { "hex": "#FFFFFF", "tokenVar": "--ft-color-neutral-white-50" },
+    "100":    { "hex": "#FAFAFA", "tokenVar": "--ft-color-neutral-white-100" },
+    "200":    { "hex": "#F5F5F5", "tokenVar": "--ft-color-neutral-gray-200" },
+    "300":    { "hex": "#E5E5E5", "tokenVar": "--ft-color-neutral-gray-300" },
+    "400":    { "hex": "#CACACA", "tokenVar": "--ft-color-neutral-gray-400" },
+    "500":    { "hex": "#959595", "tokenVar": "--ft-color-neutral-gray-500" },
+    "600":    { "hex": "#666666", "tokenVar": "--ft-color-neutral-gray-600" },
+    "700":    { "hex": "#2C2C2C", "tokenVar": "--ft-color-neutral-gray-700" },
+    "black":  { "hex": "#000000", "tokenVar": "--ft-color-neutral-black-900" }
+  },
+
+  "statePattern": {
+    "$description": "Figma uses shade-number stepping for tag states. These Figma numbers now match token numbers directly.",
+    "normalTag": {
+      "default":          "color-400 (medium shade)",
+      "hover":            "color-500 (one step darker)",
+      "disabled":         "color-300 (one step lighter)",
+      "locked-default":   "color-500 (same as hover shade, gray text)",
+      "locked-disabled":  "color-200 (lightest shade)"
+    },
+    "selectionTag": {
+      "default":          "Neutral (gray-200 bg, gray-700 text)",
+      "hover":            "Neutral (gray-300 bg, gray-700 text)",
+      "focused-selected": "Solid (black-900 bg, white-50 text)",
+      "disabled":         "Neutral (gray-200 bg, gray-400 text)",
+      "locked-default":   "Neutral (gray-200 bg, gray-500 text)",
+      "locked-focused":   "Solid (gray-300 bg, gray-500 text)",
+      "locked-disabled":  "Neutral (white-100 bg, gray-400 text)"
+    }
+  }
+}
