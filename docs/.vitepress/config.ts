@@ -21,7 +21,8 @@ export default defineConfig({
         text: 'POC Basics',
         items: [
           { text: 'What We Built & Why', link: '/guide/poc-basics' },
-          { text: 'Developer Guide', link: '/guide/dev-guide' }
+          { text: 'Developer Guide', link: '/guide/dev-guide' },
+          { text: 'Designers Guide', link: '/guide/designers-guide' }
         ]
       },
       {
