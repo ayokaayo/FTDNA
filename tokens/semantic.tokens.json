@@ -13,55 +13,55 @@
       "primary": {
         "base": {
           "$type": "color",
-          "$value": "{color.brand.blue.700}",
-          "$description": "Primary brand color for main actions and highlights"
+          "$value": "{color.brand.pink.400}",
+          "$description": "Primary brand color (pink) for main actions and CTAs"
         },
         "dark": {
           "$type": "color",
-          "$value": "{color.brand.blue.800}",
+          "$value": "{color.brand.pink.500}",
           "$description": "Darker variant of primary color for hover states"
         },
         "darker": {
           "$type": "color",
-          "$value": "{color.brand.blue.900}",
-          "$description": "Darkest variant of primary color for active states"
+          "$value": "{color.brand.pink.600}",
+          "$description": "Darkest variant of primary color for active/focused states"
         },
         "light": {
           "$type": "color",
-          "$value": "{color.brand.blue.600}",
-          "$description": "Light variant of primary color"
+          "$value": "{color.brand.pink.300}",
+          "$description": "Light variant of primary color for disabled states"
         },
         "lighter": {
           "$type": "color",
-          "$value": "{color.secondary.denim.600}",
-          "$description": "Lighter variant of primary color (#88B3DC)"
+          "$value": "{color.brand.pink.200}",
+          "$description": "Lighter variant of primary color"
         },
         "lightest": {
           "$type": "color",
-          "$value": "{color.brand.blue.100}",
+          "$value": "{color.brand.pink.200}",
           "$description": "Lightest variant of primary color for backgrounds"
         }
       },
       "secondary": {
         "base": {
           "$type": "color",
-          "$value": "{color.brand.pink.500}",
-          "$description": "Secondary brand color for accents and alternative actions"
+          "$value": "{color.brand.blue.700}",
+          "$description": "Secondary brand color (blue) for accents and alternative actions"
         },
         "dark": {
           "$type": "color",
-          "$value": "{color.brand.pink.600}",
+          "$value": "{color.brand.blue.800}",
           "$description": "Darker variant of secondary color"
         },
         "light": {
           "$type": "color",
-          "$value": "{color.brand.pink.400}",
+          "$value": "{color.brand.blue.600}",
           "$description": "Light variant of secondary color"
         },
         "lightest": {
           "$type": "color",
-          "$value": "{color.brand.pink.200}",
-          "$description": "Lightest variant of secondary color"
+          "$value": "{color.brand.blue.100}",
+          "$description": "Lightest variant of secondary color for backgrounds"
         }
       },
       "tertiary": {
@@ -258,7 +258,7 @@
         },
         "subtle": {
           "$type": "color",
-          "$value": "{color.brand.blue.100}",
+          "$value": "{color.brand.pink.200}",
           "$description": "Subtle text on primary backgrounds"
         }
       },

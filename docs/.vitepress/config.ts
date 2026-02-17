@@ -45,7 +45,7 @@ export default defineConfig({
         text: 'Components',
         items: [
           { text: 'Alert', link: '/components/alert' },
-          { text: 'Button', link: '/components/button' },
+          { text: 'Button <span class="poc-ready">POC v2</span>', link: '/components/button' },
           { text: 'Checkbox <span class="poc-ready">POC</span>', link: '/components/checkbox' },
           { text: 'Confirm', link: '/components/confirm' },
           { text: 'Datepicker', link: '/components/datepicker' },

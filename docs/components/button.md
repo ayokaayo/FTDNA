@@ -1,14 +1,14 @@
-# Button
+# FTButton
 
-The `FTButton` component is a versatile button element with multiple style options, sizes, and states. It supports icons, loading states, disabled states, and various visual styles including primary, secondary, tertiary, and action variants.
+The `FTButton` component is the primary interactive element for triggering actions. It maps directly to the **Buttons** section in DSP-Master with 5 type variants, 4 interactive states, and icon support.
 
 ## Usage
 
-### Composition api (script setup)
+### Composition API (script setup)
 
 ```vue
 <script setup lang="ts">
-  import { FTButton } from '@fasttrack-solutions/vue-components-lib';
+import { FTButton } from '@fasttrack-solutions/vue-components-lib'
 </script>
 
 <template>
@@ -18,14 +18,16 @@ The `FTButton` component is a versatile button element with multiple style optio
 </template>
 ```
 
-### Options api
+### Options API
 
 ```vue
-<script>
-  import { FTButton } from '@fasttrack-solutions/vue-components-lib';
-  export default {
-    components: { FTButton }
-  }
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { FTButton } from '@fasttrack-solutions/vue-components-lib'
+
+export default defineComponent({
+  components: { FTButton }
+})
 </script>
 
 <template>
@@ -35,141 +37,167 @@ The `FTButton` component is a versatile button element with multiple style optio
 
 ## Styles
 
-The button component supports multiple style variants:
+The `FTButton` component supports five style variants, mapping to the Figma naming convention:
 
-- **Primary** - Main action button with brand color
-- **Secondary** - Alternative action with secondary styling
-- **Tertiary** - Subtle button with minimal styling
-- **Action** - Action-specific button styling
-- **Warning** - Yellow/warning style for cautious actions
-- **Success** - Green style for positive actions
-- **Info** - Blue style for informational content
-- **Error** - Red style for destructive actions
+| Vue prop | Figma Type | Visual |
+|----------|-----------|--------|
+| `primary` (default) | main | Solid pink pill |
+| `secondary` | alt | Pink text, no background |
+| `tertiary` | sub | Solid dark pill |
+| `action` | plus | Outlined, trailing icon |
+| `iconOnly` | icon | Circular icon button |
+
+<div class="demo">
+  <FTButton primary>Primary</FTButton>
+  <FTButton secondary>Secondary</FTButton>
+  <FTButton tertiary>Tertiary</FTButton>
+  <FTButton action>Action</FTButton>
+  <FTButton icon-only leading-icon="refresh" aria-label="Refresh" />
+</div>
+
+```vue
+<FTButton primary>Primary</FTButton>
+<FTButton secondary>Secondary</FTButton>
+<FTButton tertiary>Tertiary</FTButton>
+<FTButton action>Action</FTButton>
+<FTButton icon-only leading-icon="refresh" aria-label="Refresh" />
+```
 
 ## Statuses
 
-Buttons support various interactive states:
+Each button variant supports four interactive states handled by CSS:
 
-- **Active** - Visually indicates the button is active
-- **Disabled** - Prevents interaction with disabled styling
-- **Loading** - Shows loading state with spinner
+- **Default** — Normal resting state
+- **Hover** — Mouse over the button
+- **Focused** — Keyboard focus (focus-visible)
+- **Disabled** — Non-interactive
 
 ## Disabled State
 
-Use the `disabled` prop to prevent user interaction:
+Disable the button with the `disabled` prop. Disabled buttons are non-interactive and visually muted.
+
+<div class="demo">
+  <FTButton primary disabled>Primary</FTButton>
+  <FTButton secondary disabled>Secondary</FTButton>
+  <FTButton tertiary disabled>Tertiary</FTButton>
+  <FTButton action disabled>Action</FTButton>
+</div>
 
 ```vue
-<FTButton disabled>Disabled Button</FTButton>
+<FTButton primary disabled>Primary</FTButton>
+<FTButton secondary disabled>Secondary</FTButton>
+<FTButton tertiary disabled>Tertiary</FTButton>
+<FTButton action disabled>Action</FTButton>
 ```
 
 ## Loading State
 
-Use the `loading` prop to show a loading indicator:
+Show a loading spinner with the `loading` prop. The button becomes non-interactive while loading.
+
+<div class="demo">
+  <FTButton primary loading>Saving...</FTButton>
+  <FTButton tertiary loading>Loading...</FTButton>
+</div>
 
 ```vue
-<FTButton loading>Loading...</FTButton>
+<FTButton primary loading>Saving...</FTButton>
+<FTButton tertiary loading>Loading...</FTButton>
 ```
 
 ## Icons
 
-Add icons to buttons using the `icon` prop:
+### Leading Icon
+
+Add a leading icon using the `leading-icon` prop with a Font Awesome icon name.
+
+<div class="demo">
+  <FTButton primary leading-icon="smile">With Icon</FTButton>
+  <FTButton secondary leading-icon="star">Favourite</FTButton>
+  <FTButton tertiary leading-icon="save">Save</FTButton>
+</div>
 
 ```vue
-<FTButton icon="home">Home</FTButton>
-<FTButton icon="trash" error>Delete</FTButton>
+<FTButton primary leading-icon="smile">With Icon</FTButton>
+<FTButton secondary leading-icon="star">Favourite</FTButton>
+<FTButton tertiary leading-icon="save">Save</FTButton>
+```
+
+### Trailing Icon (Action type)
+
+The `action` variant shows a trailing icon (defaults to `plus`, customisable via `trailing-icon`).
+
+<div class="demo">
+  <FTButton action>Add New</FTButton>
+  <FTButton action trailing-icon="language">Translate</FTButton>
+</div>
+
+```vue
+<FTButton action>Add New</FTButton>
+<FTButton action trailing-icon="language">Translate</FTButton>
 ```
 
 ## Icon Only
 
-Create icon-only buttons with the `iconOnly` prop:
+Circular icon-only buttons with three sizes: `sm` (24px), `md` (32px), `lg` (40px).
+
+<div class="demo">
+  <FTButton icon-only leading-icon="refresh" icon-size="sm" aria-label="Refresh small" />
+  <FTButton icon-only leading-icon="refresh" icon-size="md" aria-label="Refresh medium" />
+  <FTButton icon-only leading-icon="refresh" icon-size="lg" aria-label="Refresh large" />
+</div>
 
 ```vue
-<FTButton icon="home" iconOnly />
-<FTButton icon="heart" iconOnly />
-```
-
-## Sizes
-
-The button supports different size variations:
-
-```vue
-<FTButton iconSmall>Small Icon</FTButton>
-<FTButton iconMedium>Medium Icon</FTButton>
-<FTButton iconBig>Large Icon</FTButton>
+<FTButton icon-only leading-icon="refresh" icon-size="sm" aria-label="Refresh small" />
+<FTButton icon-only leading-icon="refresh" icon-size="md" aria-label="Refresh medium" />
+<FTButton icon-only leading-icon="refresh" icon-size="lg" aria-label="Refresh large" />
 ```
 
 ## Props
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `loading` | boolean | false | Shows loading state with spinner |
-| `primary` | boolean | false | Applies primary button style |
-| `secondary` | boolean | false | Applies secondary button style |
-| `tertiary` | boolean | false | Applies tertiary button style |
-| `action` | boolean | false | Applies action button style |
-| `warning` | boolean | false | Applies warning button style |
-| `success` | boolean | false | Applies success button style |
-| `info` | boolean | false | Applies info button style |
-| `error` | boolean | false | Applies error button style |
-| `icon` | string | undefined | Font Awesome icon name |
-| `iconOnly` | boolean | false | Display only the icon |
-| `iconSmall` | boolean | false | Use small icon size |
-| `iconMedium` | boolean | false | Use medium icon size |
-| `iconBig` | boolean | false | Use large icon size |
-| `active` | boolean | false | Indicates button is active |
-| `tooltip` | string | undefined | Tooltip text to display on hover |
-| `tooltipPosition` | string | 'top' | Position of tooltip (top, bottom, left, right) |
-| `disabled` | boolean | false | Disables the button |
+| `primary` | `boolean` | `true`* | Solid pink CTA button (Figma: main) |
+| `secondary` | `boolean` | `false` | Pink text, no background (Figma: alt) |
+| `tertiary` | `boolean` | `false` | Solid dark button (Figma: sub) |
+| `action` | `boolean` | `false` | Outlined with trailing icon (Figma: plus) |
+| `iconOnly` | `boolean` | `false` | Circular icon-only button (Figma: icon) |
+| `iconSize` | `'sm' \| 'md' \| 'lg'` | `'md'` | Icon-only button size (24/32/40px) |
+| `leadingIcon` | `string` | `undefined` | Font Awesome icon name for leading position |
+| `trailingIcon` | `string` | `undefined` | Font Awesome icon name for trailing position (action type defaults to `plus`) |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `loading` | `boolean` | `false` | Show loading spinner |
+| `ariaLabel` | `string` | `undefined` | Accessible label (required for icon-only) |
+
+\* Primary is the default when no other type variant is set.
 
 ## CSS
 
-The button component uses the following CSS custom properties:
+All button styling uses CSS custom properties for theming. These can be overridden at any level.
 
-| CSS variable | Default Value |
-|-------------|--------------|
-| `--ft-btn-height` | 32px |
-| `--ft-btn-font-size` | 12px |
-| `--ft-btn-font-weight` | 700 |
-| `--ft-btn-padding-left` | 16px |
-| `--ft-btn-padding-right` | 16px |
-| `--ft-btn-main-bg-default` | #E96092 |
-| `--ft-btn-main-fg-default` | #FFF |
-| `--ft-btn-main-bg-hover` | #D52454 |
+| CSS Variable | Default Value | Description |
+|-------------|---------------|-------------|
+| `--ft-btn-height` | `32px` | Button height |
+| `--ft-btn-font-size` | `12px` | Text size (CTA style) |
+| `--ft-btn-font-weight` | `var(--ft-font-weight-bold)` | Font weight |
+| `--ft-btn-line-height` | `16px` | Line height |
+| `--ft-btn-gap` | `4px` | Gap between icon and text |
+| `--ft-btn-padding-icon-side` | `8px` | Padding on the icon side |
+| `--ft-btn-padding-text-side` | `16px` | Padding on the text side |
+| `--ft-btn-border-radius-pill` | `32px` | Pill shape radius |
+| `--ft-btn-border-radius-rect` | `4px` | Rect shape radius (action) |
+| `--ft-btn-main-bg-default` | `var(--ft-color-primary-base)` | Primary background |
+| `--ft-btn-main-bg-hover` | `var(--ft-color-primary-dark)` | Primary hover bg |
+| `--ft-btn-main-bg-focused` | `var(--ft-color-primary-darker)` | Primary focused bg |
+| `--ft-btn-main-bg-disabled` | `var(--ft-color-primary-light)` | Primary disabled bg |
+| `--ft-btn-alt-fg-default` | `var(--ft-color-primary-base)` | Secondary text color |
+| `--ft-btn-sub-bg-default` | `var(--ft-color-neutral-dark)` | Tertiary background |
+| `--ft-btn-plus-fg-default` | `var(--ft-color-neutral-dark)` | Action text/border color |
+| `--ft-btn-icon-size-sm` | `24px` | Icon-only small |
+| `--ft-btn-icon-size-md` | `32px` | Icon-only medium |
+| `--ft-btn-icon-size-lg` | `40px` | Icon-only large |
 
-## Examples
+## Figma Reference
 
-### Basic Buttons
-
-```vue
-<template>
-  <div class="button-group">
-    <FTButton primary>Primary</FTButton>
-    <FTButton secondary>Secondary</FTButton>
-    <FTButton tertiary>Tertiary</FTButton>
-  </div>
-</template>
-```
-
-### With Icons
-
-```vue
-<template>
-  <div class="button-group">
-    <FTButton primary icon="save">Save</FTButton>
-    <FTButton error icon="trash">Delete</FTButton>
-    <FTButton success icon="check">Confirm</FTButton>
-  </div>
-</template>
-```
-
-### Icon Only
-
-```vue
-<template>
-  <div class="icon-buttons">
-    <FTButton icon="home" iconOnly />
-    <FTButton icon="search" iconOnly />
-    <FTButton icon="settings" iconOnly />
-  </div>
-</template>
-```
+- **Section**: Buttons
+- **Variants**: 40 total (5 types × 4 states × leading icon toggle)
+- **Figma naming**: `Type=main\|alt\|sub\|plus\|icon, Status=default\|hover\|focused\|disabled, Size=default\|S\|M\|L, Leading icon=Yes\|No`

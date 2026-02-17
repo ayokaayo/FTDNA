@@ -102,6 +102,10 @@
   background: #FFF6C9;
   color: #FDBC25;
 }
+.status-badge.poc {
+  background: #D8EDF9;
+  color: #105DBA;
+}
 
 /* Semantic token preview row */
 .semantic-row {
