@@ -13,6 +13,10 @@ import FTHeader from '../../../src/components/FTHeader/FTHeader.vue'
 import FTSideMenu from '../../../src/components/FTSideMenu/FTSideMenu.vue'
 import FTPageLayout from '../../../src/components/FTPageLayout/FTPageLayout.vue'
 import FTLogo from '../../../src/components/FTLogo/FTLogo.vue'
+import FTInput from '../../../src/components/FTInput/FTInput.vue'
+import FTSelect from '../../../src/components/FTSelect/FTSelect.vue'
+import FTTabs from '../../../src/components/FTTabs/FTTabs.vue'
+import FTModal from '../../../src/components/FTModal/FTModal.vue'
 
 export default {
   extends: DefaultTheme,
@@ -30,5 +34,9 @@ export default {
     app.component('FTSideMenu', FTSideMenu)
     app.component('FTPageLayout', FTPageLayout)
     app.component('FTLogo', FTLogo)
+    app.component('FTInput', FTInput)
+    app.component('FTSelect', FTSelect)
+    app.component('FTTabs', FTTabs)
+    app.component('FTModal', FTModal)
   }
 }

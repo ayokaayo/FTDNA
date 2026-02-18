@@ -52,10 +52,10 @@ export default defineConfig({
           { text: 'Datepicker', link: '/components/datepicker' },
           { text: 'Floating Label', link: '/components/floatinglabel' },
           { text: 'Header <span class="poc-ready">POC</span>', link: '/components/header' },
-          { text: 'Input', link: '/components/input' },
+          { text: 'Input <span class="poc-ready">POC</span>', link: '/components/input' },
           { text: 'Logo <span class="poc-ready">POC</span>', link: '/components/logo' },
-          { text: 'Select', link: '/components/select' },
-          { text: 'Modal', link: '/components/modal' },
+          { text: 'Select <span class="poc-ready">POC</span>', link: '/components/select' },
+          { text: 'Modal <span class="poc-ready">POC</span>', link: '/components/modal' },
           { text: 'Navbar', link: '/components/navbar' },
           { text: 'Options Selector', link: '/components/optionsselector' },
           { text: 'Paging <span class="poc-ready">POC</span>', link: '/components/paging' },
@@ -68,7 +68,7 @@ export default defineConfig({
           { text: 'Spinner', link: '/components/spinner' },
           { text: 'Table', link: '/components/table' },
           { text: 'Tag <span class="poc-ready">POC</span>', link: '/components/tag' },
-          { text: 'Tabs', link: '/components/tabs' },
+          { text: 'Tabs <span class="poc-ready">POC</span>', link: '/components/tabs' },
           { text: 'Toggle <span class="poc-ready">POC</span>', link: '/components/toggle' },
           { text: 'Tooltip <span class="poc-ready">POC</span>', link: '/components/tooltip' }
         ]
