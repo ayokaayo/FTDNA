@@ -17,6 +17,7 @@ import FTInput from '../../../src/components/FTInput/FTInput.vue'
 import FTSelect from '../../../src/components/FTSelect/FTSelect.vue'
 import FTTabs from '../../../src/components/FTTabs/FTTabs.vue'
 import FTModal from '../../../src/components/FTModal/FTModal.vue'
+import FTTable from '../../../src/components/FTTable/FTTable.vue'
 
 export default {
   extends: DefaultTheme,
@@ -38,5 +39,6 @@ export default {
     app.component('FTSelect', FTSelect)
     app.component('FTTabs', FTTabs)
     app.component('FTModal', FTModal)
+    app.component('FTTable', FTTable)
   }
 }

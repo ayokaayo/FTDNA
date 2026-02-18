@@ -93,6 +93,7 @@ Figma uses parameterized naming: `Type=value, Status=value, Size=value`
 | `FTSelect` | — | Dropdown-base (54+ variants) | `src/components/FTSelect/FTSelect.vue` |
 | `FTTabs` | — | Tabs (32 variants) | `src/components/FTTabs/FTTabs.vue` |
 | `FTModal` | — | Modal (3 variants) | `src/components/FTModal/FTModal.vue` |
+| `FTTable` | `3057:11643` | Table (25 variants) | `src/components/FTTable/FTTable.vue` |
 | `FTPageLayout` | — | Page Template (composite, not a Figma component) | `src/components/FTPageLayout/FTPageLayout.vue` |
 
 **Fast Track Logo file:** `Ahohkx0sfMS7oHU1V3j3DO`

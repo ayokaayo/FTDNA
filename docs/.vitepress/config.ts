@@ -66,7 +66,7 @@ export default defineConfig({
           { text: 'Sliding Panel', link: '/components/slidingpanel' },
           { text: 'Split View', link: '/components/splitview' },
           { text: 'Spinner', link: '/components/spinner' },
-          { text: 'Table', link: '/components/table' },
+          { text: 'Table <span class="poc-ready">POC</span>', link: '/components/table' },
           { text: 'Tag <span class="poc-ready">POC</span>', link: '/components/tag' },
           { text: 'Tabs <span class="poc-ready">POC</span>', link: '/components/tabs' },
           { text: 'Toggle <span class="poc-ready">POC</span>', link: '/components/toggle' },
