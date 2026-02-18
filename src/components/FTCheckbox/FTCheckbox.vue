@@ -75,12 +75,16 @@ const handleChange = (event: Event) => {
 
 <style>
 :root {
-  --ft-checkbox-icon-color: var(--ft-color-neutral-gray-700);
-  --ft-checkbox-disabled-color: var(--ft-color-neutral-gray-500);
+  --ft-checkbox-icon-color: var(--ft-color-on-surface-base);
+  --ft-checkbox-disabled-color: var(--ft-color-on-surface-disabled);
   --ft-checkbox-disabled-opacity: 0.5;
   --ft-checkbox-icon-size: 20px;
   --ft-checkbox-container-size: 24px;
   --ft-checkbox-gap: 8px;
+  --ft-checkbox-label-font-size: 14px;
+  --ft-checkbox-label-line-height: 20px;
+  --ft-checkbox-label-font-family: var(--ft-font-family-text, 'Inter', sans-serif);
+  --ft-checkbox-focus-ring: var(--ft-color-focus-ring-base);
 }
 </style>
 
@@ -114,10 +118,19 @@ const handleChange = (event: Event) => {
 }
 
 .ft-checkbox__label {
-  font-size: 14px;
-  font-family: var(--ft-font-family-text), sans-serif;
+  font-family: var(--ft-checkbox-label-font-family);
+  font-size: var(--ft-checkbox-label-font-size);
+  line-height: var(--ft-checkbox-label-line-height);
+  font-weight: var(--ft-font-weight-regular, 400);
+  font-feature-settings: 'lnum' 1, 'tnum' 1;
   color: var(--ft-checkbox-icon-color);
-  line-height: normal;
+}
+
+/* Focus ring */
+.ft-checkbox__input:focus-visible + .ft-checkbox__icon {
+  outline: 2px solid var(--ft-checkbox-focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Disabled state */

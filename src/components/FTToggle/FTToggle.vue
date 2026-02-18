@@ -64,6 +64,9 @@ const handleChange = (event: Event) => {
   --ft-toggle-icon-color-on: var(--ft-color-success-base);
   --ft-toggle-icon-color-off: var(--ft-color-on-surface-base);
   --ft-toggle-label-color: var(--ft-color-on-surface-base);
+  --ft-toggle-label-font-size: 14px;
+  --ft-toggle-label-line-height: 20px;
+  --ft-toggle-label-font-family: var(--ft-font-family-text, 'Inter', sans-serif);
   --ft-toggle-disabled-opacity: 0.5;
   --ft-toggle-focus-ring: var(--ft-color-focus-ring-base);
 }
@@ -111,10 +114,10 @@ const handleChange = (event: Event) => {
 }
 
 .ft-toggle__label {
-  font-family: var(--ft-font-family-text), sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: var(--ft-font-weight-regular);
+  font-family: var(--ft-toggle-label-font-family);
+  font-size: var(--ft-toggle-label-font-size);
+  line-height: var(--ft-toggle-label-line-height);
+  font-weight: var(--ft-font-weight-regular, 400);
   color: var(--ft-toggle-label-color);
   font-feature-settings: 'lnum' 1, 'tnum' 1;
 }

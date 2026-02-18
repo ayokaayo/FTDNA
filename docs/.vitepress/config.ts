@@ -82,7 +82,8 @@ export default defineConfig({
       {
         text: 'Pages',
         items: [
-          { text: 'Page Template <span class="poc-ready">POC</span>', link: '/pages/template' }
+          { text: 'Page Template <span class="poc-ready">POC</span>', link: '/pages/template' },
+          { text: 'Empty Layout <span class="poc-ready">POC</span>', link: '/pages/empty' }
         ]
       },
       {

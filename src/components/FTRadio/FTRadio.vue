@@ -7,7 +7,6 @@
       :disabled="disabled"
       :checked="modelValue === value"
       @change="$emit('update:modelValue', value)"
-      aria-role="radio"
       :aria-checked="modelValue === value"
     />
     <div class="ft-radio__box"></div>
@@ -37,8 +36,13 @@ defineEmits<{
   --ft-radio-disabled-opacity: 0.5;
   --ft-radio-size: 20px;
   --ft-radio-dot-size: 10px;
-  --ft-radio-gap: 5px;
+  --ft-radio-gap: 8px;
   --ft-radio-border-width: 2px;
+  --ft-radio-label-font-size: 14px;
+  --ft-radio-label-line-height: 20px;
+  --ft-radio-label-font-family: var(--ft-font-family-text, 'Inter', sans-serif);
+  --ft-radio-label-color: var(--ft-color-on-surface-base);
+  --ft-radio-focus-ring: var(--ft-color-focus-ring-base);
 }
 </style>
 
@@ -95,5 +99,17 @@ defineEmits<{
 .ft-radio__label {
   display: flex;
   align-items: center;
+  font-family: var(--ft-radio-label-font-family);
+  font-size: var(--ft-radio-label-font-size);
+  line-height: var(--ft-radio-label-line-height);
+  font-weight: var(--ft-font-weight-regular, 400);
+  font-feature-settings: 'lnum' 1, 'tnum' 1;
+  color: var(--ft-radio-label-color);
+}
+
+/* Focus ring */
+.ft-radio__input:focus-visible + .ft-radio__box {
+  outline: 2px solid var(--ft-radio-focus-ring);
+  outline-offset: 2px;
 }
 </style>

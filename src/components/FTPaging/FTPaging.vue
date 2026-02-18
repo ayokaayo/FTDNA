@@ -183,6 +183,8 @@ const changePageSize = () => {
   --ft-paging-tag-font-family: var(--ft-font-family-text), sans-serif;
   --ft-paging-btn-size: 24px;
   --ft-paging-btn-radius: 4px;
+  --ft-paging-btn-icon-size: 16px;
+  --ft-paging-page-active-size: 32px;
   --ft-paging-page-font-size: 10px;
   --ft-paging-page-font-weight: var(--ft-font-weight-bold);
   --ft-paging-page-font-family: var(--ft-font-family-text), sans-serif;
@@ -256,7 +258,7 @@ const changePageSize = () => {
   background-color: transparent;
   color: var(--ft-color-on-surface-base);
   cursor: pointer;
-  font-size: 16px;
+  font-size: var(--ft-paging-btn-icon-size);
   transition: opacity 0.2s ease;
 }
 
@@ -294,8 +296,8 @@ const changePageSize = () => {
   background-color: var(--ft-color-primary-base);
   color: var(--ft-color-on-primary-base);
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: var(--ft-paging-page-active-size);
+  height: var(--ft-paging-page-active-size);
 }
 
 .ft-paging__ellipsis {
