@@ -175,22 +175,17 @@ const changePageSize = () => {
 
 <style>
 :root {
-  --ft-color-mono-200: #f5f5f5;
-  --ft-color-mono-500: #959595;
-  --ft-color-mono-700: #2c2c2c;
-  --ft-color-brand-pink-400: #E96092;
-  --ft-color-white: #ffffff;
   --ft-paging-tag-height: 24px;
   --ft-paging-tag-padding: 0 8px;
   --ft-paging-tag-radius: 4px;
   --ft-paging-tag-font-size: 12px;
-  --ft-paging-tag-font-weight: 700;
-  --ft-paging-tag-font-family: 'Inter', sans-serif;
+  --ft-paging-tag-font-weight: var(--ft-font-weight-bold);
+  --ft-paging-tag-font-family: var(--ft-font-family-text), sans-serif;
   --ft-paging-btn-size: 24px;
   --ft-paging-btn-radius: 4px;
   --ft-paging-page-font-size: 10px;
-  --ft-paging-page-font-weight: 700;
-  --ft-paging-page-font-family: 'Inter', sans-serif;
+  --ft-paging-page-font-weight: var(--ft-font-weight-bold);
+  --ft-paging-page-font-family: var(--ft-font-family-text), sans-serif;
   --ft-paging-gap: 8px;
   --ft-paging-height: 42px;
 }
@@ -217,12 +212,12 @@ const changePageSize = () => {
   justify-content: center;
   height: var(--ft-paging-tag-height);
   padding: var(--ft-paging-tag-padding);
-  background-color: var(--ft-color-mono-200);
+  background-color: var(--ft-color-surface-tertiary);
   border-radius: var(--ft-paging-tag-radius);
   font-family: var(--ft-paging-tag-font-family);
   font-size: var(--ft-paging-tag-font-size);
   font-weight: var(--ft-paging-tag-font-weight);
-  color: var(--ft-color-mono-700);
+  color: var(--ft-color-on-surface-base);
 }
 
 .ft-paging__tag--dropdown {
@@ -259,7 +254,7 @@ const changePageSize = () => {
   height: var(--ft-paging-btn-size);
   border: none;
   background-color: transparent;
-  color: var(--ft-color-mono-700);
+  color: var(--ft-color-on-surface-base);
   cursor: pointer;
   font-size: 16px;
   transition: opacity 0.2s ease;
@@ -286,18 +281,18 @@ const changePageSize = () => {
   font-family: var(--ft-paging-page-font-family);
   font-size: var(--ft-paging-page-font-size);
   font-weight: var(--ft-paging-page-font-weight);
-  color: var(--ft-color-mono-500);
+  color: var(--ft-color-on-surface-tertiary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .ft-paging__page:hover:not(.ft-paging__page--active) {
-  background-color: var(--ft-color-mono-200);
+  background-color: var(--ft-color-surface-tertiary);
 }
 
 .ft-paging__page--active {
-  background-color: var(--ft-color-brand-pink-400);
-  color: var(--ft-color-white);
+  background-color: var(--ft-color-primary-base);
+  color: var(--ft-color-on-primary-base);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -305,7 +300,7 @@ const changePageSize = () => {
 
 .ft-paging__ellipsis {
   padding: 0 4px;
-  color: var(--ft-color-mono-500);
+  color: var(--ft-color-on-surface-tertiary);
   font-family: var(--ft-paging-page-font-family);
   font-size: var(--ft-paging-page-font-size);
 }

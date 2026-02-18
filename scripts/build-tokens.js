@@ -20,6 +20,7 @@ if (!fs.existsSync(DIST_DIR)) {
 const colorsTokens = JSON.parse(fs.readFileSync(path.join(TOKENS_DIR, 'colors.tokens.json'), 'utf8'));
 const semanticTokens = JSON.parse(fs.readFileSync(path.join(TOKENS_DIR, 'semantic.tokens.json'), 'utf8'));
 const typographyTokens = JSON.parse(fs.readFileSync(path.join(TOKENS_DIR, 'typography.tokens.json'), 'utf8'));
+const spacingTokens = JSON.parse(fs.readFileSync(path.join(TOKENS_DIR, 'spacing.tokens.json'), 'utf8'));
 
 // ============================================================================
 // Token Resolution Engine
@@ -33,6 +34,7 @@ const maxIterations = 10;
 const allTokens = extractTokens(colorsTokens);
 const allSemanticTokens = extractTokens(semanticTokens);
 const allTypographyTokens = extractTokens(typographyTokens);
+const allSpacingTokens = extractTokens(spacingTokens);
 
 function extractTokens(obj, prefix = '') {
   const result = {};
@@ -56,7 +58,7 @@ function extractTokens(obj, prefix = '') {
 }
 
 // Merge all tokens
-Object.assign(allTokens, allSemanticTokens, allTypographyTokens);
+Object.assign(allTokens, allSemanticTokens, allTypographyTokens, allSpacingTokens);
 
 // Resolve references with iteration to handle nested references
 function resolveReferences(value, iterations = 0) {
@@ -85,6 +87,40 @@ for (const [key, value] of Object.entries(allTokens)) {
 }
 
 console.log(`✓ Resolved ${tokenMap.size} tokens`);
+
+// ============================================================================
+// Typography Composite Extraction
+// ============================================================================
+
+// Extract composite typography styles (objects with fontSize, lineHeight, etc.)
+function extractTypographyStyles(obj, prefix = '') {
+  const styles = {};
+
+  function traverse(node, path) {
+    if (node === null || typeof node !== 'object') return;
+
+    for (const [key, value] of Object.entries(node)) {
+      if (key.startsWith('$')) {
+        if (key === '$value' && typeof value === 'object') {
+          // This is a composite typography token
+          const resolved = {};
+          for (const [prop, val] of Object.entries(value)) {
+            resolved[prop] = resolveReferences(String(val));
+          }
+          styles[path] = resolved;
+        }
+      } else {
+        traverse(value, path ? `${path}.${key}` : key);
+      }
+    }
+  }
+
+  traverse(obj);
+  return styles;
+}
+
+const typographyStyles = extractTypographyStyles(typographyTokens);
+console.log(`✓ Extracted ${Object.keys(typographyStyles).length} typography styles`);
 
 // ============================================================================
 // CSS Output Generation
@@ -129,7 +165,7 @@ function generateCSS() {
   }
 
   // Typography tokens - skip complex objects, only output simple values
-  const typographyTokens = [];
+  const typographyPrimitiveTokens = [];
   for (const [key, value] of tokenMap.entries()) {
     if (key.startsWith('font.') || key.startsWith('text.')) {
       // Skip complex typography objects with multiple properties
@@ -148,7 +184,16 @@ function generateCSS() {
         }
       }
 
-      typographyTokens.push(`  ${cssKey}: ${cssValue};`);
+      typographyPrimitiveTokens.push(`  ${cssKey}: ${cssValue};`);
+    }
+  }
+
+  // Spacing tokens
+  const spacingCssTokens = [];
+  for (const [key, value] of tokenMap.entries()) {
+    if (key.startsWith('spacing.')) {
+      const cssKey = `--ft-${key.replace(/\./g, '-')}`;
+      spacingCssTokens.push(`  ${cssKey}: ${value};`);
     }
   }
 
@@ -160,9 +205,45 @@ function generateCSS() {
   css += semanticColorTokens.sort().join('\n') + '\n\n';
 
   css += '  /* Typography */\n';
-  css += typographyTokens.sort().join('\n') + '\n';
+  css += typographyPrimitiveTokens.sort().join('\n') + '\n\n';
+
+  css += '  /* Spacing */\n';
+  css += spacingCssTokens.sort().join('\n') + '\n';
 
   css += '}\n';
+
+  // Generate typography utility classes
+  css += '\n/* ============================================================================ */\n';
+  css += '/* Typography Utility Classes                                                  */\n';
+  css += '/* Generated from typography.tokens.json composite styles                      */\n';
+  css += '/* ============================================================================ */\n\n';
+
+  for (const [path, style] of Object.entries(typographyStyles)) {
+    // Convert path like "text.body.m" to class name "ft-text-body-m"
+    const className = `ft-${path.replace(/\./g, '-')}`;
+    css += `.${className} {\n`;
+
+    if (style.fontFamily) {
+      css += `  font-family: ${style.fontFamily.startsWith("'") ? style.fontFamily : `'${style.fontFamily}'`}, sans-serif;\n`;
+    }
+    if (style.fontSize) {
+      css += `  font-size: ${style.fontSize};\n`;
+    }
+    if (style.lineHeight) {
+      css += `  line-height: ${style.lineHeight};\n`;
+    }
+    if (style.fontWeight) {
+      css += `  font-weight: ${style.fontWeight};\n`;
+    }
+    if (style.letterSpacing && style.letterSpacing !== '0px') {
+      css += `  letter-spacing: ${style.letterSpacing};\n`;
+    }
+    if (style.textDecoration) {
+      css += `  text-decoration: ${style.textDecoration};\n`;
+    }
+
+    css += '}\n\n';
+  }
 
   return css;
 }
@@ -227,6 +308,16 @@ function generateSCSS() {
   scss += typographyVars.sort().join('\n') + '\n\n';
 
   // SCSS Maps
+  scss += '// Spacing Variables\n';
+  const spacingVars = [];
+  for (const [key, value] of tokenMap.entries()) {
+    if (key.startsWith('spacing.')) {
+      const scssKey = `$ft-${key.replace(/\./g, '-')}`;
+      spacingVars.push(`${scssKey}: ${value};`);
+    }
+  }
+  scss += spacingVars.sort().join('\n') + '\n\n';
+
   scss += '// SCSS Maps for programmatic access\n\n';
 
   // Colors map

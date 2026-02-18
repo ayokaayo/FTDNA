@@ -32,8 +32,8 @@ defineEmits<{
 
 <style>
 :root {
-  --ft-radio-checked-color: var(--ft-color-brand-pink-400, #E96092);
-  --ft-radio-border-color: var(--ft-color-neutral-gray-500, #959595);
+  --ft-radio-checked-color: var(--ft-color-primary-base);
+  --ft-radio-border-color: var(--ft-color-border-strong);
   --ft-radio-disabled-opacity: 0.5;
   --ft-radio-size: 20px;
   --ft-radio-dot-size: 10px;

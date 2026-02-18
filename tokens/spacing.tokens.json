@@ -1,0 +1,55 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$metadata": {
+    "name": "FastTrack Spacing Tokens",
+    "version": "1.0.0",
+    "source": "Design System spacing scale",
+    "notes": [
+      "4px base unit, geometric progression",
+      "Used for gaps, margins, paddings, and layout spacing"
+    ]
+  },
+
+  "spacing": {
+    "2xs": {
+      "$type": "dimension",
+      "$value": "2px",
+      "$description": "Micro spacing — icon inner padding, tight inline elements"
+    },
+    "xs": {
+      "$type": "dimension",
+      "$value": "4px",
+      "$description": "Extra small — compact element gaps, tag padding"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "8px",
+      "$description": "Small — default inline gaps, form element spacing"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "16px",
+      "$description": "Medium — default content gaps, card padding"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "24px",
+      "$description": "Large — section spacing, between card groups"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "32px",
+      "$description": "Extra large — page section margins"
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": "48px",
+      "$description": "Double extra large — major page section divisions"
+    },
+    "3xl": {
+      "$type": "dimension",
+      "$value": "64px",
+      "$description": "Triple extra large — page-level vertical spacing"
+    }
+  }
+}

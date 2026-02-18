@@ -75,8 +75,8 @@ const handleChange = (event: Event) => {
 
 <style>
 :root {
-  --ft-checkbox-icon-color: var(--ft-color-neutral-mono-700, #2c2c2c);
-  --ft-checkbox-disabled-color: var(--ft-color-neutral-mono-500, #959595);
+  --ft-checkbox-icon-color: var(--ft-color-neutral-gray-700);
+  --ft-checkbox-disabled-color: var(--ft-color-neutral-gray-500);
   --ft-checkbox-disabled-opacity: 0.5;
   --ft-checkbox-icon-size: 20px;
   --ft-checkbox-container-size: 24px;
@@ -115,7 +115,7 @@ const handleChange = (event: Event) => {
 
 .ft-checkbox__label {
   font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--ft-font-family-text), sans-serif;
   color: var(--ft-checkbox-icon-color);
   line-height: normal;
 }

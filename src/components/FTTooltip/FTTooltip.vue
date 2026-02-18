@@ -56,12 +56,12 @@ const handleCopy = async () => {
 
 <style>
 :root {
-  --ft-tooltip-bg-default: var(--ft-color-neutral-mono-700, #2c2c2c);
-  --ft-tooltip-bg-success: #3aaa35;
-  --ft-tooltip-bg-info: #63b6e6;
-  --ft-tooltip-bg-warning: #f4a321;
-  --ft-tooltip-bg-error: #e54f35;
-  --ft-tooltip-fg: white;
+  --ft-tooltip-bg-default: var(--ft-color-neutral-dark);
+  --ft-tooltip-bg-success: var(--ft-color-success-base);
+  --ft-tooltip-bg-info: var(--ft-color-brand-blue-400);
+  --ft-tooltip-bg-warning: var(--ft-color-warning-light);
+  --ft-tooltip-bg-error: var(--ft-color-brand-red-400);
+  --ft-tooltip-fg: var(--ft-color-on-surface-inverse);
   --ft-tooltip-radius: var(--ft-corner-radius-tiny, 4px);
   --ft-tooltip-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.12);
   --ft-tooltip-max-width: 280px;
@@ -101,7 +101,7 @@ const handleCopy = async () => {
   border-radius: var(--ft-tooltip-radius);
   box-shadow: var(--ft-tooltip-shadow);
   color: var(--ft-tooltip-fg);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--ft-font-family-text), sans-serif;
   font-size: var(--ft-tooltip-font-size);
   font-weight: var(--ft-tooltip-font-weight);
   letter-spacing: var(--ft-tooltip-letter-spacing);
