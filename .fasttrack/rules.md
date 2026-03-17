@@ -1,5 +1,9 @@
 # FastTrack Vue Components Library - AI Rules Document
 
+> **Context:** This file describes patterns for `@fasttrack-solutions/vue-components-lib`.
+> It is reference material for AI context when generating components that will be pushed to the vue-lib repo.
+> It does NOT describe the FTDNA repo structure — see CLAUDE.md for that.
+
 This is the single source of truth for all AI-driven component generation in the FastTrack Vue Components Library. All AI tools (Claude, Cursor, etc.) MUST reference and follow these rules for production-ready output.
 
 ---

@@ -1,0 +1,326 @@
+// FastTrack Design Tokens - SCSS Variables
+
+// Color Tokens
+$ft-color-brand-blue-100: #D8EDF9;
+$ft-color-brand-blue-200: #B0DAF2;
+$ft-color-brand-blue-300: #C3D9ED;
+$ft-color-brand-blue-400: #63B6E6;
+$ft-color-brand-blue-500: #2782CF;
+$ft-color-brand-blue-600: #1369B9;
+$ft-color-brand-blue-700: #105DBA;
+$ft-color-brand-blue-800: #012B86;
+$ft-color-brand-blue-900: #001261;
+$ft-color-brand-orange-100: #F9D3CC;
+$ft-color-brand-orange-200: #F2A699;
+$ft-color-brand-orange-300: #FCA122;
+$ft-color-brand-orange-400: #F4A321;
+$ft-color-brand-orange-500: #E9681A;
+$ft-color-brand-orange-600: #E54F35;
+$ft-color-brand-orange-700: #DF4317;
+$ft-color-brand-pink-200: #FAD7E4;
+$ft-color-brand-pink-300: #F4B0C8;
+$ft-color-brand-pink-400: #E96092;
+$ft-color-brand-pink-500: #D52454;
+$ft-color-brand-pink-600: #C21030;
+$ft-color-brand-pink-700: #91003F;
+$ft-color-brand-purple-100: #F1E4F0;
+$ft-color-brand-purple-200: #C693C2;
+$ft-color-brand-purple-300: #E0C6E0;
+$ft-color-brand-purple-400: #E2C9E0;
+$ft-color-brand-purple-500: #C18EC0;
+$ft-color-brand-purple-600: #9A5594;
+$ft-color-brand-purple-700: #783171;
+$ft-color-brand-purple-800: #440743;
+$ft-color-brand-purple-900: #230123;
+$ft-color-brand-red-200: #EDC4C4;
+$ft-color-brand-red-300: #DA8A89;
+$ft-color-brand-red-400: #E54F35;
+$ft-color-brand-red-500: #CD1913;
+$ft-color-brand-red-600: #C21030;
+$ft-color-brand-red-700: #B61615;
+$ft-color-brand-red-800: #820202;
+$ft-color-brand-red-900: #5D0000;
+$ft-color-brand-yellow-300: #FFF6C9;
+$ft-color-brand-yellow-400: #F9D18F;
+$ft-color-brand-yellow-500: #FFDB14;
+$ft-color-brand-yellow-600: #F4A321;
+$ft-color-brand-yellow-700: #FDBC25;
+$ft-color-brand-yellow-800: #FEED93;
+$ft-color-brand-yellow-900: #FCE8C7;
+$ft-color-neutral-black-900: #000000;
+$ft-color-neutral-gray-200: #F5F5F5;
+$ft-color-neutral-gray-300: #E5E5E5;
+$ft-color-neutral-gray-400: #CACACA;
+$ft-color-neutral-gray-500: #959595;
+$ft-color-neutral-gray-600: #666666;
+$ft-color-neutral-gray-700: #2C2C2C;
+$ft-color-neutral-white-100: #FAFAFA;
+$ft-color-neutral-white-50: #FFFFFF;
+$ft-color-secondary-aqua-400: #E1F2F2;
+$ft-color-secondary-aqua-500: #C4E5E4;
+$ft-color-secondary-aqua-600: #89CCCA;
+$ft-color-secondary-aqua-700: #4AA3A0;
+$ft-color-secondary-aqua-800: #4AA3A0;
+$ft-color-secondary-aqua-900: #28827F;
+$ft-color-secondary-denim-600: #88B3DC;
+$ft-color-secondary-denim-700: #1369B9;
+$ft-color-secondary-denim-800: #012B86;
+$ft-color-secondary-denim-900: #001261;
+$ft-color-secondary-green-200: #CDEACC;
+$ft-color-secondary-green-300: #9CD499;
+$ft-color-secondary-green-400: #3AAA35;
+$ft-color-secondary-green-500: #0D710B;
+$ft-color-secondary-green-600: #034B02;
+$ft-color-secondary-lilac-600: #E0C6E0;
+$ft-color-secondary-lilac-700: #C18EC0;
+$ft-color-secondary-lilac-800: #783171;
+$ft-color-secondary-lilac-900: #440743;
+$ft-color-secondary-magenta-500: #EFC4DF;
+$ft-color-secondary-magenta-600: #E96092;
+$ft-color-secondary-magenta-700: #C0087F;
+$ft-color-secondary-magenta-800: #831F82;
+$ft-color-secondary-magenta-900: #91003F;
+$ft-color-secondary-thunderbird-600: #DA8A89;
+$ft-color-secondary-thunderbird-700: #B61615;
+$ft-color-secondary-thunderbird-800: #C21030;
+$ft-color-secondary-thunderbird-900: #6D001F;
+
+// Semantic Color Tokens
+$ft-color-accent-primary: $ft-color-brand-orange-500;
+$ft-color-accent-secondary: $ft-color-secondary-magenta-700;
+$ft-color-border-base: $ft-color-neutral-gray-300;
+$ft-color-border-focus: $ft-color-brand-blue-700;
+$ft-color-border-strong: $ft-color-neutral-gray-500;
+$ft-color-border-subtle: $ft-color-neutral-gray-200;
+$ft-color-error-base: $ft-color-brand-red-700;
+$ft-color-error-dark: $ft-color-brand-red-800;
+$ft-color-error-darker: $ft-color-brand-red-900;
+$ft-color-error-light: $ft-color-brand-pink-600;
+$ft-color-error-lightest: $ft-color-brand-red-200;
+$ft-color-focus-ring-base: $ft-color-brand-blue-700;
+$ft-color-focus-ring-light: $ft-color-brand-blue-400;
+$ft-color-info-base: $ft-color-secondary-aqua-700;
+$ft-color-info-dark: $ft-color-secondary-aqua-700;
+$ft-color-info-light: $ft-color-secondary-aqua-600;
+$ft-color-info-lightest: $ft-color-secondary-aqua-400;
+$ft-color-link-active: $ft-color-brand-blue-900;
+$ft-color-link-base: $ft-color-brand-blue-700;
+$ft-color-link-hover: $ft-color-brand-blue-800;
+$ft-color-link-visited: $ft-color-brand-purple-500;
+$ft-color-neutral-base: $ft-color-neutral-gray-600;
+$ft-color-neutral-dark: $ft-color-neutral-gray-700;
+$ft-color-neutral-light: $ft-color-neutral-gray-500;
+$ft-color-neutral-lighter: $ft-color-neutral-gray-400;
+$ft-color-neutral-lightest: $ft-color-neutral-gray-200;
+$ft-color-on-error-base: $ft-color-neutral-white-50;
+$ft-color-on-primary-base: $ft-color-neutral-white-50;
+$ft-color-on-primary-subtle: $ft-color-brand-pink-200;
+$ft-color-on-secondary-base: $ft-color-neutral-white-50;
+$ft-color-on-success-base: $ft-color-neutral-white-50;
+$ft-color-on-surface-base: $ft-color-neutral-gray-700;
+$ft-color-on-surface-disabled: $ft-color-neutral-gray-400;
+$ft-color-on-surface-inverse: $ft-color-neutral-white-50;
+$ft-color-on-surface-secondary: $ft-color-neutral-gray-600;
+$ft-color-on-surface-tertiary: $ft-color-neutral-gray-500;
+$ft-color-overlay-base: rgba(0, 0, 0, 0.5);
+$ft-color-overlay-dark: rgba(0, 0, 0, 0.7);
+$ft-color-overlay-light: rgba(0, 0, 0, 0.3);
+$ft-color-primary-base: $ft-color-brand-pink-400;
+$ft-color-primary-dark: $ft-color-brand-pink-500;
+$ft-color-primary-darker: $ft-color-brand-pink-600;
+$ft-color-primary-light: $ft-color-brand-pink-300;
+$ft-color-primary-lighter: $ft-color-brand-pink-200;
+$ft-color-primary-lightest: $ft-color-brand-pink-200;
+$ft-color-secondary-base: $ft-color-brand-blue-700;
+$ft-color-secondary-dark: $ft-color-brand-blue-800;
+$ft-color-secondary-light: $ft-color-brand-blue-600;
+$ft-color-secondary-lightest: $ft-color-brand-blue-100;
+$ft-color-success-base: $ft-color-secondary-green-400;
+$ft-color-success-dark: $ft-color-secondary-green-500;
+$ft-color-success-light: $ft-color-secondary-green-300;
+$ft-color-success-lightest: $ft-color-secondary-green-200;
+$ft-color-surface-base: $ft-color-neutral-white-50;
+$ft-color-surface-inverse: $ft-color-neutral-black-900;
+$ft-color-surface-secondary: $ft-color-neutral-white-100;
+$ft-color-surface-tertiary: $ft-color-neutral-gray-200;
+$ft-color-tertiary-base: $ft-color-brand-purple-700;
+$ft-color-tertiary-dark: $ft-color-brand-purple-800;
+$ft-color-tertiary-light: $ft-color-brand-purple-600;
+$ft-color-warning-base: $ft-color-brand-yellow-500;
+$ft-color-warning-dark: $ft-color-brand-yellow-700;
+$ft-color-warning-light: $ft-color-brand-yellow-600;
+$ft-color-warning-lightest: $ft-color-brand-yellow-300;
+
+// Typography Variables
+$ft-font-family-code: 'Noto Sans Mono';
+$ft-font-family-text: 'Inter';
+
+// Spacing Variables
+$ft-spacing-2xl: 48px;
+$ft-spacing-2xs: 2px;
+$ft-spacing-3xl: 64px;
+$ft-spacing-lg: 24px;
+$ft-spacing-md: 16px;
+$ft-spacing-sm: 8px;
+$ft-spacing-xl: 32px;
+$ft-spacing-xs: 4px;
+
+// SCSS Maps for programmatic access
+
+$ft-colors: (
+  'brand-blue-100': #D8EDF9,
+  'brand-blue-200': #B0DAF2,
+  'brand-blue-300': #C3D9ED,
+  'brand-blue-400': #63B6E6,
+  'brand-blue-500': #2782CF,
+  'brand-blue-600': #1369B9,
+  'brand-blue-700': #105DBA,
+  'brand-blue-800': #012B86,
+  'brand-blue-900': #001261,
+  'brand-orange-100': #F9D3CC,
+  'brand-orange-200': #F2A699,
+  'brand-orange-300': #FCA122,
+  'brand-orange-400': #F4A321,
+  'brand-orange-500': #E9681A,
+  'brand-orange-600': #E54F35,
+  'brand-orange-700': #DF4317,
+  'brand-pink-200': #FAD7E4,
+  'brand-pink-300': #F4B0C8,
+  'brand-pink-400': #E96092,
+  'brand-pink-500': #D52454,
+  'brand-pink-600': #C21030,
+  'brand-pink-700': #91003F,
+  'brand-purple-100': #F1E4F0,
+  'brand-purple-200': #C693C2,
+  'brand-purple-300': #E0C6E0,
+  'brand-purple-400': #E2C9E0,
+  'brand-purple-500': #C18EC0,
+  'brand-purple-600': #9A5594,
+  'brand-purple-700': #783171,
+  'brand-purple-800': #440743,
+  'brand-purple-900': #230123,
+  'brand-red-200': #EDC4C4,
+  'brand-red-300': #DA8A89,
+  'brand-red-400': #E54F35,
+  'brand-red-500': #CD1913,
+  'brand-red-600': #C21030,
+  'brand-red-700': #B61615,
+  'brand-red-800': #820202,
+  'brand-red-900': #5D0000,
+  'brand-yellow-300': #FFF6C9,
+  'brand-yellow-400': #F9D18F,
+  'brand-yellow-500': #FFDB14,
+  'brand-yellow-600': #F4A321,
+  'brand-yellow-700': #FDBC25,
+  'brand-yellow-800': #FEED93,
+  'brand-yellow-900': #FCE8C7,
+  'neutral-black-900': #000000,
+  'neutral-gray-200': #F5F5F5,
+  'neutral-gray-300': #E5E5E5,
+  'neutral-gray-400': #CACACA,
+  'neutral-gray-500': #959595,
+  'neutral-gray-600': #666666,
+  'neutral-gray-700': #2C2C2C,
+  'neutral-white-100': #FAFAFA,
+  'neutral-white-50': #FFFFFF,
+  'secondary-aqua-400': #E1F2F2,
+  'secondary-aqua-500': #C4E5E4,
+  'secondary-aqua-600': #89CCCA,
+  'secondary-aqua-700': #4AA3A0,
+  'secondary-aqua-800': #4AA3A0,
+  'secondary-aqua-900': #28827F,
+  'secondary-denim-600': #88B3DC,
+  'secondary-denim-700': #1369B9,
+  'secondary-denim-800': #012B86,
+  'secondary-denim-900': #001261,
+  'secondary-green-200': #CDEACC,
+  'secondary-green-300': #9CD499,
+  'secondary-green-400': #3AAA35,
+  'secondary-green-500': #0D710B,
+  'secondary-green-600': #034B02,
+  'secondary-lilac-600': #E0C6E0,
+  'secondary-lilac-700': #C18EC0,
+  'secondary-lilac-800': #783171,
+  'secondary-lilac-900': #440743,
+  'secondary-magenta-500': #EFC4DF,
+  'secondary-magenta-600': #E96092,
+  'secondary-magenta-700': #C0087F,
+  'secondary-magenta-800': #831F82,
+  'secondary-magenta-900': #91003F,
+  'secondary-thunderbird-600': #DA8A89,
+  'secondary-thunderbird-700': #B61615,
+  'secondary-thunderbird-800': #C21030,
+  'secondary-thunderbird-900': #6D001F
+);
+
+$ft-semantic-colors: (
+  'accent-primary': $ft-color-brand-orange-500,
+  'accent-secondary': $ft-color-secondary-magenta-700,
+  'border-base': $ft-color-neutral-gray-300,
+  'border-focus': $ft-color-brand-blue-700,
+  'border-strong': $ft-color-neutral-gray-500,
+  'border-subtle': $ft-color-neutral-gray-200,
+  'error-base': $ft-color-brand-red-700,
+  'error-dark': $ft-color-brand-red-800,
+  'error-darker': $ft-color-brand-red-900,
+  'error-light': $ft-color-brand-pink-600,
+  'error-lightest': $ft-color-brand-red-200,
+  'focus-ring-base': $ft-color-brand-blue-700,
+  'focus-ring-light': $ft-color-brand-blue-400,
+  'info-base': $ft-color-secondary-aqua-700,
+  'info-dark': $ft-color-secondary-aqua-700,
+  'info-light': $ft-color-secondary-aqua-600,
+  'info-lightest': $ft-color-secondary-aqua-400,
+  'link-active': $ft-color-brand-blue-900,
+  'link-base': $ft-color-brand-blue-700,
+  'link-hover': $ft-color-brand-blue-800,
+  'link-visited': $ft-color-brand-purple-500,
+  'neutral-base': $ft-color-neutral-gray-600,
+  'neutral-dark': $ft-color-neutral-gray-700,
+  'neutral-light': $ft-color-neutral-gray-500,
+  'neutral-lighter': $ft-color-neutral-gray-400,
+  'neutral-lightest': $ft-color-neutral-gray-200,
+  'on-error-base': $ft-color-neutral-white-50,
+  'on-primary-base': $ft-color-neutral-white-50,
+  'on-primary-subtle': $ft-color-brand-pink-200,
+  'on-secondary-base': $ft-color-neutral-white-50,
+  'on-success-base': $ft-color-neutral-white-50,
+  'on-surface-base': $ft-color-neutral-gray-700,
+  'on-surface-disabled': $ft-color-neutral-gray-400,
+  'on-surface-inverse': $ft-color-neutral-white-50,
+  'on-surface-secondary': $ft-color-neutral-gray-600,
+  'on-surface-tertiary': $ft-color-neutral-gray-500,
+  'overlay-base': rgba(0, 0, 0, 0.5),
+  'overlay-dark': rgba(0, 0, 0, 0.7),
+  'overlay-light': rgba(0, 0, 0, 0.3),
+  'primary-base': $ft-color-brand-pink-400,
+  'primary-dark': $ft-color-brand-pink-500,
+  'primary-darker': $ft-color-brand-pink-600,
+  'primary-light': $ft-color-brand-pink-300,
+  'primary-lighter': $ft-color-brand-pink-200,
+  'primary-lightest': $ft-color-brand-pink-200,
+  'secondary-base': $ft-color-brand-blue-700,
+  'secondary-dark': $ft-color-brand-blue-800,
+  'secondary-light': $ft-color-brand-blue-600,
+  'secondary-lightest': $ft-color-brand-blue-100,
+  'success-base': $ft-color-secondary-green-400,
+  'success-dark': $ft-color-secondary-green-500,
+  'success-light': $ft-color-secondary-green-300,
+  'success-lightest': $ft-color-secondary-green-200,
+  'surface-base': $ft-color-neutral-white-50,
+  'surface-inverse': $ft-color-neutral-black-900,
+  'surface-secondary': $ft-color-neutral-white-100,
+  'surface-tertiary': $ft-color-neutral-gray-200,
+  'tertiary-base': $ft-color-brand-purple-700,
+  'tertiary-dark': $ft-color-brand-purple-800,
+  'tertiary-light': $ft-color-brand-purple-600,
+  'warning-base': $ft-color-brand-yellow-500,
+  'warning-dark': $ft-color-brand-yellow-700,
+  'warning-light': $ft-color-brand-yellow-600,
+  'warning-lightest': $ft-color-brand-yellow-300
+);
+
+$ft-typography: (
+  'family-code': 'Noto Sans Mono',
+  'family-text': 'Inter'
+);

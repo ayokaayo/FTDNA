@@ -1,17 +1,18 @@
-# FastTrack Vue Components Library — AI Rules
+# FT DNA — AI Rules
 # This file is automatically loaded by Cursor IDE and compatible VS Code extensions.
-# For the complete reference, see .fasttrack/rules.md
+# For the complete vue-components-lib reference, see .fasttrack/rules.md
 
 ## Project Context
 
-You are working on the FastTrack Design System, a Vue 3 + TypeScript component library.
+You are working in FT DNA, the FastTrack platform's unified workspace. This repo contains design tokens, component inventory, AI skills, and reference documentation. It does NOT contain Vue components — those live in `../vue-components-lib/`.
 
-- Package: @fasttrack-solutions/vue-components-lib
-- Design system: @fasttrack-solutions/design-system
-- Registry: GitHub Packages (private, npm.pkg.github.com)
-- Documentation: VitePress (in docs/ directory)
-- Figma library: DSP-Master (839 components across 29 sections)
-- Icons: Font Awesome (duotone preferred, prefix fad)
+- **Design tokens**: `tokens/` (W3C JSON) → `dist/` (generated CSS/SCSS/TS)
+- **Component inventory**: `inventory/` (Figma ↔ Vue mapping, gap analysis)
+- **AI Skills**: `skills/` (prd-writer, design-critique, prototype-generator, skill-architect)
+- **Shared references**: `references/` (component-catalog.md, page-patterns.md)
+- **Templates**: `templates/` (Vue component, test, docs templates)
+- **Session memory**: `memory/claude.md`
+- **Figma MCP**: configured in `.mcp.json`
 
 ## ABSOLUTE RULES — Never Break These
 
@@ -36,7 +37,7 @@ Files:
 - tokens/colors.tokens.json → 67 colors (W3C format)
 - tokens/typography.tokens.json → 17 text styles
 - tokens/semantic.tokens.json → Functional aliases
-- dist/tokens.css → 159 CSS custom properties (--ft-* prefix)
+- dist/tokens.css → CSS custom properties (--ft-* prefix)
 - dist/tokens.scss → SCSS variables + maps
 - dist/useTokens.ts → Vue 3 composable + TypeScript types
 
@@ -54,110 +55,36 @@ Semantic roles:
 
 Typography: Inter (text), Noto Sans Mono (code). Two weights: Regular (400), Bold (700).
 
-## Component Conventions
+## Component Generation
 
-### Vue SFC Structure
-
-<template>
-  <div :class="['ft-{name}', { 'ft-{name}--primary': primary }]" :aria-disabled="disabled">
-    <slot />
-  </div>
-</template>
-
-<script setup lang="ts">
-interface FT{Name}Props {
-  primary?: boolean
-  secondary?: boolean
-  disabled?: boolean
-  loading?: boolean
-}
-const props = withDefaults(defineProps<FT{Name}Props>(), {
-  primary: false,
-  disabled: false,
-})
-</script>
-
-<style scoped>
-.ft-{name} {
-  --ft-{name}-bg: var(--ft-color-surface-base);
-  --ft-{name}-fg: var(--ft-color-on-surface-base);
-  background: var(--ft-{name}-bg);
-  color: var(--ft-{name}-fg);
-  font-family: var(--ft-font-family-text);
-  transition: all 150ms ease;
-}
-</style>
-
-### Props Patterns
-
-Style variants (boolean, mutually exclusive): primary, secondary, tertiary, action, warning, success, info, error
-State props (boolean): loading, disabled, active
-Icon props: icon (string, FA icon name), iconOnly (boolean), iconSmall/iconMedium/iconBig (boolean)
-Tooltip: tooltip (string), tooltipPosition (string: top|bottom|left|right)
-
-### CSS Architecture
-
-- BEM-like classes: .ft-button, .ft-button__icon, .ft-button--primary
-- Component CSS variables: --ft-{component}-{property}-{state}
-  Example: --ft-btn-height, --ft-btn-main-bg-default, --ft-btn-main-bg-hover
-- Variables reference semantic tokens: --ft-btn-bg: var(--ft-color-primary-base)
-- Transitions: 150ms ease for all interactive states
-
-## Accessibility (Non-Negotiable)
-
-- Keyboard: Enter/Space for buttons, Escape to close overlays, Arrow keys for lists
-- Focus ring: 2px solid var(--ft-color-focus-ring-base) with 2px offset
-- Labels: Every form element needs aria-label, aria-labelledby, or visible <label>
-- Contrast: WCAG 2.1 AA minimum (4.5:1 text, 3:1 large text/UI)
-- Disabled: aria-disabled="true", tabindex="-1", opacity 0.5
-- Loading: aria-busy="true", spinner with role="status" and aria-label="Loading"
-
-## Documentation (VitePress)
-
-Each component gets a page at docs/components/{name}.md with these sections:
-1. Title + description
-2. Usage (Composition API + Options API examples)
-3. Styles (variant descriptions)
-4. States (disabled, loading)
-5. Props table (Name | Type | Default | Description)
-6. CSS variables table (Variable | Default Value)
-
-Reference: docs/components/button.md is the gold standard.
-
-## Testing (Vitest + Vue Test Utils)
-
-Test file: {ComponentName}.test.ts
-Required tests:
-1. Renders correctly (snapshot)
-2. Each prop variant applies correct class
-3. Events emit correctly
-4. Keyboard interaction works
-5. ARIA attributes present
-6. CSS variables applied
+When generating Vue components (targeting ../vue-components-lib/):
+- Templates are in `templates/`
+- Full conventions in `.fasttrack/rules.md`
+- Component CSS variables follow: --ft-{component}-{property}-{state}
 
 ## Figma Translation
 
-Figma naming: Type=value, Status=value, Size=value (parameterized)
-94% of 839 Figma components follow this pattern.
+Figma uses parameterized naming: Type=value, Status=value, Size=value
+- Variant properties → Vue props
+- Color values → map to --ft-color-* semantic tokens
+- Spacing → map to CSS variables
 
-Translation process:
-1. Figma variant properties → Vue prop names
-2. Boolean (2 values) → boolean prop; 3+ values → string enum prop
-3. Colors → map to --ft-color-* semantic tokens
-4. Spacing/sizing → CSS variables
+**FT DNA Figma file (primary):** `7J3dSTuOSRlsHBqQ4ohtxI`
+**DSP-Master file (legacy):** `tyhDN8pjR0WM048BYhEa1Q`
+**Fast Track Logo file:** `Ahohkx0sfMS7oHU1V3j3DO`
 
-## File Structure
+## Skills System
 
-src/components/FT{Name}/
-  FT{Name}.vue       # Component
-  FT{Name}.test.ts   # Tests
-  FT{Name}.css       # Styles (if not scoped in SFC)
-  index.ts           # Barrel export
+Skills are Claude instruction packages in `skills/`. Registry: `skills/registry.json`.
 
-docs/components/{name}.md  # Documentation
+Available skills:
+- **prd-writer** — Write/review/refactor PRDs
+- **skill-architect** — Create new skills (the skill factory)
+- **design-critique** — Review designs for compliance and quality
+- **prototype-generator** — Generate Figma prototypes from briefs
 
 ## Commands
 
-npm run build:tokens    # Rebuild CSS/SCSS/TS from token JSON files
-npm run dev             # VitePress dev server (localhost:5173)
-npm run build:docs      # Build static documentation site
+```bash
+npm run build:tokens   # Rebuild CSS/SCSS/TS from token JSON
+```

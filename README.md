@@ -1,70 +1,61 @@
-# FastTrack Design System
+# FT DNA
 
-A centralized design system providing tokens, components, and documentation for FastTrack Solutions products.
+The FastTrack platform's DNA — design tokens, component inventory, AI skills, and reference documentation. This is the team's unified workspace for design system management and AI-assisted development.
 
-## Purpose
+## What's Here
 
-The FastTrack Design System ensures consistency, accessibility, and efficiency across all product interfaces by establishing a single source of truth for design tokens, components, and patterns.
-
-## Directory Structure
-
-- **tokens/** — Design token definitions
-  - `colors.tokens.json` — Color palettes and semantic color assignments
-  - `semantic.tokens.json` — Semantic design decisions (spacing, sizing, etc.)
-  - `typography.tokens.json` — Type scales and font definitions
-
-- **inventory/** — Component audit and gap analysis
-  - Tracks all designed and implemented components
-  - Identifies missing or outdated components
-
-- **scripts/** — Build tooling
-  - `build-tokens.js` — Compiles tokens into distributable formats
-
-- **dist/** — Generated outputs (created during build)
-
-## Building Tokens
-
-Compile all design tokens from source definitions:
-
-```bash
-npm run build:tokens
-```
-
-This generates formatted token outputs in the `dist/` directory for use in design tools and code.
-
-## Token Workflow
-
-The design system follows this flow:
-
-1. **Figma** — Design decisions are made in Figma
-2. **tokens/*.json** — Exported and structured as JSON token definitions
-3. **scripts/build-tokens.js** — Build script processes tokens
-4. **dist/** — Compiled outputs ready for consumption
-
-## Component Inventory
-
-See the [inventory/](inventory/) directory for the current component gap analysis. This document tracks:
-- Designed components
-- Implemented components
-- Missing or outdated components
-- Priority for next iterations
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
-- Token naming conventions
-- Adding new colors and typography
-- Component contribution workflow
-- Code review checklist
+| Directory | Contents |
+|-----------|----------|
+| `tokens/` | W3C design tokens (colors, typography, spacing, semantic) |
+| `dist/` | Generated CSS, SCSS, and TypeScript from tokens |
+| `inventory/` | Component audit, gap analysis, Figma-to-Vue tracking |
+| `skills/` | Claude AI skills (prd-writer, design-critique, prototype-generator, skill-architect) |
+| `references/` | Shared context docs (component catalog, page patterns) |
+| `templates/` | Vue component, test, and docs templates |
+| `assets/logos/` | FastTrack brand SVGs |
+| `scripts/` | Token build script |
+| `memory/` | AI session memory and progress log |
 
 ## Quick Start
 
-1. Review the [inventory/](inventory/) to understand current components
-2. Check [tokens/](tokens/) for existing design decisions
-3. Make changes to token files or add new components
-4. Run `npm run build:tokens` to compile changes
-5. Submit a pull request with your contributions
+```bash
+# Build design tokens (CSS, SCSS, TypeScript)
+npm install
+npm run build:tokens
+```
 
----
+Output lands in `dist/`:
+- `tokens.css` — CSS custom properties (`--ft-*`)
+- `tokens.scss` — SCSS variables and maps
+- `useTokens.ts` — Vue 3 composable with TypeScript types
 
-For questions or contributions, please open an issue or pull request in the repository.
+## How It Works
+
+This repo is the team's AI-assisted workspace. When a designer needs a component converted from Figma to code:
+
+1. Open Claude in this directory
+2. Claude reads Figma via MCP
+3. Claude reads this repo for context (tokens, catalog, skills, conversion rules)
+4. Claude writes the Vue component to `../vue-components-lib/`
+5. Claude creates a branch and PR on the vue-lib repo
+6. Front-end reviews and merges
+
+## Related Repos
+
+- **[vue-components-lib](https://github.com/fasttrack-solutions/vue-components-lib)** — Production Vue 3 component library (npm package)
+- **FT DNA Figma file** — Source of truth for design (file key: `7J3dSTuOSRlsHBqQ4ohtxI`)
+
+## AI Skills
+
+Skills are Claude instruction packages in `skills/`. See `skills/registry.json` for the full index.
+
+| Skill | What it does |
+|-------|-------------|
+| `prd-writer` | Write or refactor PRDs |
+| `skill-architect` | Create new skills |
+| `design-critique` | Review designs for compliance and quality |
+| `prototype-generator` | Generate Figma prototypes from briefs |
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for token naming conventions, component workflow, and review checklist.

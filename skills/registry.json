@@ -1,0 +1,63 @@
+{
+  "$schema": "./registry-schema.json",
+  "version": "1.0.0",
+  "updated": "2026-03-17",
+  "skills": [
+    {
+      "name": "prd-writer",
+      "path": "skills/prd-writer",
+      "description": "Write, review, or refactor Product Requirements Documents (PRDs) for product teams. Adapts output density to task complexity — from a lightweight task brief to a full system PRD. Trigger on: PRD, product requirements, feature specs, task specs, ClickUp task descriptions, rough notes to structured docs.",
+      "author": "miguel-angelo",
+      "domain": ["product-management", "documentation"],
+      "autonomy": "semi-auto",
+      "inputs": ["user-prompt", "rough-notes", "feature-description"],
+      "outputs": [".md file", "clickup-task-description"],
+      "complexity": "moderate",
+      "created": "2026-03-12",
+      "updated": "2026-03-13",
+      "status": "active"
+    },
+    {
+      "name": "skill-architect",
+      "path": "skills/skill-architect",
+      "description": "Design and build production-ready Claude skills from scratch. Trigger on: create a skill, make a skill, turn this into a skill, automate this workflow, I keep doing X manually, build a reusable skill, skill for X. Also trigger when someone describes a repeatable process they want Claude to handle.",
+      "author": "miguel-angelo",
+      "domain": ["meta", "automation"],
+      "autonomy": "semi-auto",
+      "inputs": ["user-prompt", "workflow-description", "existing-skill", "structured-brief"],
+      "outputs": ["skill-folder", "registry-entry"],
+      "complexity": "complex",
+      "created": "2026-03-13",
+      "updated": "2026-03-13",
+      "status": "active"
+    },
+    {
+      "name": "design-critique",
+      "path": "skills/design-critique",
+      "description": "Review and critique UI designs for usability, visual quality, accessibility, and design system compliance. Trigger on: design review, UI review, design critique, UX audit, review this screen, check this design, design QA, review before handoff, does this look right, feedback on this layout, review this Figma, check this mockup. Also trigger when a developer shares a production URL or screenshot for design feedback.",
+      "author": "miguel-angelo",
+      "domain": ["product-design", "quality-assurance"],
+      "autonomy": "semi-auto",
+      "inputs": ["figma-url", "screenshot", "production-url", "clickup-task"],
+      "outputs": ["structured-feedback", "figma-comment", "clickup-comment"],
+      "complexity": "moderate",
+      "created": "2026-03-13",
+      "updated": "2026-03-13",
+      "status": "active"
+    },
+    {
+      "name": "prototype-generator",
+      "path": "skills/prototype-generator",
+      "description": "Generate branded Figma prototypes from a brief, PRD, or verbal description. Trigger on: build a screen, create a prototype, design a page in Figma, mock up a feature, generate UI, build a layout, create a form, design a modal, make a dashboard, prototype this. Outputs production-quality Figma frames using FT DNA design tokens and real component instances — not wireframes, not screenshots, not code.",
+      "author": "miguel-angelo",
+      "domain": ["product-design", "prototyping", "figma"],
+      "autonomy": "semi-auto",
+      "inputs": ["user-prompt", "prd", "feature-description", "screenshot", "clickup-task"],
+      "outputs": ["figma-frames", "figma-prototype"],
+      "complexity": "complex",
+      "created": "2026-03-16",
+      "updated": "2026-03-17",
+      "status": "active"
+    }
+  ]
+}

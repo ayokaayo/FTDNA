@@ -1,8 +1,31 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Workspace scratch
+.workspace/
+*-workspace/
+
+# OS files
 .DS_Store
-dist/
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
 *.log
-docs/.vitepress/dist/
-docs/.vitepress/cache/
-.vitepress/cache/
-docs/.vitepress/config.ts.timestamp-*
+
+# Temp
+/tmp/
+
+# Packaged skills
+*.skill
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/

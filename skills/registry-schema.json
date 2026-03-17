@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Automate Skills Registry",
+  "description": "Machine-readable index of all skills in the automate repo. Agents read this to discover, select, and compose skills without scanning individual SKILL.md files.",
+  "type": "object",
+  "required": ["version", "updated", "skills"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Registry schema version (semver)"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Last time the registry was modified (YYYY-MM-DD)"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "description", "author", "domain", "created"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Skill identifier (kebab-case, matches folder name)"
+          },
+          "path": {
+            "type": "string",
+            "description": "Relative path from repo root to skill folder"
+          },
+          "description": {
+            "type": "string",
+            "description": "What the skill does and when to trigger it (same as SKILL.md frontmatter)"
+          },
+          "author": {
+            "type": "string",
+            "description": "Who created or owns this skill"
+          },
+          "domain": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Domain tags for categorization (e.g., 'product-design', 'engineering', 'ops')"
+          },
+          "autonomy": {
+            "type": "string",
+            "enum": ["guided", "semi-auto", "autonomous"],
+            "description": "guided = needs user input throughout; semi-auto = needs initial brief then runs; autonomous = can trigger and complete without user"
+          },
+          "inputs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "What the skill expects (e.g., 'user-prompt', 'figma-url', '.csv file', 'slack-thread')"
+          },
+          "outputs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "What the skill produces (e.g., '.md file', '.docx file', 'clickup-task', 'slack-message')"
+          },
+          "complexity": {
+            "type": "string",
+            "enum": ["simple", "moderate", "complex"],
+            "description": "How much context and reasoning the skill requires"
+          },
+          "created": {
+            "type": "string",
+            "format": "date"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "active", "deprecated"],
+            "default": "active"
+          }
+        }
+      }
+    }
+  }
+}
