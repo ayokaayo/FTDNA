@@ -541,20 +541,32 @@ These apply to every generated page:
 3. **No dividers.** We don't have a divider component. Do not create separator frames between sections. Use spacing (auto-layout `itemSpacing`) to separate content sections instead.
 4. **Toggles hug content.** Toggle instances must use `layoutSizingHorizontal = 'HUG'`, never `'FILL'`. The label text hugs the toggle control — they don't stretch across the row.
 
-#### Header — Minimal by default
+#### Header — Structure (Local Page Header)
 
-A default page shows only the essentials. Turn features on when the brief calls for them.
+The local Page Header has NO boolean toggle props (unlike the old DSP-Master header). It contains:
+- `Left - Breadcrumb Navigation` — INSTANCE with `LVL no. and rename` prop
+- `Right - CTA and icons` — FRAME with button instances
+
+To configure, hide extra buttons and set breadcrumb text directly:
 
 ```javascript
-header.setProperties({
-  'Primary Button#3781:26': true,    // Keep: main CTA
-  'Secondary Button#3781:22': false,  // Off by default
-  'Ellipses menu#4256:6': false,      // Off by default
-  'Action Icons#4256:5': false,       // Off by default
-  'Info#3781:24': false,              // Off by default
-  'Lock#3781:25': false,              // Off by default
-  'Change log#3781:23': false,        // Off by default
-});
+// Set breadcrumb to 1 level
+const breadNav = header.findOne(n => n.name === 'Left - Breadcrumb Navigation');
+breadNav.setProperties({ 'LVL no. and rename': '5' });
+for (let i = 1; i < breadNav.children.length; i++) breadNav.children[i].visible = false;
+breadNav.children[0].setProperties({ 'Select state': 'Selected' });
+const bcText = breadNav.children[0].findOne(n => n.type === 'TEXT');
+await figma.loadFontAsync(bcText.fontName);
+bcText.characters = 'Page Title';
+
+// Hide extra CTA buttons, keep only main
+const rightCTA = header.findOne(n => n.name === 'Right - CTA and icons');
+const buttons = rightCTA.children;
+for (let i = 0; i < buttons.length - 1; i++) buttons[i].visible = false;
+const mainBtn = buttons[buttons.length - 1];
+const btnText = mainBtn.findOne(n => n.type === 'TEXT');
+await figma.loadFontAsync(btnText.fontName);
+btnText.characters = 'SAVE CHANGES';
 ```
 
 #### Breadcrumbs — 1 level by default
@@ -718,6 +730,37 @@ const contentPlaceholder = detachedPanel.children[1]; // content placeholder FRA
 
 **Why detach at all?** Instances are read-only structures. To add custom children (form fields, sections, etc.), the panel must be a plain FRAME.
 
+## Verified Variant Names (from test 2026-03-17)
+
+These are the EXACT variant names. Using wrong names causes silent failures.
+
+| Component | Variant Name (exact) |
+|-----------|---------------------|
+| Input (text) | `Type=Text input, State=default-empty` |
+| Input (dropdown) | `Type=Dropdown - Regular, State=default-empty` |
+| Toggle (on) | `Type=Checked, Status=Default, Alignment=Justified` |
+| Toggle (off) | `Type=Unchecked, Status=Default, Alignment=Justified` |
+| Alert (info) | `Status=info, Type=Large - Left aligned` |
+| Alert (success) | `Status=success, Type=Large - Left aligned` |
+| Alert (warning) | `Status=warning, Type=Large - Left aligned` |
+| Alert (error) | `Status=error, Type=Centered` |
+
+### Text Override Gotchas
+
+1. **Toggle labels:** The text node is named `"Enter option text here"` — NOT "Label". Search by that name or by `node.characters === 'Enter option text here'`.
+2. **Alert text:** `setProperties` controls visibility of title/description, but text overrides require deep traversal. Title node name = the default title string. Use `findAll` to scan all TEXT nodes in the alert, then match by content:
+   ```javascript
+   const texts = [];
+   const scan = (node) => {
+     if (node.type === 'TEXT') texts.push(node);
+     if (node.children) for (const c of node.children) scan(c);
+   };
+   scan(alertInstance);
+   // Title is the bold 16px text, Description is the regular 14px text
+   ```
+3. **Panel header Sub-Title:** Node is named `"Sub-Title"`, accessible via deep scan on the Panel Header instance.
+4. **Input labels:** Text node named `"Label text here"` (with space), placeholder node named `"Placeholder"`.
+
 ## Limitations
 
 - Text styles: not published yet — apply typography manually using the type scale table
@@ -725,6 +768,7 @@ const contentPlaceholder = detachedPanel.children[1]; // content placeholder FRA
 - `layoutSizingHorizontal = 'FILL'` can only be set AFTER appending to an auto-layout parent
 - `findOne()` can return null in dynamic-page mode — prefer `getNodeByIdAsync()` with known IDs
 - Always `loadFontAsync()` before any text editing, using the node's actual `fontName`
+- Instance children traversal can fail in dynamic-page mode — use recursive `node.children` scan instead of `findAll()`
 
 ## Reference Files
 
