@@ -44,13 +44,14 @@ await figma.loadFontAsync(subtitleNode.fontName);
 subtitleNode.characters = 'Description text';
 
 // Page Header breadcrumbs + CTA
+// CTA text is SENTENCE CASE: "Add Player", "Save Changes", "Create Campaign" — NOT uppercase
 const header = screen.children.find(c => c.name === 'Page Header' || c.name === 'Header');
 const allTexts = header.findAll(n => n.type === 'TEXT');
 for (const t of allTexts) {
   await figma.loadFontAsync(t.fontName);
   if (t.characters === 'Level 1') t.characters = 'Home';
   if (t.characters === 'Level 2') t.characters = 'Page Name';
-  if (t.characters === 'Button text') t.characters = 'CTA Label';
+  if (t.characters === 'Button text') t.characters = 'Add Player'; // Sentence case
   if (t.characters === 'Heading') t.characters = 'Page Name';
 }
 ```
@@ -125,6 +126,9 @@ for (const col of columns) {
   const text = cell.findOne(n => n.type === 'TEXT' && n.name === 'Heading');
   if (text) { await figma.loadFontAsync(text.fontName); text.characters = col; }
   cell.layoutSizingHorizontal = 'FILL';
+  // Sort icon OFF by default — only enable when brief explicitly asks for sorting
+  const sortIcon = cell.findOne(n => n.name === 'v7-icon' || n.name === 'icon');
+  if (sortIcon) sortIcon.visible = false;
   // For fixed-width columns: cell.layoutSizingHorizontal = 'FIXED'; cell.resize(150, cell.height);
 }
 // Action column spacer

@@ -111,6 +111,8 @@ Based on the page pattern selected in Step 1:
 8. **Load fonts before text** — `loadFontAsync(node.fontName)`
 9. **Realistic data** — FT iGaming context, never lorem ipsum
 10. **Screenshot after every major step** — catch issues early
+11. **CTA text is sentence case** — "Add Player", "Save Changes", "Create Campaign" — never uppercase
+12. **Table sort icons off by default** — hide the sort icon on header cells; only show when the brief explicitly requests sorting
 
 ## Reference Files
 
