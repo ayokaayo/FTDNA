@@ -48,7 +48,7 @@ Every FT back-office page starts with the Base Template (`94:21370`). This gives
 
 **Purpose:** Configuration forms with labeled fields, toggles, and a save action.
 
-**Structure:**
+**Structure (single panel for simple forms):**
 ```
 Standard Panel
 ├── Panel Header (title + optional description)
@@ -69,6 +69,34 @@ Standard Panel
 │   └── ...
 └── [Footer area — buttons are in Page Header, not here]
 ```
+
+**Structure (multi-panel for complex forms — e.g. Activity Builder):**
+```
+Content Area (gap: 32)
+├── Standard Panel 1 — Activity Name
+│   ├── Panel Header
+│   └── Input Field (filled)
+├── Standard Panel 2 — Type of Activity
+│   ├── Panel Header (with description)
+│   ├── Tab switch (Specific Date / Recurring)
+│   └── Form Row (date picker + dropdown + optional widget)
+├── Standard Panel 3 — Segment
+│   ├── Panel Header
+│   ├── Alert (info banner with CTAs)
+│   ├── Sub-section: Player Origin
+│   │   ├── Sub-Panel Header (section label)
+│   │   └── Block Selector grid (wrap, gap: 8)
+│   ├── Sub-section: Market
+│   │   ├── Sub-Panel Header
+│   │   └── Block Selector grid
+│   └── Sub-section: Additional Rules
+│       └── Plus button + link
+└── Actions Panel (custom component)
+    ├── Panel Header
+    └── Action buttons grid
+```
+
+**Key insight from real pages:** Complex create/edit flows use **multiple Standard Panels stacked** (gap: 32), each owning one logical section. Each panel has its own Panel Header. Sub-sections within a panel use a nested Panel Header for the label and a horizontal `Frame` (gap: 8) for Block Selector grids.
 
 **Key components:**
 
@@ -127,39 +155,57 @@ input1.layoutSizingHorizontal = 'FILL';
 
 **Purpose:** Browsable data with search, filters, and table.
 
-**Structure:**
+**Structure (observed from All Activities page):**
 ```
-Standard Panel
-├── Panel Header (title + search toggle + action icons)
-├── [Alert — if system message needed] ← always first
-├── [Tab bar — if multiple views/filters]
-├── Table
-│   ├── Table Header (column names)
-│   ├── Row (EVEN)
-│   ├── Row (ODD)
-│   ├── Row (EVEN)
-│   └── ...
-└── Pagination
+Content Area
+├── Tab bar (OUTSIDE the panel — at content area level)
+│   ├── tab (tab-text, Default)      "Overview"
+│   ├── tab (tab-text, Default)      "Projects"
+│   └── tab (tab-text, Selected)     "All Activities"
+├── Icon toolbar strip (Standard Panel, no Panel Header, icons only — filter/view toggles)
+└── Standard Panel (main table)
+    ├── Panel Header (title + search + filter tags)
+    │   └── Filter tags row: Tag instances (Active, Ended, Disabled, Scheduled)
+    ├── Table frame (VERTICAL, no gap)
+    │   ├── Header row (HORIZONTAL, gap: 0)
+    │   │   ├── Header cell instance (w: flexible)
+    │   │   ├── Header cell instance
+    │   │   └── ...
+    │   ├── Data row (HORIZONTAL, gap: 0, h: 75)
+    │   │   ├── Row cell instance (Type=Text+leading icon, Position=ODD)
+    │   │   ├── Row cell instance
+    │   │   └── Row cell (Type=ellipsis) ← last column
+    │   ├── Data row (Position=EVEN)
+    │   └── ...
+    └── Pagination instance (Type=go to page)
 ```
 
 **Key components:**
 
 | Slot | Component | ID | Default Variant |
 |------|-----------|----|----------------|
-| Table header | Header (standalone) | `91:39176` | — |
-| Table rows | Row | `91:39179` | Type=Text, Position=EVEN/ODD alternating |
-| Pagination | pagination | `92:40394` | Type=Standard |
+| Table header cells | Header (standalone) | `91:39176` | Heading text + sort icon |
+| Table row cells | Row | `91:39179` | Type=Text, Position=EVEN/ODD alternating |
+| Pagination | pagination | `92:40394` | Type=go to page |
 | Tabs | tab | `91:19098` | Type=tab-text |
+| Filter tags | Tag | `91:10023` | Type=Icon-solid, Size=Small |
 | Search | Built into Panel Header | — | `Search#4635:14: true` |
 
+**Table composition (critical — learned from real pages):**
+- Each table row is a **horizontal Frame** (gap: 0) containing **multiple Row cell instances** side by side
+- Header row uses **Header** component instances (not Row), each with Heading text + sort icon
+- Cell widths are set explicitly per column (e.g., Name: 760, Status: 200, Trigger: 240)
+- Data rows alternate Position=EVEN/ODD for zebra striping
+- Row height is 75px for data rows, 40px for header
+- Last column typically uses `Type=ellipsis` for action menu
+- The `table` frame wrapping all rows has `layoutMode: VERTICAL`, no gap, no padding
+
 **Composition rules:**
-- Panel Header: enable `Search#4635:14` for filterable lists
-- Table rows alternate EVEN/ODD for zebra striping
-- Action column (last) uses Row Type=action icons or Type=ellipsis
-- Status column uses Row Type=tag
-- Pagination always at bottom
-- Tabs go between Panel Header and Table when multiple views exist
+- **Tabs live OUTSIDE panels** — at the content area level, above all panels
+- Icon toolbar strip is a separate slim panel (32px padding, icons only)
+- Panel Header for table: enable search, add filter Tag instances in the header row
 - "Create new" button is the main CTA in Page Header
+- Pagination sits inside the panel, after the table frame
 
 **Row type selection:**
 | Column content | Row Type |
@@ -170,7 +216,7 @@ Standard Panel
 | Avatar/thumbnail | image |
 | Country flags | flags |
 | Checkboxes (multi-select) | checkbox |
-| Action menu | ellipsis or action icons |
+| Action menu | ellipsis (always last column) |
 | Numeric/version | number/version |
 
 ---
@@ -255,30 +301,55 @@ Modal (M — 640px)
 
 Use `Modal` set, Size=M. Enable `Input field#2828:8`, disable `Select all option#3089:0`.
 
-### 4c: Slide-In Panel (most common for FT)
+### 4c: Slide-In Panel — LVL 1 (most common for FT)
 ```
-Screen (existing page dimmed)
-├── Overlay blur (left side)
-└── Slide-in panel (right, 1250px)
-    ├── Slide-in Header (title + close)
-    ├── [Tabs — if multi-section]
-    ├── Content sections
-    │   ├── Form fields
-    │   ├── Tables
-    │   └── ...
-    └── Footer (Save + Cancel buttons)
+Slide-in (1250px × 1080, VERTICAL)
+├── Header - slide in modal (HORIZONTAL, pad: 0 32)
+│   ├── Left: X close icon + Tag (ACT-ID) + Breadcrumb (title)
+│   └── Right: icon buttons (Frame 1505) + alt button + main button + kebab
+├── Content Area (Frame 1317, VERTICAL, gap: 32, pad: 32 all)
+│   ├── Standard Panel 1 (section)
+│   │   ├── Panel Header
+│   │   └── Form content
+│   ├── Standard Panel 2
+│   ├── Standard Panel 3
+│   └── Actions Panel (if applicable)
 ```
 
-The slide-in uses:
-- `Overlay blur-small` (`92:55554`) for the backdrop
-- Custom frame for the panel (1250px wide, white, vertical auto-layout)
-- Buttons in the footer, not in header
+### 4d: Slide-In Panel — LVL 2 (nested, narrower)
+```
+Slide-in (1125px × 1080)
+└── Same structure as LVL 1, just narrower
+```
 
-**Composition rules:**
-- Slide-in is the preferred pattern for create/edit flows in FT (not modals)
-- Slide-in header has its own breadcrumb trail (LVL 2)
-- Content follows same section/form-row patterns as Settings Page
-- Footer buttons: main CTA right-aligned, alt (cancel) left of it
+### 4e: Full Page + Slide-In Overlay
+```
+Root frame (1920 × 1080, NONE layout)
+├── Full page (underlying, dimmed via Overlay)
+├── Slide-in (1250px, positioned right)
+├── [Actions Panel — can be pulled outside slide-in]
+└── Overlay blur-small (614px, positioned between page and slide-in)
+```
+
+**Key components:**
+
+| Slot | Component | Notes |
+|------|-----------|-------|
+| Slide-in header | `Header - slide in modal` | Has own component — NOT the page Header |
+| Close | X icon (xmark) | Left side of header |
+| ID tag | Tag (Medium, Solid) | Next to close, shows entity ID |
+| Title | Breadcrumb (Selected) | Entity name as breadcrumb |
+| Save | button-btn (main) | Right side of header — NOT in footer |
+| Backdrop | Overlay blur-small (`92:55554`) | 614px wide, placed left of slide-in |
+
+**Composition rules (updated from real pages):**
+- Slide-in is the preferred pattern for create/edit flows in FT
+- **Buttons live in the slide-in header** — NOT in a footer. Main CTA (Save) right-aligned.
+- Content area uses **multiple Standard Panels stacked** (gap: 32) — same as Settings multi-panel
+- Each panel has its own Panel Header
+- Slide-in header shows: X close → ID tag → entity name breadcrumb → icon buttons → alt CTA → main CTA → kebab
+- Block Selectors for multi-option grids (Player Origin, Market) — wrap in horizontal Frame (gap: 8)
+- Tab-switch components for mode selection (Specific Date / Recurring)
 
 ---
 
@@ -315,10 +386,16 @@ Content Area
 |--------------|-----------------|
 | Divider lines between sections | Use `itemSpacing` (24-32px) |
 | Toggle with `layoutSizing = 'FILL'` | `layoutSizing = 'HUG'` always |
-| Save button inside the panel | Main CTA in Page Header |
+| Save button inside the panel | Main CTA in Page Header (or slide-in header) |
 | Multiple main (pink) buttons | 1 main max; use alt/sub for others |
 | Custom colors on alerts | Use Status variant (success/error/info/warning) |
 | Padding on content placeholder | Zero padding, zero fill — content owns spacing |
 | `findOne()` for node access | `getNodeByIdAsync()` with known IDs |
 | Setting FILL before appendChild | Append first, THEN set sizing |
 | Lorem ipsum | Realistic FT domain content |
+| Tabs inside a panel | Tabs go at content area level, ABOVE panels |
+| Building pages from primitives | Always instantiate Base Template `94:21370` first |
+| Table rows as single Row instances | Each row is a horizontal Frame with multiple Row CELL instances |
+| One panel for everything | Complex forms use multiple Standard Panels stacked (gap: 32) |
+| Footer buttons in slide-ins | Buttons live in the slide-in header |
+| Building table header from text | Use Header component instances with sort icon |
