@@ -33,3 +33,7 @@ __pycache__/
 .venv/
 *.egg-info/
 architecture-diagram.html
+
+# Screenshot tool
+.browser-profile/
+references/screenshots/
