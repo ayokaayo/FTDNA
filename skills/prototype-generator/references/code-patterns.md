@@ -214,38 +214,41 @@ if (leadingKey) tag.setProperties({ [leadingKey]: false });
 row.insertChild(STATUS_COLUMN_INDEX, tagWrapper);
 ```
 
-## No-Zebra Table Rows (Divider Lines)
+## Status Circle with Text (Leading Icon Pattern)
 
-Some pages use white rows with thin divider lines instead of zebra striping. Use EVEN variant for all rows and add a bottom stroke.
+For columns showing a colored dot + status text (e.g. "In Dev", "Running"), use `Type=Text+leading icon` cells with `circle` as the icon name and override the icon color.
 
 ```javascript
-// Use EVEN (white) variant for ALL rows — no alternation
-const textEven = rowSet.children.find(v => v.name === 'Type=Text, Position=EVEN');
-const BORDER_COLOR = { r: 0.9, g: 0.9, b: 0.9 };
+const cell = (isEven ? textIconEven : textIconOdd).createInstance();
+row.appendChild(cell);
+cell.layoutSizingHorizontal = 'FIXED';
+cell.resize(120, cell.height);
 
-for (let i = 0; i < data.length; i++) {
-  const row = figma.createFrame();
-  row.name = data[i].name;
-  row.layoutMode = 'HORIZONTAL';
-  row.itemSpacing = 0;
-  row.fills = [];
-  // Divider line via bottom stroke
-  row.strokes = [{ type: 'SOLID', color: BORDER_COLOR }];
-  row.strokeWeight = 1;
-  row.strokeAlign = 'INSIDE';
-  row.strokeTopWeight = 0;
-  row.strokeLeftWeight = 0;
-  row.strokeRightWeight = 0;
-  row.strokeBottomWeight = 1;
-  content.appendChild(row);
-  row.layoutSizingHorizontal = 'FILL';
-  row.layoutSizingVertical = 'HUG';
+// Set status text
+const statusText = cell.findOne(n => n.type === 'TEXT' && n.name === 'Row');
+if (statusText) { await figma.loadFontAsync(statusText.fontName); statusText.characters = 'In Dev'; }
 
-  // Always use textEven (white) for every cell
-  const cell = textEven.createInstance();
-  row.appendChild(cell);
-  cell.layoutSizingHorizontal = 'FILL';
+// Set icon to circle and color it
+const icon = cell.findOne(n => n.name === 'v7-icon');
+if (icon) {
+  const iconText = icon.findOne(n => n.type === 'TEXT' && n.name === 'icon');
+  if (iconText) {
+    await figma.loadFontAsync(iconText.fontName);
+    iconText.characters = 'circle';
+    iconText.fills = [{ type: 'SOLID', color: { r: 0.7, g: 0.7, b: 0.7 } }]; // gray
+  }
 }
+```
+
+## Leading Icon Override
+
+To change the icon on any `Text+leading icon` cell, find the `v7-icon` instance's text child and set the Font Awesome icon name.
+
+```javascript
+const icon = cell.findOne(n => n.name === 'v7-icon');
+const iconText = icon.findOne(n => n.type === 'TEXT' && n.name === 'icon');
+await figma.loadFontAsync(iconText.fontName);
+iconText.characters = 'arrows-spin'; // FA icon name: bolt, clock, users, etc.
 ```
 
 ## Red "x" Text Override (No-Data Indicators)
@@ -294,6 +297,103 @@ const label = input1.findOne(n => n.type === 'TEXT' && n.name.includes('Label'))
 if (label) { await figma.loadFontAsync(label.fontName); label.characters = 'Field Name'; }
 const value = input1.findOne(n => n.type === 'TEXT' && n.name === 'Placeholder');
 if (value) { await figma.loadFontAsync(value.fontName); value.characters = 'Field value'; }
+```
+
+## Multi-Panel Settings Pages
+
+Settings pages use multiple Standard Panel instances stacked vertically. Each panel is FIXED 1700px wide (not FILL).
+
+```javascript
+// Content frame holds multiple panels
+contentFrame.layoutMode = 'VERTICAL';
+contentFrame.itemSpacing = 32;
+
+// Each panel: FIXED 1700px, HUG vertically
+// Clone panels from base template (create temp instance, detach, extract panel, remove temp)
+const tempInst = baseTemplate.createInstance();
+const tempScreen = tempInst.detachInstance();
+const tempCF = tempScreen.children.find(c => c.name === 'Frame 1317');
+const tempPanel = tempCF.children.find(c => c.name === 'Standard Panel');
+let panel = tempPanel.type === 'INSTANCE' ? tempPanel.detachInstance() : tempPanel;
+contentFrame.appendChild(panel);
+panel.layoutSizingHorizontal = 'FIXED';
+panel.resize(1700, panel.height);
+tempScreen.remove();
+
+// Detach + set panel header, then HUG
+panel.layoutSizingVertical = 'HUG';
+```
+
+## Dropdown with Info Icon (Settings Pages)
+
+Dropdowns on settings pages are half-width with the info icon enabled.
+
+```javascript
+const inputSet = await figma.getNodeByIdAsync('91:6537');
+const dropdownFilled = inputSet.children.find(v =>
+  v.name.includes('Type=Dropdown - Regular') && v.name.includes('State=default-filled')
+);
+
+const dd = dropdownFilled.createInstance();
+content.appendChild(dd);
+dd.layoutSizingHorizontal = 'FIXED';
+dd.resize(content.width / 2, dd.height); // Half-width
+
+// Enable info icon, disable unnecessary features
+dd.setProperties({
+  'Info icon#4283:93': true,
+  'Tags#4281:31': false,
+  'AI+Emoji#4369:0': false,
+});
+
+// Override label + value
+const label = dd.findOne(n => n.type === 'TEXT' && n.characters.includes('Label'));
+if (label) { await figma.loadFontAsync(label.fontName); label.characters = 'Field label'; }
+const val = dd.findOne(n => n.type === 'TEXT' && n.name === 'Placeholder');
+if (val) { await figma.loadFontAsync(val.fontName); val.characters = 'Selected value'; }
+```
+
+## Radio Buttons (Settings Pages)
+
+Use `setProperties` to override text — direct text editing fails on instances.
+
+```javascript
+const radioSet = await figma.getNodeByIdAsync('91:8595');
+const radioChecked = radioSet.children.find(v => v.name === 'Type=Checked, Status=Default');
+const radioUnchecked = radioSet.children.find(v => v.name === 'Type=Unchecked, Status=Default');
+
+const radioRow = figma.createFrame();
+radioRow.name = 'Radio Row';
+radioRow.layoutMode = 'HORIZONTAL';
+radioRow.itemSpacing = 24;
+radioRow.fills = [];
+content.appendChild(radioRow);
+radioRow.layoutSizingHorizontal = 'HUG';
+radioRow.layoutSizingVertical = 'HUG';
+
+const r1 = radioChecked.createInstance();
+radioRow.appendChild(r1);
+r1.setProperties({ 'Text#9:9': 'Option A' });
+
+const r2 = radioUnchecked.createInstance();
+radioRow.appendChild(r2);
+r2.setProperties({ 'Text#9:9': 'Option B' });
+```
+
+## Toggle Switches (Settings Pages)
+
+Use `setProperties` for text — same pattern as radio buttons.
+
+```javascript
+const toggleSet = await figma.getNodeByIdAsync('91:8647');
+const toggleChecked = toggleSet.children.find(v =>
+  v.name === 'Type=Checked, Status=Default, Alignment=Default'
+);
+
+const toggle = toggleChecked.createInstance();
+content.appendChild(toggle);
+toggle.setProperties({ 'Text#9:17': 'Toggle label text here' });
+// Toggles are always HUG, never FILL
 ```
 
 ## Panel Header — Enable Search (LIST-SIMPLE)

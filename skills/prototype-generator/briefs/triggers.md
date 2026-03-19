@@ -39,8 +39,7 @@
 | 4 | Activities | 120px FIXED | Text | Number or red "x" for zero |
 
 **Row styling:**
-- No zebra striping — all rows white background
-- Thin gray divider lines between rows (1px, ~#E5E5E5)
+- Zebra striping — alternating EVEN (white) / ODD (#FAFAFA gray) rows
 - Activities "x" values colored red (rgb 0.87, 0.25, 0.25)
 
 **Sample rows (from live data):**
@@ -63,7 +62,7 @@
 
 ## Construction Learnings
 
-- **Zebra striping**: Use standard EVEN/ODD alternation — matches the platform rendering.
+- **Zebra striping**: Always use EVEN/ODD alternation — this is the platform default for all list pages.
 - **Red text for "no data" indicators**: Activities column uses red "x" instead of a tag or empty cell. Override fill on text node: `{ r: 0.87, g: 0.25, b: 0.25 }`.
 - **Minimal header**: No CTA buttons, no right-side icons — just breadcrumb. Set `primaryAxisAlignItems = 'MIN'` on Page Header for left-alignment. Hide `Right - CTA and icons` entirely.
 - **Search input HUG**: Set Input Fields search instance to `layoutSizingHorizontal = 'HUG'` so it doesn't overflow the panel boundary. Don't use FIXED width on the search.

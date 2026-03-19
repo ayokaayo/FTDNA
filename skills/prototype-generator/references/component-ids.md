@@ -67,7 +67,8 @@ All row types have `Position=EVEN` and `Position=ODD` variants for zebra stripin
 | Tab | Title | `"text goes here"` inside `"tab title and alert circle"` frame | Inter Bold |
 | Input Fields | Label | `"Label text here"` | Inter Bold |
 | Input Fields | Value/Placeholder | `"Placeholder"` | Inter Regular |
-| Toggle | Label | `"Enter option text here"` | Inter Regular |
+| Toggle | Label | Use `setProperties({ 'Text#9:17': 'label' })` — direct text edit fails | Inter Regular |
+| Radio | Label | Use `setProperties({ 'Text#9:9': 'label' })` — direct text edit fails | Inter Regular |
 | Tag | Text | `"I am a tag"` | Inter Bold |
 | Table Header cell | Column name | `"Heading"` | Inter Bold |
 | Table Row cell | Cell value | `"Row"` | Inter Regular |
@@ -97,6 +98,121 @@ Panel Header
 ```
 
 To enable search only: set `Search + Action Icons` visible, then hide Toggle and Action icons individually.
+
+## Input Fields — Component Properties
+
+The Input Fields component (`91:6537`) has boolean properties for toggling features:
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Info icon#4283:93` | BOOLEAN | false | Show info (ⓘ) icon next to field |
+| `Tags#4281:31` | BOOLEAN | false | Show inline tags |
+| `AI+Emoji#4369:0` | BOOLEAN | true | AI/Emoji picker — disable on settings fields |
+| `Label#4339:0` | BOOLEAN | true | Show label above field |
+| `Required#4285:155` | BOOLEAN | false | Show required asterisk |
+| `Leading Icon#4276:0` | BOOLEAN | false | Icon inside field (left) |
+
+**Settings dropdowns:** Enable `Info icon` and `Tags` (when needed), disable `AI+Emoji`.
+
+## Tag Component Properties
+
+The Tag component (`91:10023`) is used inline in dropdowns and table cells.
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Tag text#26:8` | TEXT | "I am a tag" | Tag label text |
+| `Trailing icon#26:4` | BOOLEAN | true | X/close button — hide for read-only tags |
+| `Leading Icon#26:0` | BOOLEAN | false | Icon before text |
+
+**Variants:** `Size=Small/Medium/Large`, `Solid Colour=Black/Neutral`, `Status=Default/Hover/Focused/Locked-default/Disabled`
+
+### Changing Tag Color via Variables
+
+Tags only have Black and Neutral colour variants. For other colours (e.g. blue "SYSTEM DEFAULT"), override the fill with a variable:
+
+```javascript
+const blueVar = await figma.variables.getVariableByIdAsync('VariableID:28:26'); // Blue/color-brand-blue-400
+const currentFills = [...tag.fills];
+const newFill = figma.variables.setBoundVariableForPaint(currentFills[0], 'color', blueVar);
+tag.fills = [newFill];
+```
+
+**Key colour variable IDs:**
+
+| Colour | Variable ID | Name |
+|---|---|---|
+| Blue 400 | `VariableID:28:26` | Blue/color-brand-blue-400 |
+| Blue 500 | `VariableID:28:27` | Blue/color-brand-blue-500 |
+| Green (use for success/active) | Check Colours collection | Green/color-brand-green-* |
+| Yellow 400 | `VariableID:28:31` | Yellow/color-brand-yellow-400 |
+| Pink 500 | `VariableID:28:17` | Pink/color-brand-pink-500 |
+
+### Dropdown with "SYSTEM DEFAULT" Tag
+
+```javascript
+dd.setProperties({ 'Tags#4281:31': true });
+const tags = dd.findAll(n => n.name === 'Tag' && n.type === 'INSTANCE');
+tags[0].setProperties({
+  'Tag text#26:8': 'SYSTEM DEFAULT',
+  'Trailing icon#26:4': false,
+  'Leading Icon#26:0': false,
+});
+// Blue fill
+const blueVar = await figma.variables.getVariableByIdAsync('VariableID:28:26');
+const newFill = figma.variables.setBoundVariableForPaint([...tags[0].fills][0], 'color', blueVar);
+tags[0].fills = [newFill];
+// Hide second tag slot if exists
+if (tags[1]) tags[1].visible = false;
+```
+
+## Alert Component Properties
+
+The Alert component (`92:40484`) has boolean properties for toggling elements:
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Description#2821:5` | BOOLEAN | true | Show description text |
+| `Show more#2821:10` | BOOLEAN | true | Show "show more" link |
+| `Show more text#2821:30` | BOOLEAN | true | Show expanded text |
+| `Primary button#2821:15` | BOOLEAN | true | Show primary action button |
+| `Secondary Button#2821:20` | BOOLEAN | true | Show secondary button |
+| `Timer bar#2821:25` | BOOLEAN | true | Show countdown bar |
+| `Buttons#2821:35` | BOOLEAN | true | Show button row |
+| `Close icon#2821:40` | BOOLEAN | true | Show close X icon |
+
+**Variants:** `Status=success/warning/info/error`, `Type=Large - Left aligned/Centered`
+
+**Simple alert (warning banner):** Use `Status=warning, Type=Large - Left aligned`. Disable all except `Description`.
+
+## Placeholder / Empty State Component Properties
+
+The Placeholder component (`92:49611`) is used for empty states inside panels.
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Description#3783:7` | BOOLEAN | true | Show description text |
+| `Learn more link#3691:6` | BOOLEAN | true | Show "learn more" link |
+| `CTA#3691:0` | BOOLEAN | true | Show CTA button |
+| `Extras#4325:0` | BOOLEAN | true | Show extra elements |
+
+**Variants:** `Size=XS/S/M/L/XL [icon]/XL [GIF]`
+
+**Simple empty state:** Use `Size=M`, disable all booleans except heading. Override heading text via `findOne(n => n.name.includes('Heading'))`.
+
+```javascript
+const placeholderSet = await figma.getNodeByIdAsync('92:49611');
+const mediumPH = placeholderSet.children.find(v => v.name === 'Size=M');
+const placeholder = mediumPH.createInstance();
+content.appendChild(placeholder);
+placeholder.setProperties({
+  'Description#3783:7': false,
+  'Learn more link#3691:6': false,
+  'CTA#3691:0': false,
+  'Extras#4325:0': false,
+});
+const heading = placeholder.findOne(n => n.type === 'TEXT' && n.name.includes('Heading'));
+if (heading) { await figma.loadFontAsync(heading.fontName); heading.characters = 'NO DATA TO DISPLAY'; }
+```
 
 ## Figma API Gotchas
 

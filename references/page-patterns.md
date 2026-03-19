@@ -536,7 +536,7 @@ Content Area
 | Divider lines between sections | Use `itemSpacing` (24-32px) |
 | Toggle with `layoutSizing = 'FILL'` | `layoutSizing = 'HUG'` always |
 | Save button inside the panel | Main CTA in Page Header (or slide-in header) |
-| Multiple main (pink) buttons | 1 main max; use alt/sub for others |
+| Guessing CTA styles | Match the live screenshot — some pages have 2 main CTAs (e.g. "New Event" + "Export Events") |
 | Custom colors on alerts | Use Status variant (success/error/info/warning) |
 | Panel FILL instead of 1700px FIXED | Panel is always 1700px FIXED (max canvas width) |
 | `findOne()` for node access | `getNodeByIdAsync()` with known IDs |
