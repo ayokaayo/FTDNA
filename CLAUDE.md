@@ -75,29 +75,32 @@ Component CSS variables follow: `--ft-{component}-{property}-{state}`
 
 ## Figma Translation
 
-**FT DNA file (primary):** `7J3dSTuOSRlsHBqQ4ohtxI`
-**DSP-Master file (legacy, being migrated):** `tyhDN8pjR0WM048BYhEa1Q`
+**FT DNA file:** `7J3dSTuOSRlsHBqQ4ohtxI` — single source of truth for all components, tokens, and prototypes
 **Fast Track Logo file:** `Ahohkx0sfMS7oHU1V3j3DO`
 
-### Figma → Component Map
+### Figma Component Sources
 
-| Vue Component | Figma Node ID | Figma Name |
-|---------------|---------------|------------|
-| `FTButton` | `2244:3840` | Buttons (Type=main/alt/sub/plus/icon) |
-| `FTCheckbox` | `2824:5763` | Checkbox (Type=Checked/Unchecked) |
-| `FTRadio` | `2824:5780` | Radio (Type=Selected/Unselected) |
+**For prototype generation (Figma API / MCP):** Use Workbench component IDs in `skills/prototype-generator/references/component-ids.md`. These are the live, local component set IDs used by `createInstance()`.
+
+**For Code Connect (Vue ↔ Figma mapping):** Use the published node IDs below with `get_design_context`:
+
+| Vue Component | Published Node ID | Figma Name |
+|---------------|-------------------|------------|
+| `FTButton` | `2244:3840` | Buttons |
+| `FTCheckbox` | `2824:5763` | Checkbox |
+| `FTRadio` | `2824:5780` | Radio |
 | `FTTag` | `2837:5802` | Tags |
 | `FTPaging` | `2838:5840` | Paging |
 | `FTTooltip` | `2838:5860` | Tooltip |
-| `FTToggle` | `2824:5730` | Toggle (Type=On/Off) |
-| `FTBreadcrumb` | `3052:3870` | Breadcrumb (Short/Ellipses/Level break) |
-| `FTPanel` | `3780:6892` | Standard Panel (Width=Full/2-3/1-2/1-3) |
+| `FTToggle` | `2824:5730` | Toggle |
+| `FTBreadcrumb` | `3052:3870` | Breadcrumb |
+| `FTPanel` | `3780:6892` | Standard Panel |
 | `FTHeader` | `3054:5706` | Header |
-| `FTSideMenu` | `3057:11430` | Side Menu (Level=LVL 1) |
-| `FTTable` | `3057:11643` | Table (25 variants) |
-| `FTLogo` | `14:398` | Logo (Size × Colour variants) — in Logo file |
+| `FTSideMenu` | `3057:11430` | Side Menu |
+| `FTTable` | `3057:11643` | Table |
+| `FTLogo` | `14:398` | Logo — in Logo file |
 
-When pulling Figma design context, use `get_design_context` with the file key and node ID above.
+**These are NOT the same IDs used by the prototype generator.** The prototype generator uses Workbench set IDs (e.g. `91:8299` for button-btn). See `component-ids.md` for those.
 
 ## Skills System
 
@@ -131,14 +134,9 @@ The component is staged locally in the vue-lib checkout before being pushed as a
 | Prototype approach | V2 Hybrid (clone + instances) | `importComponentByKeyAsync()` times out; clone from seed is instant |
 | Seed instance | Node `3:5535` in FT DNA Sandbox page | NEVER delete — source for all prototype clones |
 | Base Template | Component `94:21370` on Workbench | Use `createInstance()` for new prototypes |
-| Component source | All local in FT DNA Workbench (481 variants) | Migrated from DSP-Master; no remote dependency for prototypes |
+| Component source | All local in FT DNA Workbench | Single source — no external library dependency |
 | Skills registry | `skills/registry.json` | Machine-readable, auto-populated by skill-architect |
 | Ship-ready default | Skills work without human review | Review happens after, not as a gate |
-
-## Session Memory
-
-Full session log: `memory/claude.md` (migrated from the automate repo).
-Read it at the start of any session that continues prior work.
 
 ## Commands
 

@@ -207,7 +207,6 @@ When a deviation exists, note whether it appears intentional (a design decision)
 
 ## Sources
 
-- **Figma (primary):** [FT DNA](https://www.figma.com/design/7J3dSTuOSRlsHBqQ4ohtxI/%F0%9F%A7%AC-FT-DNA) — new file, components being migrated here
-- **Figma (legacy):** DSP-Master (`tyhDN8pjR0WM048BYhEa1Q`) — fall back for components not yet in FT DNA
+- **Figma:** [FT DNA](https://www.figma.com/design/7J3dSTuOSRlsHBqQ4ohtxI/%F0%9F%A7%AC-FT-DNA) — single source of truth for all components, tokens, and prototypes
 - **Playbook:** [components.fasttrack.dev](https://components.fasttrack.dev/guide/getting-started.html)
 - **Repo:** [vue-components-lib](https://github.com/fasttrack-solutions/vue-components-lib)

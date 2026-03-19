@@ -15,7 +15,7 @@ This is the single source of truth for all AI-driven component generation in the
 - **Design System Package**: `@fasttrack-solutions/design-system`
 - **Registry**: GitHub Packages (private, `npm.pkg.github.com`)
 - **Framework**: Vue 3 + TypeScript
-- **Figma Library**: DSP-Master (839 components across 29 sections)
+- **Figma Library**: FT DNA (`7J3dSTuOSRlsHBqQ4ohtxI`)
 - **Documentation**: VitePress at `docs/` directory
 
 ### Component Naming Prefix
@@ -654,7 +654,7 @@ Tooltip components must use ARIA attributes:
 
 ### Figma Component Structure
 
-Figma components in DSP-Master use **parameterized naming convention**:
+Figma components in FT DNA use **parameterized naming convention**:
 ```
 ComponentName (Type=value, Status=value, Size=value)
 ```
@@ -1323,7 +1323,7 @@ export type { FTComponentProps } from './components/FTComponent/FTComponent.vue'
 
 ## REFERENCE LINKS
 
-- **Figma Library**: DSP-Master (839 components, 29 sections)
+- **Figma Library**: FT DNA (`7J3dSTuOSRlsHBqQ4ohtxI`)
 - **Package Registry**: `npm.pkg.github.com/@fasttrack-solutions/`
 - **Design System Package**: `@fasttrack-solutions/design-system` (159 token definitions)
 - **Documentation**: VitePress in `docs/` directory
