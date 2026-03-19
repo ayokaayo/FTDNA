@@ -40,8 +40,7 @@ FTDNA/
 ├── templates/       → Vue component, test, and docs templates
 ├── assets/logos/    → FastTrack brand SVGs
 ├── scripts/         → build-tokens.js
-├── memory/          → Session history (claude.md)
-├── .fasttrack/      → Vue-lib rules reference, Figma showcase, plans
+├── .fasttrack/      → Vue-lib rules reference, plans
 └── .workspace/      → Scratch space (gitignored)
 ```
 
