@@ -214,6 +214,53 @@ if (leadingKey) tag.setProperties({ [leadingKey]: false });
 row.insertChild(STATUS_COLUMN_INDEX, tagWrapper);
 ```
 
+## No-Zebra Table Rows (Divider Lines)
+
+Some pages use white rows with thin divider lines instead of zebra striping. Use EVEN variant for all rows and add a bottom stroke.
+
+```javascript
+// Use EVEN (white) variant for ALL rows — no alternation
+const textEven = rowSet.children.find(v => v.name === 'Type=Text, Position=EVEN');
+const BORDER_COLOR = { r: 0.9, g: 0.9, b: 0.9 };
+
+for (let i = 0; i < data.length; i++) {
+  const row = figma.createFrame();
+  row.name = data[i].name;
+  row.layoutMode = 'HORIZONTAL';
+  row.itemSpacing = 0;
+  row.fills = [];
+  // Divider line via bottom stroke
+  row.strokes = [{ type: 'SOLID', color: BORDER_COLOR }];
+  row.strokeWeight = 1;
+  row.strokeAlign = 'INSIDE';
+  row.strokeTopWeight = 0;
+  row.strokeLeftWeight = 0;
+  row.strokeRightWeight = 0;
+  row.strokeBottomWeight = 1;
+  content.appendChild(row);
+  row.layoutSizingHorizontal = 'FILL';
+  row.layoutSizingVertical = 'HUG';
+
+  // Always use textEven (white) for every cell
+  const cell = textEven.createInstance();
+  row.appendChild(cell);
+  cell.layoutSizingHorizontal = 'FILL';
+}
+```
+
+## Red "x" Text Override (No-Data Indicators)
+
+Some columns show a red "x" for zero/null values instead of tags or empty cells.
+
+```javascript
+const t = cell.findOne(n => n.type === 'TEXT' && n.name === 'Row');
+if (t) {
+  await figma.loadFontAsync(t.fontName);
+  t.characters = 'x';
+  t.fills = [{ type: 'SOLID', color: { r: 0.87, g: 0.25, b: 0.25 } }]; // Red
+}
+```
+
 ## Form Fields (Settings/Detail Pages)
 
 ```javascript
@@ -247,4 +294,61 @@ const label = input1.findOne(n => n.type === 'TEXT' && n.name.includes('Label'))
 if (label) { await figma.loadFontAsync(label.fontName); label.characters = 'Field Name'; }
 const value = input1.findOne(n => n.type === 'TEXT' && n.name === 'Placeholder');
 if (value) { await figma.loadFontAsync(value.fontName); value.characters = 'Field value'; }
+```
+
+## Panel Header — Enable Search (LIST-SIMPLE)
+
+The Panel Header has a hidden `Search + Action Icons` frame. To show just the search icon:
+
+```javascript
+// Panel Header structure: top → "Search + Action Icons" (hidden by default)
+// Inside: Input Fields (search), Toggle, Action icons
+const panelHeader = await figma.getNodeByIdAsync(PANEL_HEADER_ID);
+
+const searchFrame = panelHeader.findOne(n => n.name === 'Search + Action Icons');
+searchFrame.visible = true;
+
+// Hide toggle and action icons — keep only search input
+const toggle = searchFrame.findOne(n => n.name === 'Toggle');
+if (toggle) toggle.visible = false;
+const actionIcons = searchFrame.findOne(n => n.name === 'Action icons');
+if (actionIcons) actionIcons.visible = false;
+```
+
+## Tag Cell with Zebra Striping
+
+Tag components don't inherit row backgrounds. Wrap in a frame with manually matched fill.
+
+**GOTCHA:** Row variant naming is counter-intuitive:
+- `Position=EVEN` → **no fill** (white/transparent)
+- `Position=ODD` → **gray fill** (`#FAFAFA` / `{ r: 0.9804, g: 0.9804, b: 0.9804 }`)
+
+```javascript
+const ZEBRA_GRAY = { type: 'SOLID', color: { r: 0.9804, g: 0.9804, b: 0.9804 } };
+
+const tagWrapper = figma.createFrame();
+tagWrapper.name = 'Status Cell';
+tagWrapper.layoutMode = 'HORIZONTAL';
+tagWrapper.counterAxisAlignItems = 'CENTER';
+tagWrapper.paddingLeft = 16;
+// EVEN rows (i%2===0) have no fill, ODD rows have gray
+tagWrapper.fills = (i % 2 === 0) ? [] : [ZEBRA_GRAY];
+row.appendChild(tagWrapper);
+tagWrapper.layoutSizingHorizontal = 'FIXED';
+tagWrapper.resize(COLUMN_WIDTH, 75);
+tagWrapper.layoutSizingVertical = 'FIXED';
+
+const tag = tagVariant.createInstance();
+tagWrapper.appendChild(tag);
+
+const tagText = tag.findOne(n => n.type === 'TEXT' && n.name === 'I am a tag');
+if (tagText) { await figma.loadFontAsync(tagText.fontName); tagText.characters = 'Active'; }
+
+// Hide trailing/leading icons for clean display
+const props = tag.componentProperties;
+for (const key of Object.keys(props)) {
+  if (key.toLowerCase().includes('trailing') || key.toLowerCase().includes('leading')) {
+    try { tag.setProperties({ [key]: false }); } catch(e) {}
+  }
+}
 ```

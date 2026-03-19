@@ -1,19 +1,40 @@
 # Page Patterns
 
-> Composable templates for standard FT back-office pages. Each pattern defines the layout structure, required components, slot definitions, and composition rules.
-> Consumed by: prototype-generator
-> Last updated: 2026-03-17
+> Consumed by: prototype-generator. **Read only the section you need, not the whole file.**
+> Last updated: 2026-03-19
+
+## Jump to Pattern
+
+| Code | Pattern | Section |
+|---|---|---|
+| `FORM` | Settings Form | Pattern 1 |
+| `LIST-SIMPLE` | Simple List (most common, ~14 pages) | Pattern 2a |
+| `LIST-TAB` | List + Tabs | Pattern 2b |
+| `LIST-FULL` | List + Tabs + Toolbar | Pattern 2c |
+| `DETAIL` | Detail Page | Pattern 3 |
+| `SLIDEIN` | Modal / Slide-In | Pattern 4 |
+| `DASH` | Dashboard | Pattern 5 |
+| `GRID` | Grid (cards) | Pattern 6 |
+
+Also read: **Shared Shell** (applies to all), **Shared Table Rules** (applies to all LIST-*), **Anti-Patterns** (always)
 
 ## Pattern Selection Logic
 
-| User says... | Pattern |
-|-------------|---------|
-| "settings page", "configuration", "form page", "edit page" | Settings Page |
-| "list page", "table page", "index page", "browse", "overview" | List Page |
-| "detail page", "view page", "profile", "single item" | Detail Page |
-| "modal", "dialog", "slide-in", "overlay" | Modal / Slide-In |
-| "dashboard", "overview with stats" | Dashboard (compose from panels) |
-| "empty state", "first time", "no data" | Use any pattern + Placeholder component |
+| User says... | Layout Code | Pattern |
+|-------------|-------------|---------|
+| "simple list", "settings list", "table page", "browse" | `LIST-SIMPLE` | Simple List (Pattern 2a) |
+| "list with tabs", "tabbed list", "list page with categories" | `LIST-TAB` | List + Tabs (Pattern 2b) |
+| "full list", "activities page", "list with toolbar and filters" | `LIST-FULL` | List + Tabs + Toolbar (Pattern 2c) |
+| "settings page", "configuration", "form page" | `FORM` | Settings Form (Pattern 1) |
+| "detail page", "view page", "profile", "single item" | `DETAIL` | Detail Page (Pattern 3) |
+| "modal", "dialog", "slide-in", "overlay", "create", "edit" | `SLIDEIN` | Modal / Slide-In (Pattern 4) |
+| "dashboard", "overview with stats", "metrics" | `DASH` | Dashboard (Pattern 5) |
+| "grid", "cards", "gallery", "media", "templates" | `GRID` | Grid (Pattern 6) |
+| "empty state", "first time", "no data" | — | Use any pattern + Placeholder component |
+
+### Layout Codes (match page-inventory.md)
+
+`LIST-SIMPLE` · `LIST-TAB` · `LIST-FULL` · `FORM` · `DETAIL` · `SLIDEIN` · `DASH` · `GRID`
 
 ---
 
@@ -39,8 +60,8 @@ Every FT back-office page starts with the Base Template (`94:21370`). This gives
 **Shell defaults (apply to ALL patterns):**
 1. Side menu → match `Section` to product area
 2. Page Header → 1 breadcrumb level, 1 main CTA only, all other header toggles OFF
-3. Content placeholder → NO padding, NO fill (hard rule)
-4. Standard Panel → Full width unless brief says split
+3. Content placeholder → 32px padding all sides, gray fill `#F5F5F5` (matches live platform rendering)
+4. Standard Panel → 1700px FIXED (max canvas width) unless brief says split
 
 ---
 
@@ -151,11 +172,92 @@ input1.layoutSizingHorizontal = 'FILL';
 
 ---
 
-## Pattern 2: List Page
+## Pattern 2a: Simple List (`LIST-SIMPLE`)
 
-**Purpose:** Browsable data with search, filters, and table.
+**Purpose:** Browsable data table with optional search. No tabs, no toolbar. The most common layout (~14 pages).
 
-**Structure (observed from All Activities page):**
+**Pages using this pattern:** Communication Profiles, Manage Action Types, Manage Trigger Events, Manage Segment Fields, Player Origins, Manage Unsubscribe Pages, Content Variables, Triggers, Segments, Projects, QA Portal, Archive, Failed Actions, Feature Types.
+
+**Structure:**
+```
+Content Area
+└── Standard Panel
+    ├── Panel Header (title + description + optional search)
+    ├── Table frame (VERTICAL, no gap)
+    │   ├── Header row (HORIZONTAL, gap: 0)
+    │   │   ├── Header cell instance (w: flexible)
+    │   │   └── ...
+    │   ├── Data row (HORIZONTAL, gap: 0, h: 75, Position=ODD)
+    │   ├── Data row (Position=EVEN)
+    │   └── ...
+    └── Pagination instance (Type=go to page) — optional
+```
+
+**Key components:**
+
+| Slot | Component | ID | Default Variant |
+|------|-----------|----|----------------|
+| Table header cells | Header (standalone) | `91:39176` | Heading text + sort icon (sort hidden) |
+| Table row cells | Row | `91:39179` | Type=Text, Position=EVEN/ODD alternating |
+| Pagination | pagination | `92:40394` | Type=go to page |
+| Search | Built into Panel Header | — | `Search#4635:14: true` |
+
+**Composition rules:**
+- Single panel, no tabs, no toolbar — simplest table layout
+- Panel Header: enable search if the page has search, otherwise title + description only
+- "Create new" / "Add" button is the main CTA in Page Header
+- Pagination sits inside the panel, after the table frame (optional for short lists)
+- No filter tags — if the page has filters, it's probably LIST-TAB or LIST-FULL
+
+> See `code-patterns.md` § Table Composition for table assembly code
+
+---
+
+## Pattern 2b: List + Tabs (`LIST-TAB`)
+
+**Purpose:** Tabbed categories above a table. No toolbar strip, no filter tags.
+
+**Pages using this pattern:** Lifecycle Automation, Projects (tab view), some Singularity lists.
+
+**Structure:**
+```
+Content Area
+├── Tab bar (OUTSIDE the panel — at content area level)
+│   ├── tab (tab-text, Selected)     "Active"
+│   ├── tab (tab-text, Default)      "Paused"
+│   └── tab (tab-text, Default)      "Ended"
+└── Standard Panel
+    ├── Panel Header (title + optional search)
+    ├── Table frame (same structure as LIST-SIMPLE)
+    └── Pagination instance
+```
+
+**Key components:**
+
+| Slot | Component | ID | Default Variant |
+|------|-----------|----|----------------|
+| Tabs | tab | `91:19098` | Type=tab-text, Status=Selected/Default |
+| Table + Pagination | Same as LIST-SIMPLE | — | — |
+
+**Composition rules:**
+- **Tabs live OUTSIDE panels** — at the content area level, above the panel
+- Tab bar width must match panel width exactly
+- Tab bar is a horizontal frame (gap: 16), inserted as first child of content area
+- Content area itemSpacing: 16 between tab bar and panel
+- Only 1 tab is Selected, rest are Default
+- Hide badge and alert circle on tabs unless brief specifies counts
+
+> See `code-patterns.md` § Tabs for tab assembly code
+
+---
+
+## Pattern 2c: List + Tabs + Toolbar (`LIST-FULL`)
+
+**Purpose:** The most complex list — tabs, icon toolbar, search, filter tags, table, pagination.
+
+**Pages using this pattern:** All Activities, Activities Overview.
+
+**Structure:**
 ```
 Content Area
 ├── Tab bar (OUTSIDE the panel — at content area level)
@@ -169,12 +271,8 @@ Content Area
     ├── Table frame (VERTICAL, no gap)
     │   ├── Header row (HORIZONTAL, gap: 0)
     │   │   ├── Header cell instance (w: flexible)
-    │   │   ├── Header cell instance
     │   │   └── ...
-    │   ├── Data row (HORIZONTAL, gap: 0, h: 75)
-    │   │   ├── Row cell instance (Type=Text+leading icon, Position=ODD)
-    │   │   ├── Row cell instance
-    │   │   └── Row cell (Type=ellipsis) ← last column
+    │   ├── Data row (HORIZONTAL, gap: 0, h: 75, Position=ODD)
     │   ├── Data row (Position=EVEN)
     │   └── ...
     └── Pagination instance (Type=go to page)
@@ -184,12 +282,24 @@ Content Area
 
 | Slot | Component | ID | Default Variant |
 |------|-----------|----|----------------|
-| Table header cells | Header (standalone) | `91:39176` | Heading text + sort icon |
-| Table row cells | Row | `91:39179` | Type=Text, Position=EVEN/ODD alternating |
-| Pagination | pagination | `92:40394` | Type=go to page |
 | Tabs | tab | `91:19098` | Type=tab-text |
 | Filter tags | Tag | `91:10023` | Type=Icon-solid, Size=Small |
+| Icon toolbar | Icons in a slim Standard Panel | — | No Panel Header, 32px padding |
+| Table + Pagination | Same as LIST-SIMPLE | — | — |
 | Search | Built into Panel Header | — | `Search#4635:14: true` |
+
+**Composition rules:**
+- Everything from LIST-TAB applies (tabs outside panels, width matching)
+- Icon toolbar strip is a **separate Standard Panel** below tabs, above the main table panel — no Panel Header, just icon buttons in a horizontal layout
+- Panel Header for table: enable search AND add filter Tag instances
+- Filter tags are Tag instances (Small, Icon-solid) in a horizontal row inside the Panel Header
+- Stacking order in content area: Tab bar → Toolbar panel → Table panel
+
+> See `code-patterns.md` § Tabs, § Table Composition, § Status Tag Cells
+
+---
+
+## Shared Table Rules (apply to all LIST-* patterns)
 
 **Table composition (critical — learned from real pages):**
 - Each table row is a **horizontal Frame** (gap: 0) containing **multiple Row cell instances** side by side
@@ -199,25 +309,24 @@ Content Area
 - Row height is 75px for data rows, 40px for header
 - Last column typically uses `Type=ellipsis` for action menu
 - The `table` frame wrapping all rows has `layoutMode: VERTICAL`, no gap, no padding
+- **CRITICAL: Header cell widths MUST match data cell widths**
 
-**Composition rules:**
-- **Tabs live OUTSIDE panels** — at the content area level, above all panels
-- Icon toolbar strip is a separate slim panel (32px padding, icons only)
-- Panel Header for table: enable search, add filter Tag instances in the header row
-- "Create new" button is the main CTA in Page Header
-- Pagination sits inside the panel, after the table frame
+**Row type selection (12 cell types — always use the right component, never fake with primitives):**
 
-**Row type selection:**
-| Column content | Row Type |
-|---------------|----------|
-| Plain text | Text |
-| Text with icon prefix | Text+leading icon |
-| Status indicator | tag |
-| Avatar/thumbnail | image |
-| Country flags | flags |
-| Checkboxes (multi-select) | checkbox |
-| Action menu | ellipsis (always last column) |
-| Numeric/version | number/version |
+| Column content | Row Type | Example |
+|---|---|---|
+| Plain text | `Text` | Name, description, ID |
+| Text + left icon | `Text+leading icon` | Icon-prefixed label |
+| Text + right icon | `Text+trailing icon` | External link, arrow |
+| Standalone icon | `Icon` | Single icon indicator |
+| Status dot | `status circle` | Green/red active indicator |
+| Tag / badge | `tag` | Status tag (Active, Disabled) |
+| Checkbox | `checkbox` | Multi-select rows |
+| Action menu | `ellipsis` | Kebab — always last column |
+| Action type icons | `action icons` | Colored circle + FA icon |
+| Avatars | `image` | User/player thumbnails |
+| Country flags | `flags` | Market/locale indicators |
+| Number / version | `number/version` | Numeric badge in pill |
 
 ---
 
@@ -380,6 +489,46 @@ Content Area
 
 ---
 
+## Pattern 6: Grid (`GRID`)
+
+**Purpose:** Card-based layout for visual content — templates, media, image galleries.
+
+**Pages using this pattern:** Email Templates, Media Library.
+
+**Structure:**
+```
+Content Area
+├── [Tab bar — optional, if categories exist]
+├── [Toolbar strip — optional, view toggles (grid/list)]
+└── Standard Panel
+    ├── Panel Header (title + search + optional view toggles)
+    ├── Card Grid (HORIZONTAL, wrap, gap: 16-24)
+    │   ├── Card (fixed width, e.g. 280px)
+    │   ├── Card
+    │   ├── Card
+    │   └── ...
+    └── Pagination instance
+```
+
+**Key components:**
+
+| Slot | Component | ID | Notes |
+|------|-----------|----|-------|
+| Cards | Lifecycle card / template card | varies | Fixed width, variable height |
+| Pagination | pagination | `92:40394` | Type=go to page |
+| Search | Built into Panel Header | — | `Search#4635:14: true` |
+
+**Composition rules:**
+- Card grid frame: `layoutMode: 'HORIZONTAL'`, `layoutWrap: 'WRAP'`, `itemSpacing: 16-24`
+- Cards have **fixed width** (e.g. 280px) — NOT FILL. The wrap handles responsive columns.
+- Card height can be HUG (content-driven) or fixed (uniform thumbnails)
+- Some grid pages offer a list/grid toggle — toolbar strip same as LIST-FULL
+- Pagination same as LIST-SIMPLE
+
+**Status:** Placeholder — not yet verified. Will be codified during Tier 5 page builds.
+
+---
+
 ## Anti-Patterns
 
 | Don't do this | Do this instead |
@@ -389,7 +538,7 @@ Content Area
 | Save button inside the panel | Main CTA in Page Header (or slide-in header) |
 | Multiple main (pink) buttons | 1 main max; use alt/sub for others |
 | Custom colors on alerts | Use Status variant (success/error/info/warning) |
-| Padding on content placeholder | Zero padding, zero fill — content owns spacing |
+| Panel FILL instead of 1700px FIXED | Panel is always 1700px FIXED (max canvas width) |
 | `findOne()` for node access | `getNodeByIdAsync()` with known IDs |
 | Setting FILL before appendChild | Append first, THEN set sizing |
 | Lorem ipsum | Realistic FT domain content |

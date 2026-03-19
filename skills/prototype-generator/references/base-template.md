@@ -6,7 +6,7 @@
 
 ## Overview
 
-The standard FT back-office page is a 1920×1080 frame with three zones: side menu, header, and content area containing a standard panel. All components are **remote library instances** from the DSP-Master library.
+The standard FT back-office page is a 1920×1080 frame with three zones: side menu, header, and content area containing a standard panel. All components are **local instances** on the FT DNA Workbench page.
 
 ```
 ┌──────┬──────────────────────────────────────────────┐
@@ -46,7 +46,7 @@ The root frame uses no auto-layout. Children are positioned absolutely or via co
 
 ## Component Registry
 
-All components are remote (from DSP-Master library). Use `importComponentByKeyAsync()` to instantiate.
+All components are local on the FT DNA Workbench page. Use `getNodeByIdAsync()` to get the component set, then `createInstance()` to instantiate.
 
 ### Side Menu
 | Property | Value |
@@ -161,7 +161,7 @@ Two collections discovered from the template bindings:
 - **File:** FT DNA (`7J3dSTuOSRlsHBqQ4ohtxI`)
 - **Page:** 🧫 Workbench
 - **Node:** `94:21370` ("Base Template") — this is a COMPONENT, never delete it
-- **Type:** Local COMPONENT with all local children (no DSP-Master dependency)
+- **Type:** Local COMPONENT with all local children
 - **Children:** side menu (local `92:46353`), Page Header (local `97:90645`), Frame 1317 > Standard Panel (local `92:46584`)
 
 > **Legacy seed:** The old seed instance `3:5535` on Sandbox still exists but is deprecated. Use the Base Template component instead.

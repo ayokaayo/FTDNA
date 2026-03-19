@@ -19,12 +19,16 @@ Production-quality Figma frames built from real component instances — side men
 
 ## Decision Engine
 
-Before writing any code, reason through these references:
+### Fast Path (brief exists)
+If a brief file exists in `briefs/` for this page → **read the brief first.** It has layout type, columns, data, and construction notes. Then go straight to `code-patterns.md` for implementation snippets and `component-ids.md` for ID lookups. Skip the catalog and patterns files.
 
-1. **`references/page-patterns.md`** — Select page pattern (settings, list, detail, modal, dashboard)
-2. **`references/component-catalog.md`** — Map brief elements to exact component variants
-3. **`references/code-patterns.md`** — Get the proven code for each pattern
-4. **`references/component-ids.md`** — Look up IDs, variant names, text override nodes
+### Full Path (no brief, new page type)
+Read references in this priority order — stop when you have enough:
+
+1. **`./references/component-ids.md`** — IDs, variant names, text overrides, gotchas (102 lines, always read)
+2. **`./references/code-patterns.md`** — Proven code snippets for each composition pattern (always read)
+3. **`FTDNA/references/page-patterns.md`** — Jump to the specific layout type section you need (only read the relevant pattern, not the whole file)
+4. **`FTDNA/references/component-catalog.md`** — Deep reference. Only read when you encounter a component NOT covered in component-ids.md
 
 ## Process
 
@@ -32,7 +36,7 @@ Before writing any code, reason through these references:
 
 Extract from the input:
 - **What screens** are needed
-- **What page pattern** each matches → `page-patterns.md`
+- **What layout type** each matches → `page-patterns.md` (LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM, DETAIL, SLIDEIN, DASH, GRID)
 - **What components** each needs → `component-catalog.md`
 - **What states** matter (default, empty, error, success)
 - **What data** to show (realistic FT iGaming content)
@@ -40,7 +44,7 @@ Extract from the input:
 Present the plan before building:
 ```
 Screen plan:
-1. [Screen name] — Pattern: [settings/list/detail/modal]
+1. [Screen name] — Layout: [LIST-SIMPLE/LIST-TAB/LIST-FULL/FORM/DETAIL/SLIDEIN/DASH/GRID]
    Components: [list with specific variants]
    Data: [realistic content]
 ```
@@ -116,13 +120,14 @@ Based on the page pattern selected in Step 1:
 
 ## Reference Files
 
-**Read before generating:**
+**Priority order — read top-down, stop when you have enough:**
 
-| File | What it contains |
-|------|-----------------|
-| `references/page-patterns.md` | Layout patterns, slot definitions, composition rules, anti-patterns |
-| `references/component-catalog.md` | 52 components, prop keys, variant selection logic, compliance rules |
-| `references/code-patterns.md` | Proven code snippets: bootstrap, tables, tabs, forms, tags, overrides |
-| `references/component-ids.md` | Component IDs, variant names, text override node names, API gotchas |
-| `references/base-template.md` | Base Template node structure and navigation |
-| `references/ft-dna-variables.json` | Variable ID map (colors + sizing) |
+| Priority | File | Location | When to read |
+|----------|------|----------|-------------|
+| P0 | `briefs/*.md` | Skill-local | **FIRST** — if a brief exists for this page, it has everything |
+| P1 | `references/component-ids.md` | Skill-local | **ALWAYS** — IDs, variants, text overrides, gotchas (compact) |
+| P1 | `references/code-patterns.md` | Skill-local | **ALWAYS** — proven code snippets for each composition pattern |
+| P2 | `references/page-patterns.md` | Repo root | **WHEN NEEDED** — jump to the specific layout type section only |
+| P3 | `references/component-catalog.md` | Repo root | **DEEP REFERENCE** — only when component-ids.md doesn't cover it |
+| P3 | `references/base-template.md` | Skill-local | **IF STUCK** — full Base Template node tree for debugging |
+| P3 | `references/ft-dna-variables.json` | Skill-local | **IF NEEDED** — variable ID map for color/sizing overrides |
