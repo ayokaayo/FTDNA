@@ -1,5 +1,7 @@
 # FastTrack Component Inventory Gap Analysis
 
+> **Historical reference.** The coverage data below is still accurate, but the implementation roadmap has been superseded by `.fasttrack/plans/v1-completion-plan.md` (2026-03-19). Use that plan for current priorities and execution sequence.
+
 **Generated:** February 6, 2026
 **Source:** DSP-Master Figma Design System + Vue Playbook Analysis
 
