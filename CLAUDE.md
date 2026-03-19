@@ -1,6 +1,26 @@
 # FT DNA — AI Context
 
 > This file is loaded automatically by Claude Code. It is the single entry point for any AI session working in this repo.
+> **Update the status section below after every working session.**
+
+## Project Status
+
+**Version:** 0.2.3 (testing)
+**Last updated:** 2026-03-19
+
+| Track | Status | Detail |
+|---|---|---|
+| Page composition | T1 done (3/13 pages) | LIST-SIMPLE proven. T2-T5 blocked on platform scanner. |
+| Platform scanner | Not started | Waiting for new CRM environment from Miguel. |
+| Component audit | Not started | Will use existing vue-lib meta.json + prop interfaces. |
+| Code Connect | Not started | Depends on component audit. |
+| Design critique | Stale refs | design-system.md needs token/component refresh. |
+
+**What's next:** Build platform scanner when environment is shared, or continue page composition with manual screenshots.
+**Full plan:** `.fasttrack/plans/v1-completion-plan.md`
+**Page progress:** `inventory/composition-tracker.md`
+
+---
 
 ## What This Repo Is
 
