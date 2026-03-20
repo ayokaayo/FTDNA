@@ -68,7 +68,7 @@ const tabDefault = tabSet.children.find(v => v.name.includes('Type=tab-text') &&
 const tabBar = figma.createFrame();
 tabBar.name = 'Tab Bar';
 tabBar.layoutMode = 'HORIZONTAL';
-tabBar.itemSpacing = 16;
+tabBar.itemSpacing = 32; // RULE: always 32px between tabs
 tabBar.fills = [];
 contentFrame.insertChild(0, tabBar);
 tabBar.layoutSizingHorizontal = 'FIXED';
@@ -427,15 +427,12 @@ toggle.setProperties({ 'Text#9:17': 'Toggle label text here' });
 // Toggles are always HUG, never FILL
 ```
 
-## Panel Header — Enable Search (LIST-SIMPLE)
+## Panel Header — Enable Search
 
-The Panel Header has a hidden `Search + Action Icons` frame. To show just the search icon:
+The Panel Header has a hidden `Search + Action Icons` frame. Replace the search button with a full Search input at **350px width**.
 
 ```javascript
-// Panel Header structure: top → "Search + Action Icons" (hidden by default)
-// Inside: Input Fields (search), Toggle, Action icons
 const panelHeader = await figma.getNodeByIdAsync(PANEL_HEADER_ID);
-
 const searchFrame = panelHeader.findOne(n => n.name === 'Search + Action Icons');
 searchFrame.visible = true;
 
@@ -444,6 +441,66 @@ const toggle = searchFrame.findOne(n => n.name === 'Toggle');
 if (toggle) toggle.visible = false;
 const actionIcons = searchFrame.findOne(n => n.name === 'Action icons');
 if (actionIcons) actionIcons.visible = false;
+
+// Replace search button with full search input (ALWAYS 350px)
+const inputSet = await figma.getNodeByIdAsync('91:6537');
+const searchVariant = inputSet.children.find(v =>
+  v.name.includes('Type=Search') && v.name.includes('State=default-empty')
+);
+const oldSearch = searchFrame.findOne(n => n.name === 'Input Fields');
+const newSearch = searchVariant.createInstance();
+searchFrame.insertChild(searchFrame.children.indexOf(oldSearch), newSearch);
+oldSearch.remove();
+newSearch.layoutSizingHorizontal = 'FIXED';
+newSearch.resize(350, newSearch.height);
+newSearch.setProperties({ 'Label#4339:0': false, 'AI+Emoji#4369:0': false });
+```
+
+## Icon Toolbar Strip (LIST-FULL pages)
+
+Row of icon-only buttons between tabs and panel. **No background fill.** All icons use `Status=default`.
+
+```javascript
+const btnSet = await figma.getNodeByIdAsync('91:8299');
+const iconBtnDefault = btnSet.children.find(v =>
+  v.name === 'Type=icon, Status=default, Size=M, Leading icon=No'
+);
+
+const toolbar = figma.createFrame();
+toolbar.name = 'Icon Toolbar';
+toolbar.layoutMode = 'HORIZONTAL';
+toolbar.itemSpacing = 8;
+toolbar.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }]; // WHITE background with padding
+toolbar.paddingTop = 8;
+toolbar.paddingBottom = 8;
+contentFrame.insertChild(1, toolbar); // after tabs
+toolbar.layoutSizingHorizontal = 'FIXED';
+toolbar.resize(panel.width, 48);
+
+const icons = ['clock', 'tag', 'users', 'sliders', 'filter'];
+for (const iconName of icons) {
+  const btn = iconBtnDefault.createInstance();
+  toolbar.appendChild(btn);
+  const iconNode = btn.findOne(n => n.name === 'v7-icon');
+  if (iconNode) {
+    const iconText = iconNode.findOne(n => n.type === 'TEXT' && n.name === 'icon');
+    if (iconText) {
+      await figma.loadFontAsync(iconText.fontName);
+      iconText.characters = iconName;
+    }
+  }
+}
+```
+
+## Content Frame Rules
+
+The main content frame (`Frame 1317`) must be renamed to **"Main"** and **top-aligned**:
+
+```javascript
+const mainFrame = screen.children.find(c => c.name === 'Frame 1317');
+mainFrame.name = 'Main';
+mainFrame.primaryAxisAlignItems = 'MIN';     // top
+mainFrame.counterAxisAlignItems = 'CENTER';  // horizontal center
 ```
 
 ## Tag Cell with Zebra Striping
