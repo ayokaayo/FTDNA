@@ -178,6 +178,22 @@ const goToPage = paginationSet.children.find(v => v.name.includes('Type=go to pa
 const pagination = goToPage.createInstance();
 content.appendChild(pagination);
 pagination.layoutSizingHorizontal = 'FILL';
+
+// PAGINATION TEXT OVERRIDES — numbers must match visible rows
+// Structure: Tag "N/total" | Tag "N items per page ▼" | ‹ | page 1 | page 2 | ... | › | "Go to page"
+const allPagTexts = pagination.findAll(n => n.type === 'TEXT');
+for (const t of allPagTexts) {
+  await figma.loadFontAsync(t.fontName);
+  if (t.characters.includes('/')) t.characters = `${data.length}/${totalItems}`;         // e.g. "10/345"
+  if (t.characters.includes('items per page')) t.characters = `${data.length} items per page`; // match row count
+}
+// Replace last page number with "..." to indicate more pages
+const pageNums = allPagTexts.filter(t => /^\d+$/.test(t.characters) && t.parent?.name === 'page number');
+if (pageNums.length >= 3) {
+  const lastPage = pageNums[pageNums.length - 1];
+  await figma.loadFontAsync(lastPage.fontName);
+  lastPage.characters = '...';
+}
 ```
 
 ## Status Tag Cells
@@ -251,16 +267,31 @@ await figma.loadFontAsync(iconText.fontName);
 iconText.characters = 'arrows-spin'; // FA icon name: bolt, clock, users, etc.
 ```
 
-## Red "x" Text Override (No-Data Indicators)
+## Xmark Icon Cells (No-Data Indicators)
 
-Some columns show a red "x" for zero/null values instead of tags or empty cells.
+Columns that show a red "x" for zero/null values MUST use `Type=Icon` cell variant with the `xmark` FontAwesome icon — never plain red text in a Text cell.
 
 ```javascript
-const t = cell.findOne(n => n.type === 'TEXT' && n.name === 'Row');
-if (t) {
-  await figma.loadFontAsync(t.fontName);
-  t.characters = 'x';
-  t.fills = [{ type: 'SOLID', color: { r: 0.87, g: 0.25, b: 0.25 } }]; // Red
+const rowSet = await figma.getNodeByIdAsync('91:39179');
+const iconEven = rowSet.children.find(v => v.name === 'Type=Icon, Position=EVEN');
+const iconOdd = rowSet.children.find(v => v.name === 'Type=Icon, Position=ODD');
+
+const RED = { type: 'SOLID', color: { r: 0.87, g: 0.25, b: 0.25 } };
+
+// Inside row loop — replace text cell with icon cell for "x" values:
+const isEven = i % 2 === 0;
+const iconCell = (isEven ? iconEven : iconOdd).createInstance();
+row.appendChild(iconCell);
+iconCell.layoutSizingHorizontal = 'FILL';
+
+const iconInstance = iconCell.findOne(n => n.name === 'v7-icon');
+if (iconInstance) {
+  const iconText = iconInstance.findOne(n => n.type === 'TEXT' && n.name === 'icon');
+  if (iconText) {
+    await figma.loadFontAsync(iconText.fontName);
+    iconText.characters = 'xmark';
+    iconText.fills = [RED];
+  }
 }
 ```
 

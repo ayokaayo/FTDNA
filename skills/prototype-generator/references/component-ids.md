@@ -37,7 +37,7 @@
 | Plain text | `Type=Text` | `"Row"` text node | Default cell. Override text characters. |
 | Text + left icon | `Type=Text+leading icon` | `"Row"` text + `v7-icon` instance | Icon prefix (e.g. status dot + label). |
 | Text + right icon | `Type=Text+trailing icon` | `"Row"` text + `v7-icon` instance | Icon suffix (e.g. external link arrow). |
-| Standalone icon | `Type=Icon` | `v7-icon` instance | Single icon, no text. Override icon text character. |
+| Standalone icon | `Type=Icon` | `v7-icon` instance | Single icon, no text. Override icon text character. Use for xmark (no-data) indicators — set icon to `xmark` + red fill. |
 | Status dot | `Type=status circle` | `v7-icon` instance | Green/red/yellow dot. Override icon fill color. |
 | Tag / status badge | `Type=tag` | `Tag` instance | Uses Tag component. Override text + variant (color/size). |
 | Checkbox | `Type=checkbox` | `v7-icon` instance | Check/uncheck. Override icon character + fill. |
