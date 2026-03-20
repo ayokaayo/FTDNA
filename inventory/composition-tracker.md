@@ -2,7 +2,7 @@
 
 > Tracks page generation progress: which pages are built, which patterns are codified, reproduction test results.
 > Updated after every page build session.
-> Last updated: 2026-03-18
+> Last updated: 2026-03-20
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Metric | Value |
 |---|---|
-| Pages composed | 9 / 48 |
+| Pages composed | 11 / 48 |
 | Layout types verified | 0 / 8 |
 | Code patterns proven | 15 / 18 |
 | Reproduction tests passed | 0 |
@@ -23,11 +23,11 @@
 |---|---|---|---|---|---|
 | Simple List | `LIST-SIMPLE` | ~14 | 3 | No | Partial |
 | List + Tabs | `LIST-TAB` | 3 | 3 | No | Yes |
-| List + Tabs + Toolbar | `LIST-FULL` | 2 | 0 | No | No |
+| List + Tabs + Toolbar | `LIST-FULL` | 2 | 1 | No | Partial |
 | Settings Form | `FORM` | ~4 | 3 | No | Yes |
 | Dashboard | `DASH` | 5 | 0 | No | No |
 | Detail Page | `DETAIL` | ~5 | 0 | No | No |
-| Slide-In | `SLIDEIN` | ~8 | 0 | No | No |
+| Slide-In | `SLIDEIN` | ~8 | 1 | No | Partial |
 | Grid | `GRID` | ~2 | 0 | No | No |
 
 **Verified** = a fresh Claude session can reproduce the page cold from a brief.
@@ -48,9 +48,9 @@
 | 5 | Settings Localisation | FORM | T2 | Done | No | — | Figma Sandbox. Multi-panel (3), dropdowns half-width + info icon, blue "SYSTEM DEFAULT" tags, radio buttons, toggles. |
 | 6 | Lifecycle Automation | LIST-TAB | T2 | Done | No | — | Figma Sandbox. 8 tabs, filter tags (IN DEV/QA/READY/PROD), leading icon overrides (arrows-spin, circle, bolt, clock, users), status circle+text pattern. |
 | 7 | Activities & Projects | LIST-TAB | T2 | Done | No | — | Figma Sandbox. Overview tab, 3 panels with empty state Placeholder components (Size=M). |
-| 8 | All Activities | LIST-FULL | T3 | Not started | — | — | Full complexity list |
+| 8 | All Activities | LIST-FULL | T3 | Done | No | — | Figma Pastebin `181:77359`. Tabs (3), icon toolbar (5 icons), panel header with search+filter tags (ACTIVE/ENDED/DISABLED/SCHEDULED)+action icons, 8-row table (Name 760/Status 200/Trigger 240/Players 200/Origins 184/Ellipsis 52), image cells for origins, status circle colors (gray/green/blue), pagination. Built from reference `92:55380`. |
 | 9 | Integration Settings | FORM | T3 | Not started | — | — | Multi-panel form |
-| 7 | Activity Create/Edit LVL1 | SLIDEIN | T3 | Not started | — | — | Slide-in overlay |
+| 7 | Activity Create/Edit LVL1 | SLIDEIN | T3 | Done | No | — | Figma Pastebin `181:79166`. Full page composite: All Activities bg + blur overlay + 1250px slide-in. 4 sections: Activity Name (input), Type of Activity (SDT/Recurring tabs + trigger/feature inputs), Segment (alert + origin cards + market cards + additional rules), Add Actions (option cards + action block components). Built from reference `92:56151`. |
 | 8 | Activity Nested Edit LVL2 | SLIDEIN | T3 | Not started | — | — | Nested slide-in |
 | 9 | CRM Dashboard | DASH | T4 | Not started | — | — | Landing page |
 | 10 | Performance Dashboard | DASH | T4 | Not started | — | — | Validates DASH pattern |

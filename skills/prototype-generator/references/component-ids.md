@@ -137,15 +137,88 @@ const newFill = figma.variables.setBoundVariableForPaint(currentFills[0], 'color
 tag.fills = [newFill];
 ```
 
-**Key colour variable IDs:**
+**Complete Colour Variable IDs (Colours collection, 53 vars, Light + Dark modes):**
 
-| Colour | Variable ID | Name |
+| Variable ID | Name | Hex (Light) |
 |---|---|---|
-| Blue 400 | `VariableID:28:26` | Blue/color-brand-blue-400 |
-| Blue 500 | `VariableID:28:27` | Blue/color-brand-blue-500 |
-| Green (use for success/active) | Check Colours collection | Green/color-brand-green-* |
-| Yellow 400 | `VariableID:28:31` | Yellow/color-brand-yellow-400 |
-| Pink 500 | `VariableID:28:17` | Pink/color-brand-pink-500 |
+| `VariableID:28:5` | Monochrome/color-mono-white | #FFFFFF |
+| `VariableID:28:6` | Monochrome/color-mono-100 | #FAFAFA |
+| `VariableID:28:7` | Monochrome/color-mono-200 | #F5F5F5 |
+| `VariableID:28:8` | Monochrome/color-mono-300 | #E5E5E5 |
+| `VariableID:28:9` | Monochrome/color-mono-400 | #CACACA |
+| `VariableID:28:10` | Monochrome/color-mono-500 | #959595 |
+| `VariableID:28:11` | Monochrome/color-mono-600 | #666666 |
+| `VariableID:28:12` | Monochrome/color-mono-700 | #2C2C2C |
+| `VariableID:28:13` | Monochrome/color-mono-black | #000000 |
+| `VariableID:28:14` | Pink/color-brand-pink-200 | #FAD7E4 |
+| `VariableID:28:15` | Pink/color-brand-pink-300 | #F4B0C8 |
+| `VariableID:28:16` | Pink/color-brand-pink-400 | #E96092 |
+| `VariableID:28:17` | Pink/color-brand-pink-500 | #D52454 |
+| `VariableID:28:18` | Pink/color-brand-pink-600 | #C21030 |
+| `VariableID:28:19` | Purple/color-brand-purple-200 | #E0C6E0 |
+| `VariableID:28:21` | Purple/color-brand-purple-400 | #831F82 |
+| `VariableID:28:24` | Blue/color-brand-blue-200 | #D8EDF9 |
+| `VariableID:28:25` | Blue/color-brand-blue-300 | #B0DAF2 |
+| `VariableID:28:26` | Blue/color-brand-blue-400 | #63B6E6 |
+| `VariableID:28:27` | Blue/color-brand-blue-500 | #2782CF |
+| `VariableID:28:28` | Blue/color-brand-blue-600 | #105DBA |
+| `VariableID:28:29` | Yellow/color-brand-yellow-200 | #FFF6C9 |
+| `VariableID:28:31` | Yellow/color-brand-yellow-400 | #FFDB14 |
+| `VariableID:28:32` | Yellow/color-brand-yellow-500 | #FDBC25 |
+| `VariableID:28:34` | Red/color-brand-red-200 | #F9D3CC |
+| `VariableID:28:36` | Red/color-brand-red-400 | #E54F35 |
+| `VariableID:28:37` | Red/color-brand-red-500 | #CD1913 |
+| `VariableID:28:39` | Orange/color-brand-orange-200 | #FCE8C7 |
+| `VariableID:28:41` | Orange/color-brand-orange-400 | #F4A321 |
+| `VariableID:28:44` | Green/color-alt-green-200 | #CDEACC |
+| `VariableID:28:45` | Green/color-alt-green-300 | #9CD499 |
+| `VariableID:28:46` | Green/color-alt-green-400 | #3AAA35 |
+| `VariableID:28:47` | Green/color-alt-green-500 | #0D710B |
+
+**Common semantic mappings:**
+
+| Usage | Variable | ID |
+|---|---|---|
+| White/surface | mono-white | `VariableID:28:5` |
+| Panel bg (secondary) | mono-100 | `VariableID:28:6` |
+| Card bg (tertiary) | mono-200 | `VariableID:28:7` |
+| Border (base) | mono-300 | `VariableID:28:8` |
+| Border (strong) | mono-500 | `VariableID:28:10` |
+| Text (secondary) | mono-600 | `VariableID:28:11` |
+| Text (primary) | mono-700 | `VariableID:28:12` |
+| Primary/CTA | pink-500 | `VariableID:28:17` |
+| Success/Active | green-400 | `VariableID:28:46` |
+| Error | red-500 | `VariableID:28:37` |
+| Warning | yellow-400 | `VariableID:28:31` |
+| Info/Link | blue-600 | `VariableID:28:28` |
+
+**How to bind a variable to a fill:**
+
+```javascript
+// Helper function — use this for ALL fills/strokes
+async function bindFill(node, variableId) {
+  const variable = await figma.variables.getVariableByIdAsync(variableId);
+  const baseFill = node.fills.length > 0 ? { ...node.fills[0] } : { type: 'SOLID', color: { r: 1, g: 1, b: 1 } };
+  const boundFill = figma.variables.setBoundVariableForPaint(baseFill, 'color', variable);
+  node.fills = [boundFill];
+}
+
+// Usage
+await bindFill(panel, 'VariableID:28:6');     // mono-100
+await bindFill(card, 'VariableID:28:7');       // mono-200
+
+// For strokes
+async function bindStroke(node, variableId) {
+  const variable = await figma.variables.getVariableByIdAsync(variableId);
+  const baseStroke = node.strokes.length > 0 ? { ...node.strokes[0] } : { type: 'SOLID', color: { r: 0, g: 0, b: 0 } };
+  const boundStroke = figma.variables.setBoundVariableForPaint(baseStroke, 'color', variable);
+  node.strokes = [boundStroke];
+}
+
+await bindStroke(panel, 'VariableID:28:8');    // mono-300 border
+```
+
+**RULE: NEVER hardcode RGB values. Always use `bindFill`/`bindStroke` with variable IDs.**
 
 ### Dropdown with "SYSTEM DEFAULT" Tag
 

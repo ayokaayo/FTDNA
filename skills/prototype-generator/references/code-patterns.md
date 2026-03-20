@@ -3,6 +3,53 @@
 > Executable code snippets for the prototype-generator skill. Each pattern is proven and tested.
 > Last updated: 2026-03-18
 
+## Variable Binding Helpers (MANDATORY — never hardcode colours)
+
+Include these helpers at the top of every build script. All fills and strokes MUST use variable binding.
+
+```javascript
+// Bind a colour variable to a node's fill
+async function bindFill(node, variableId) {
+  const variable = await figma.variables.getVariableByIdAsync(variableId);
+  const baseFill = node.fills?.length > 0 ? { ...node.fills[0] } : { type: 'SOLID', color: { r: 1, g: 1, b: 1 } };
+  const boundFill = figma.variables.setBoundVariableForPaint(baseFill, 'color', variable);
+  node.fills = [boundFill];
+}
+
+// Bind a colour variable to a node's stroke
+async function bindStroke(node, variableId) {
+  const variable = await figma.variables.getVariableByIdAsync(variableId);
+  const baseStroke = node.strokes?.length > 0 ? { ...node.strokes[0] } : { type: 'SOLID', color: { r: 0, g: 0, b: 0 } };
+  const boundStroke = figma.variables.setBoundVariableForPaint(baseStroke, 'color', variable);
+  node.strokes = [boundStroke];
+}
+
+// Common variable IDs — see component-ids.md for full list
+const V = {
+  white:    'VariableID:28:5',   // #FFFFFF
+  mono100:  'VariableID:28:6',   // #FAFAFA — panel bg, secondary surface
+  mono200:  'VariableID:28:7',   // #F5F5F5 — card bg, tertiary surface
+  mono300:  'VariableID:28:8',   // #E5E5E5 — border base
+  mono400:  'VariableID:28:9',   // #CACACA — border subtle
+  mono500:  'VariableID:28:10',  // #959595 — text tertiary
+  mono600:  'VariableID:28:11',  // #666666 — text secondary
+  mono700:  'VariableID:28:12',  // #2C2C2C — text primary
+  black:    'VariableID:28:13',  // #000000
+  pink500:  'VariableID:28:17',  // #D52454 — primary/CTA
+  green400: 'VariableID:28:46',  // #3AAA35 — success/active
+  red500:   'VariableID:28:37',  // #CD1913 — error
+  yellow400:'VariableID:28:31',  // #FFDB14 — warning
+  blue600:  'VariableID:28:28',  // #105DBA — info/link
+};
+
+// Usage:
+// await bindFill(panel, V.mono100);
+// await bindStroke(panel, V.mono300);
+// await bindFill(card, V.white);
+```
+
+---
+
 ## Bootstrap: Instantiate Base Template
 
 ```javascript
