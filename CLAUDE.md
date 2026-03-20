@@ -14,7 +14,7 @@
 | Page composition | T2 done (7/13 pages) | LIST-SIMPLE, LIST-TAB, FORM proven. T3-T5 ready to start. |
 | Component audit | Not started | Will use existing vue-lib meta.json + prop interfaces. |
 | Code Connect | Not started | Depends on component audit. |
-| Design critique | Stale refs | design-system.md needs token/component refresh. |
+| Design critique | Done | design-system.md refreshed from Figma variables. Compact summary output as default. |
 
 **What's next:** T3 page composition (LIST-FULL, SLIDEIN). Screenshot each page on demand with `npm run snap <path>`.
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`

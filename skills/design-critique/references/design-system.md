@@ -1,7 +1,8 @@
 # FT DNA — Design System Reference
 
 > Source of truth for design-critique compliance checks.
-> Last synced: 2026-03-13
+> All values below come from Figma variables (FT DNA file). When sources conflict, Figma wins.
+> Last synced: 2026-03-20
 
 ## Source Hierarchy
 
@@ -14,9 +15,11 @@ When sources conflict, Figma wins.
 ---
 
 ## Color Tokens
-_Source: Figma + Playbook_
+_Source: Figma Variables → Colours collection (53 variables, Light + Dark modes)_
 
-### Brand Palette (7 families × 5 shades)
+### Brand Palette (6 families × 5 shades)
+
+Variable pattern: `color-brand-{family}-{shade}`
 
 | Family | 200 (lightest) | 300 | 400 | 500 | 600 (darkest) |
 |--------|-------|-----|-----|-----|-------|
@@ -26,9 +29,18 @@ _Source: Figma + Playbook_
 | Yellow | #FFF6C9 | #FEED93 | #FFDB14 | #FDBC25 | #FCA122 |
 | Red | #F9D3CC | #F2A699 | #E54F35 | #CD1913 | #B80E11 |
 | Orange | #FCE8C7 | #F9D18F | #F4A321 | #E9681A | #DF4317 |
-| Green | #D4E9D4 | #A9D3A9 | #3AAA3F | #2E7D2E | #1A5A1A |
+
+### Alt Palette (1 family × 5 shades)
+
+Variable pattern: `color-alt-{family}-{shade}`
+
+| Family | 200 (lightest) | 300 | 400 | 500 | 600 (darkest) |
+|--------|-------|-----|-----|-----|-------|
+| Green | #CDEACC | #9CD499 | #3AAA35 | #0D710B | #034B02 |
 
 ### Neutral / Mono Palette
+
+Variable pattern: `color-mono-{shade}`
 
 | Token | Value |
 |-------|-------|
@@ -42,18 +54,36 @@ _Source: Figma + Playbook_
 | 700 | #2C2C2C |
 | Black | #000000 |
 
-### Semantic Tokens
+### Wireframe Palette
 
-| Role | Tokens used |
-|------|------------|
-| Primary | Pink 200–600 |
-| Secondary | Blue 200, 500, 600 |
-| Tertiary | Purple 300–500 |
-| Success | Green 200–500 |
-| Warning | Yellow 200–500 |
-| Error | Red 200, 400, 500, 600 |
-| Info | Blue 200, 400, 500, 600 |
-| Neutral | Mono 200–700 |
+Variable pattern: `color-wire-{shade}` — blue-gray tones for wireframing and low-fidelity work.
+
+| Token | Value |
+|-------|-------|
+| White | #FFFFFF |
+| 100 | #F5F9FC |
+| 200 | #E9EFF6 |
+| 300 | #D5DBE3 |
+| 400 | #C2CAD6 |
+| 500 | #AEBBC8 |
+| 600 | #7D90A6 |
+| 700 | #313F55 |
+| Black | #101A2F |
+
+### Semantic Aliases
+
+Functional color mappings referencing the palettes above.
+
+| Role | Base color | Shades used |
+|------|-----------|-------------|
+| Primary | Pink | base=400, dark=500, darker=600, light=300, lighter/lightest=200 |
+| Secondary | Blue | base=600, dark=600, light=500, lightest=200 |
+| Tertiary | Purple | base=400, dark=500, light=300 |
+| Success | Green (alt) | base=400, dark=500, light=300, lightest=200 |
+| Warning | Yellow | base=400, dark=500, light=300, lightest=200 |
+| Error | Red | base=500, dark=600, light=400, lightest=200 |
+| Info | Blue | base=400, dark=500, light=300, lightest=200 |
+| Neutral | Mono | base=600, dark=700, light=500, lighter=400, lightest=200 |
 
 ### Surface, Text & Border
 
@@ -68,6 +98,10 @@ _Source: Figma + Playbook_
 | `on-surface.tertiary` | Mono 500 (#959595) | Tertiary text / placeholders |
 | `on-surface.disabled` | Mono 400 (#CACACA) | Disabled text |
 | `on-surface.inverse` | White | Text on dark surfaces |
+| `on-primary.base` | White | Text on primary backgrounds |
+| `on-secondary.base` | White | Text on secondary backgrounds |
+| `on-success.base` | White | Text on success backgrounds |
+| `on-error.base` | White | Text on error backgrounds |
 | `border.base` | Mono 300 (#E5E5E5) | Default borders |
 | `border.subtle` | Mono 200 (#F5F5F5) | Subtle dividers |
 | `border.strong` | Mono 500 (#959595) | Emphasized borders |
@@ -78,47 +112,56 @@ _Source: Figma + Playbook_
 | `accent.primary` | Orange 500 (#E9681A) | Primary accent |
 | `accent.secondary` | Purple 400 (#831F82) | Secondary accent |
 | `overlay.base` | rgba(0,0,0,0.5) | Modal/overlay backdrop |
+| `overlay.light` | rgba(0,0,0,0.3) | Subtle dimming |
+| `overlay.dark` | rgba(0,0,0,0.7) | Strong dimming |
 
 ---
 
 ## Typography
+_Source: Figma text styles — 17 styles across 5 groups_
 
 ### Font Families
 
-| Role | Font | CSS Variable |
-|------|------|-------------|
-| UI / Content | Inter | `--font-primary` |
-| Code / Monospace | Noto Sans Mono | `--font-monospaced` |
+| Role | Font |
+|------|------|
+| UI / Content | Inter |
+| Code / Monospace | Noto Sans Mono |
 
 ### Font Weights
 
-| Weight | Value | CSS Variable |
-|--------|-------|-------------|
-| Regular | 400 | `--font-weight-regular` |
-| Bold | 700 | `--font-weight-bold` |
+Only two weights used across the entire system:
+
+| Weight | Value |
+|--------|-------|
+| Regular | 400 |
+| Bold | 700 |
 
 ### Type Scale
 
-| Level | Size | Line Height | Weight | Letter Spacing |
-|-------|------|-------------|--------|----------------|
-| Headline | 120px | 124px | 700 | -0.2px |
-| Section | 72px | 76px | 700 | -0.2px |
-| Heading | 38px | 45px | 700 | -0.2px |
-| Title | 20px | 25px | 700 | — |
-| Sub-title | 16px | 23px | 400 | — |
-| Sub-title Bold | 16px | 23px | 700 | — |
-| Body | 14px | 17px | 400 | — |
-| Body Bold | 14px | 17px | 700 | — |
-| CTA | 12px | — | 700 | — |
-| Note | 12px | — | 400 | — |
-| Note Bold | 12px | — | 700 | — |
-| Caption | 10px | 12px | 700 | 0.4px |
+| Level | Token name | Size | Line Height | Weight | Letter Spacing |
+|-------|-----------|------|-------------|--------|----------------|
+| Display Large | `display.l` | 72px | 72px | 700 | -4px |
+| Display Medium | `display.m` | 38px | 38px | 700 | -2px |
+| Heading Medium Bold | `heading.m-bold` | 20px | 24px | 700 | 0 |
+| Heading Small | `heading.s` | 16px | 20px | 400 | 0 |
+| Heading Small Bold | `heading.s-bold` | 16px | 20px | 700 | 0 |
+| Body Large | `body.l` | 15px | 24px | 400 | 0 |
+| Body Large Bold | `body.l-bold` | 15px | 24px | 700 | 0 |
+| Body Medium | `body.m` | 14px | 20px | 400 | 0 |
+| Body Bold | `body.bold` | 14px | 20px | 700 | 0 |
+| Body Small | `body.s` | 12px | 16px | 400 | 0 |
+| Body Small Bold | `body.s-bold` | 12px | 16px | 700 | 0 |
+| Caption Medium | `caption.m` | 12px | 16px | 400 | 0 |
+| Caption Medium Bold | `caption.m-bold` | 12px | 16px | 700 | 0 |
+| Caption Small | `caption.s` | 10px | 12px | 400 | 0.2px |
+| Caption Small Bold | `caption.s-bold` | 10px | 12px | 700 | 0.2px |
+| Link | `variant.link` | inherit | inherit | 400 | — (underline) |
+| CTA | `variant.cta` | 12px | — | 700 | 0 |
 
 ---
 
 ## Spacing & Sizing
-
-### Modern Scale
+_Source: Figma Variables → Sizes collection (10 variables)_
 
 | Token | Value | Purpose |
 |-------|-------|---------|
@@ -169,6 +212,8 @@ _Source: Figma + Playbook_
 
 **Composables:** useNotification
 
+For full component specs see `references/component-catalog.md`.
+
 ### Key Component Rules
 
 **FTButton:**
@@ -196,7 +241,7 @@ When reviewing a design against this system, flag:
 
 1. **Color violations** — Any color not in the palette. Hardcoded hex values that should use semantic tokens.
 2. **Typography violations** — Font sizes, weights, or line heights not in the type scale. Non-Inter fonts for UI text.
-3. **Spacing violations** — Values not on the scale (2, 4, 8, 12, 16, 24, 32, 48, 64). Irregular gaps between similar elements.
+3. **Spacing violations** — Values not on the scale (0, 2, 4, 8, 12, 16, 24, 32, 48, 64). Irregular gaps between similar elements.
 4. **Component violations** — Custom implementations of components that exist in the library (buttons, inputs, modals, etc.).
 5. **Icon violations** — Icons not from FontAwesome Pro. Inconsistent icon styles (mixing solid and regular without purpose).
 6. **Layout violations** — Content areas that break the standard page layout pattern without justification.

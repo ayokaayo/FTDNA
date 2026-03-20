@@ -140,20 +140,58 @@ Bad provocations (avoid these):
 
 ### 4. Deliver
 
-Start every critique with a one-line summary — the overall read and finding counts. The person should know the shape of the feedback before reading details.
+**Two output modes.** Default is Summary. Use Full only when explicitly requested.
 
-**Example:**
-"Solid structure with clear hierarchy. The flow works. 2 compliance issues (off-system spacing, contrast on secondary text), 1 major UX concern (empty state unhandled), 3 minor polish items. 2 things working particularly well."
+---
 
-**Output routing — match the source:**
+#### Summary Mode (default)
 
-**Figma** → Post as a comment using `figma_post_comment`, pinned to the relevant node. Group findings by frame/section — one structured comment per area, not a flood of individual notes.
+Every critique starts and ends here unless the user asks for more. Keep it tight — the person should absorb the entire review in under 30 seconds.
 
-**ClickUp** → Post as a task comment using `clickup_create_task_comment`. Severity categories as headers. Summary line at top.
+```
+[one-line overall read with finding counts]
+
+| Sev | Element | Issue | Fix |
+|-----|---------|-------|-----|
+| Critical | [specific element] | [what's wrong] | [concrete action] |
+| Major | ... | ... | ... |
+| Minor | ... | ... | ... |
+| Positive | ... | [what's working] | [preserve] |
+
+Provocations:
+• [stress-test question 1]
+• [stress-test question 2]
+```
+
+**Rules:**
+- Always include a Figma link to the frame being critiqued (format: `https://www.figma.com/design/{fileKey}/...?node-id={nodeId}`)
+- One row per finding — no multi-line explanations
+- Severity column doubles as the layer indicator (compliance issues get flagged, design issues get severity)
+- Provocations: 2–3 max, one line each
+- Total output: ~20–30 lines
+
+**Example one-liner:**
+"Solid structure, clear hierarchy. 2 compliance (off-scale spacing, contrast), 1 major (empty state), 3 minor polish. 2 positives."
+
+If the user wants detail on any finding, they can ask to **expand** or request a **full critique**.
+
+---
+
+#### Full Mode (on request)
+
+Triggered by: "full critique", "detailed review", "expand", "give me everything".
+
+Delivers all three layers in full prose — Layer 1 (compliance with What/Expected/Actual/Fix per finding), Layer 2 (design review with severity and rationale), Layer 3 (provocations). This is the original detailed format.
+
+---
+
+#### Output routing — match the source:
+
+**Figma** → Post as a comment using `figma_post_comment`, pinned to the relevant node. Use Summary format. Group findings by frame/section — one structured comment per area, not a flood of individual notes.
+
+**ClickUp** → Post as a task comment using `clickup_create_task_comment`. Use Summary format. Severity categories as headers. Summary line at top.
 
 **Neither** → Structured markdown. This is the universal fallback.
-
-For Figma and ClickUp output: keep the format scannable. These are work contexts, not documents. Use the three layers as sections but keep each finding to 2-3 lines max.
 
 ---
 
