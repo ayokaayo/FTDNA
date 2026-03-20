@@ -5,18 +5,18 @@
 
 ## Project Status
 
-**Version:** 0.2.3 (testing)
-**Last updated:** 2026-03-19
+**Version:** 0.2.8 (testing)
+**Last updated:** 2026-03-20
 
 | Track | Status | Detail |
 |---|---|---|
-| Page composition | T1 done (3/13 pages) | LIST-SIMPLE proven. T2-T5 blocked on platform scanner. |
-| Platform scanner | Not started | Waiting for new CRM environment from Miguel. |
+| Platform scanner | Done | `scan.js` discovers 34 pages, saves DOM structure to `scan-manifest.json`. Screenshots on demand via `snap.js`. |
+| Page composition | T2 done (7/13 pages) | LIST-SIMPLE, LIST-TAB, FORM proven. T3-T5 ready to start. |
 | Component audit | Not started | Will use existing vue-lib meta.json + prop interfaces. |
 | Code Connect | Not started | Depends on component audit. |
 | Design critique | Stale refs | design-system.md needs token/component refresh. |
 
-**What's next:** Build platform scanner when environment is shared, or continue page composition with manual screenshots.
+**What's next:** T3 page composition (LIST-FULL, SLIDEIN). Screenshot each page on demand with `npm run snap <path>`.
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`
 **Page progress:** `inventory/composition-tracker.md`
 
@@ -39,7 +39,7 @@ FTDNA/
 ├── references/      → Shared context (component-catalog.md, page-patterns.md)
 ├── templates/       → Vue component, test, and docs templates
 ├── assets/logos/    → FastTrack brand SVGs
-├── scripts/         → build-tokens.js
+├── scripts/         → build-tokens.js, snap.js (screenshots), scan.js (page discovery), figma-paste.js
 ├── .fasttrack/      → Vue-lib rules reference, plans
 └── .workspace/      → Scratch space (gitignored)
 ```
@@ -161,4 +161,10 @@ The component is staged locally in the vue-lib checkout before being pushed as a
 
 ```bash
 npm run build:tokens   # Rebuild CSS/SCSS/TS from token JSON
+npm run snap --login   # Open browser for CRM authentication
+npm run snap --start   # Launch persistent headless browser
+npm run snap --stop    # Stop persistent browser
+npm run snap <path>    # Screenshot a page (e.g. /v2/segments)
+npm run snap:paste <img>  # Copy screenshot to clipboard + paste into Figma
+node scripts/scan.js   # Discover all platform pages → scan-manifest.json + page-inventory.md
 ```
