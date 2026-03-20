@@ -58,6 +58,20 @@
       "created": "2026-03-16",
       "updated": "2026-03-17",
       "status": "active"
+    },
+    {
+      "name": "kb",
+      "path": "skills/kb",
+      "description": "Search the FastTrack platform knowledgebase (GitBook) and answer questions about features, workflows, and platform behavior. Trigger on: how does X work, what is X, what does the KB say, find docs on, explain the platform's, how do I, what's the difference between, where do I find, platform question, check the knowledgebase, kb lookup, search gitbook, search the docs.",
+      "author": "miguel-angelo",
+      "domain": ["knowledge-management", "platform-support"],
+      "autonomy": "semi-auto",
+      "inputs": ["user-prompt", "platform-question"],
+      "outputs": ["structured-answer", "source-links"],
+      "complexity": "moderate",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "status": "active"
     }
   ]
 }

@@ -12,6 +12,9 @@ Thumbs.db
 # MCP config (contains tokens)
 .mcp.json
 
+# Environment variables (contains API tokens)
+.env
+
 # Editor
 .vscode/
 .idea/
