@@ -34,7 +34,8 @@ __pycache__/
 *.egg-info/
 architecture-diagram.html
 
-# Screenshot tool
+# Screenshot / scanner tools
 .browser-profile/
 references/screenshots/
+references/scan-manifest.json
 .browser-ws

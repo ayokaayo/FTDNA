@@ -32,7 +32,10 @@ const name = nameIdx > -1 ? args[nameIdx + 1] : null;
 const target = args.find(a => !a.startsWith('--') && a !== name);
 
 function slugify(s) {
-  return s.replace(/^https?:\/\/[^/]+\//, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'index';
+  // Extract the last meaningful path segment as the page name
+  const path = s.replace(/^https?:\/\/[^/]+/, '').replace(/\/+$/, '');
+  const last = path.split('/').filter(Boolean).pop() || 'index';
+  return last.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
 }
 
 // Try to connect to a running browser instance
@@ -172,10 +175,10 @@ async function main() {
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
   }
 
-  // Take screenshot
-  mkdirSync(OUT, { recursive: true });
-  const file = (name || slugify(target)) + '.png';
-  const out = join(OUT, file);
+  // Take screenshot — saves as {slug}/{slug}.png (folder per page)
+  const slug = name || slugify(target);
+  const out = join(OUT, slug, slug + '.png');
+  mkdirSync(dirname(out), { recursive: true });
   const fullPage = args.includes('--full');
   await page.screenshot({ path: out, fullPage });
   console.log(out);
