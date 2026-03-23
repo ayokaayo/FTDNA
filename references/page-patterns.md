@@ -310,6 +310,7 @@ Content Area
 - Last column typically uses `Type=ellipsis` for action menu
 - The `table` frame wrapping all rows has `layoutMode: VERTICAL`, no gap, no padding
 - **CRITICAL: Header cell widths MUST match data cell widths**
+- **CRITICAL: Header column COUNT must match data row column count** — if a data row has an extra cell (e.g. avatar image), add a matching spacer/header in the header row
 
 **Row type selection (12 cell types — always use the right component, never fake with primitives):**
 

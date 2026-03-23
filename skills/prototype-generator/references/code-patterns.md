@@ -105,6 +105,7 @@ After building, systematically compare against the reference:
 □ Content alignment correct (top-centre)?
 □ No hardcoded RGB — all variable-bound?
 □ Side menu section matches product area?
+□ Header columns align 1:1 with data row columns? (every data cell needs a matching header cell/spacer)
 □ Overall proportions match reference at 1x scale?
 ```
 

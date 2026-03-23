@@ -10,9 +10,9 @@
 
 | Metric | Value |
 |---|---|
-| Pages composed | 11 / 48 |
+| Pages composed | 14 / 48 |
 | Layout types verified | 0 / 8 |
-| Code patterns proven | 15 / 18 |
+| Code patterns proven | 17 / 18 |
 | Reproduction tests passed | 0 |
 
 ---
@@ -21,13 +21,14 @@
 
 | Layout | Code | Pages in platform | Pages composed | Verified? | Patterns codified? |
 |---|---|---|---|---|---|
-| Simple List | `LIST-SIMPLE` | ~14 | 3 | No | Partial |
+| Simple List | `LIST-SIMPLE` | ~14 | 4 | No | Partial |
 | List + Tabs | `LIST-TAB` | 3 | 3 | No | Yes |
 | List + Tabs + Toolbar | `LIST-FULL` | 2 | 1 | No | Partial |
 | Settings Form | `FORM` | ~4 | 3 | No | Yes |
 | Dashboard | `DASH` | 5 | 0 | No | No |
 | Detail Page | `DETAIL` | ~5 | 0 | No | No |
-| Slide-In | `SLIDEIN` | ~8 | 1 | No | Partial |
+| Slide-In | `SLIDEIN` | ~8 | 2 | No | Partial |
+| Hub | `HUB` | ~1 | 1 | No | Yes |
 | Grid | `GRID` | ~2 | 0 | No | No |
 
 **Verified** = a fresh Claude session can reproduce the page cold from a brief.
@@ -49,9 +50,11 @@
 | 6 | Lifecycle Automation | LIST-TAB | T2 | Done | No | — | Figma Sandbox. 8 tabs, filter tags (IN DEV/QA/READY/PROD), leading icon overrides (arrows-spin, circle, bolt, clock, users), status circle+text pattern. |
 | 7 | Activities & Projects | LIST-TAB | T2 | Done | No | — | Figma Sandbox. Overview tab, 3 panels with empty state Placeholder components (Size=M). |
 | 8 | All Activities | LIST-FULL | T3 | Done | No | — | Figma Pastebin `181:77359`. Tabs (3), icon toolbar (5 icons), panel header with search+filter tags (ACTIVE/ENDED/DISABLED/SCHEDULED)+action icons, 8-row table (Name 760/Status 200/Trigger 240/Players 200/Origins 184/Ellipsis 52), image cells for origins, status circle colors (gray/green/blue), pagination. Built from reference `92:55380`. |
-| 9 | Integration Settings | FORM | T3 | Not started | — | — | Multi-panel form |
+| 9 | Integration Settings | HUB | T3 | Done | No | — | Figma Pastebin `190:37671`. Hub/navigation page with 3 white panels (Tools & Guides 3 cards, Migrations Wizard 2 cards + info icons, Greco 1 card). Cards: mono-100, 8px radius, 24px padding, centered icon+title+desc. Proved HUB pattern. |
 | 7 | Activity Create/Edit LVL1 | SLIDEIN | T3 | Done | No | — | Figma Pastebin `181:79166`. Full page composite: All Activities bg + blur overlay + 1250px slide-in. 4 sections: Activity Name (input), Type of Activity (SDT/Recurring tabs + trigger/feature inputs), Segment (alert + origin cards + market cards + additional rules), Add Actions (option cards + action block components). Built from reference `92:56151`. |
-| 8 | Activity Nested Edit LVL2 | SLIDEIN | T3 | Not started | — | — | Nested slide-in |
+| 8 | Activity Nested Edit LVL2 (Send Email) | SLIDEIN | T3 | Done | No | — | Figma Pastebin `193:51713`. Full nested composite: All Activities bg + overlay + LVL1 Activity Builder + overlay + LVL2 1125px slide-in. "Send Email" form: template dropdown (required), sender name, email subject (required), checkbox, bordered provider sub-panel (Sendgrid/sender email/IP pool), action scheduling toggle. Content FILL height, top-aligned. |
+| 10 | Player Origins | LIST-SIMPLE | Test | Done | No | — | Figma Pastebin `194:60902`. Validation test: new page from screenshot. Nav/1 breadcrumb, search, 2-row table (image cell + text + Id + Origin Key + status circle green + trash icon), simple count. |
+| 11 | Exclusion Groups (DEV-14482) | SLIDEIN | Test | Done | No | — | Figma Pastebin `193:59163`. Feature design from ClickUp brief. 3-state component (collapsed/dropdown/selected) integrated into Activity Builder Segment section. Red tags, categorised dropdown, "479 excluded" count. |
 | 9 | CRM Dashboard | DASH | T4 | Not started | — | — | Landing page |
 | 10 | Performance Dashboard | DASH | T4 | Not started | — | — | Validates DASH pattern |
 | 11 | Project Detail | DETAIL | T5 | Not started | — | — | Split panel |
