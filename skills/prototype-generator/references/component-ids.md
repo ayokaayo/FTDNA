@@ -287,6 +287,96 @@ const heading = placeholder.findOne(n => n.type === 'TEXT' && n.name.includes('H
 if (heading) { await figma.loadFontAsync(heading.fontName); heading.characters = 'NO DATA TO DISPLAY'; }
 ```
 
+## Component Property Registry (complete — probed 2026-03-23)
+
+> Use `inst.setProperties({ 'Key': value })` — never guess keys. All keys below are verified.
+
+### Form Controls
+
+| Component | Set ID | Property Key | Type | Default | Usage |
+|---|---|---|---|---|---|
+| **Checkbox** | `91:8542` | `Text#9:1` | TEXT | "Enter option text here" | Label text |
+| | | `Type` | VARIANT | Unchecked | Checked/Unchecked |
+| | | `Status` | VARIANT | Default | Default/Disabled/Hover |
+| **Toggle** | `91:8647` | `Text#9:17` | TEXT | "Enter option text here" | Label text |
+| | | `Type` | VARIANT | Unchecked | Checked/Unchecked |
+| | | `Status` | VARIANT | Default | Default/Disabled/Hover |
+| | | `Alignment` | VARIANT | Default | Default/Justified |
+| **Radio** | `91:8595` | `Text#9:9` | TEXT | "Enter option text here" | Label text |
+| | | `Type` | VARIANT | Unchecked | Checked/Unchecked |
+| | | `Status` | VARIANT | Default | Default/Disabled/Hover |
+
+### Input Fields (`91:6537`)
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Label#4339:0` | BOOL | true | Show label above field |
+| `Required#4285:155` | BOOL | false | Show red asterisk (*) |
+| `Info icon#4283:93` | BOOL | false | Show ⓘ icon next to label |
+| `AI+Emoji#4369:0` | BOOL | true | AI/Emoji picker — **disable on settings fields** |
+| `Tags#4281:31` | BOOL | false | Show inline tags |
+| `Leading Icon#4276:0` | BOOL | false | Icon inside field (left) |
+| `Clear text#4284:31` | BOOL | false | Show clear (x) button |
+| `Load#4284:93` | BOOL | false | Show loading spinner |
+| `Refresh#4284:62` | BOOL | false | Show refresh icon |
+| `Preview#4284:0` | BOOL | false | Show preview button |
+| `Send/Return#4284:124` | BOOL | false | Show send/return button |
+| `Underline Caption#4281:0` | BOOL | false | Show underline caption text |
+
+### Tag (`91:10023`)
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Tag text#26:8` | TEXT | "I am a tag" | Tag label text |
+| `Trailing icon#26:4` | BOOL | true | Close/X button — hide for read-only |
+| `Leading Icon#26:0` | BOOL | true | Icon before text |
+
+### Alert (`92:40484`)
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Description#2821:5` | BOOL | true | Show description text |
+| `Close icon#2821:40` | BOOL | true | Show close X |
+| `Buttons#2821:35` | BOOL | true | Show button row |
+| `Primary button#2821:15` | BOOL | true | Show primary button |
+| `Secondary Button#2821:20` | BOOL | true | Show secondary button |
+| `Show more#2821:10` | BOOL | true | Show "show more" link |
+| `Show more text#2821:30` | BOOL | true | Show expanded text |
+| `Timer bar#2821:25` | BOOL | true | Show countdown bar |
+
+**Simple alert:** Disable all except `Description#2821:5` and `Close icon#2821:40`.
+
+### Block Selector (`91:8712`)
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Icon#4370:37` | BOOL | true | Show icon |
+| `Image#4370:31` | BOOL | true | Show avatar/image |
+| `flag#4371:49` | BOOL | true | Show flag |
+| `Number#4373:7` | BOOL | true | Show count number |
+| `xmark#4370:43` | BOOL | true | Show close X |
+| `Toggle#4373:0` | BOOL | false | Show toggle switch |
+
+### Placeholder / Empty State (`92:49611`)
+
+| Property Key | Type | Default | Usage |
+|---|---|---|---|
+| `Description#3783:7` | BOOL | true | Show description |
+| `Learn more link#3691:6` | BOOL | true | Show "learn more" |
+| `CTA#3691:0` | BOOL | true | Show CTA button |
+| `Extras#4325:0` | BOOL | true | Show extra elements |
+
+### Button (`91:8299`)
+
+| Property | Type | Values |
+|---|---|---|
+| `Type` | VARIANT | main / alt / sub / icon |
+| `Status` | VARIANT | default / hover / focused / disabled |
+| `Size` | VARIANT | default / M / S |
+| `Leading icon` | VARIANT | Yes / No |
+
+---
+
 ## Figma API Gotchas
 
 - `layoutSizingHorizontal = 'FILL'` only works AFTER appending to an auto-layout parent

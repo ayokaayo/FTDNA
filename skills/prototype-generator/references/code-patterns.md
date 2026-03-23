@@ -1,7 +1,155 @@
 # Code Patterns
 
 > Executable code snippets for the prototype-generator skill. Each pattern is proven and tested.
-> Last updated: 2026-03-18
+> Last updated: 2026-03-23
+
+---
+
+## ⛔ Pre-Build Protocol (MANDATORY — execute before ANY Figma work)
+
+> **This is not optional.** Every gate must pass before `figma_execute` is called.
+> Each gate produces visible output in the conversation. No silent skipping.
+
+### Gate 0: STOP — Do I Have What I Need?
+
+```
+□ Reference screenshot exists?
+  → YES: proceed
+  → NO: run `npm run snap <path>` or ask user. DO NOT BUILD WITHOUT A REFERENCE.
+
+□ Quick Access has a clonable template for this page?
+  → YES: CLONE IT. Do not rebuild from scratch. Customize text/data only.
+  → NO: proceed to build from components.
+```
+
+**Quick Access Templates (clone first, ask questions later):**
+
+| Pattern | Template | Node ID |
+|---------|----------|---------|
+| Empty shell | Full page template (base) | `92:54630` |
+| LIST-FULL | All Activities | `92:55380` |
+| LIST-TAB | Lifecycles | `181:72894` |
+| SLIDEIN (full comp, SDT) | New Activity - SDT | `92:56151` |
+| SLIDEIN (full comp, Recurring) | New Activity - Recurring | `92:56159` |
+| Slide-in LVL 1 shell | Slide-in LVL 1 | `92:54631` |
+| Slide-in LVL 2 shell | Slide-in LVL 2 | `92:55549` |
+| Activity Builder SDT | Activity Builder/SDT | `92:54684` |
+| Activity Builder Recurring | Activity Builder/Recurring | `92:55332` |
+| Overlay (small) | Overlay blur-small | `92:55554` |
+| Overlay (full page) | Overlay blur-full | `92:55556` |
+
+### Gate 1: Load Context — Read ONLY What This Build Needs
+
+**Directed reading paths by pattern type:**
+
+| Building... | Read from page-patterns.md | Read from code-patterns.md | Clone from |
+|---|---|---|---|
+| `LIST-SIMPLE` | §Shared Shell, §Pattern 2a, §Shared Table Rules | §Bootstrap, §Table Composition, §Pagination | `92:55380` (adapt) |
+| `LIST-TAB` | §Shared Shell, §Pattern 2b, §Shared Table Rules | §Bootstrap, §Tabs, §Table Composition | `92:55380` or `181:72894` |
+| `LIST-FULL` | §Shared Shell, §Pattern 2c, §Shared Table Rules | §Bootstrap, §Tabs, §Icon Toolbar, §Table Composition | `92:55380` |
+| `FORM` | §Shared Shell, §Pattern 1 | §Bootstrap, §Form Fields, §Multi-Panel, §Dropdown, §Radio, §Toggle | — |
+| `SLIDEIN` | §Pattern 4 (relevant sub-pattern) | §Bootstrap, §Form Fields, §Multi-Panel | `92:56151` or `92:54631` |
+| `HUB` | §Pattern 7 | §Hub Card Grid | — |
+| `DASH` | §Shared Shell, §Pattern 5 | §Bootstrap, §Multi-Panel | — |
+| `DETAIL` | §Shared Shell, §Pattern 3 | §Bootstrap, §Form Fields | — |
+| `GRID` | §Shared Shell, §Pattern 6 | §Bootstrap, §Table Composition (for pagination) | — |
+
+**Always also read:**
+- component-ids.md §Component Property Registry (for property keys)
+- scan-manifest.json for the target page (icon names, labels, DOM structure)
+
+### Gate 2: Element Map — Write It Out Before Coding
+
+List every element from the reference screenshot. Map each to:
+- Component + variant (from component-ids.md)
+- Sizing rule (from documented rules — NOT visual estimation)
+- Content text (from scan data or screenshot — NOT guesses)
+
+**If any detail is unknown:**
+- Icon name not in scan data? → **SAY SO and ask.** Do not guess.
+- Component property key unknown? → Check the Property Registry. If not there, probe once and document.
+- Page content not visible in screenshot? → **SAY SO and ask.** Do not fabricate.
+
+### Gate 3: Plan Verification — Check Against Rules
+
+Before writing code, verify:
+
+```
+□ Panel spacing = 32px? (universal — no exceptions)
+□ Panels = 1700px FIXED? (unless split panel or slide-in)
+□ All fills/strokes use variable binding? (bindFill/bindStroke with V.xxx)
+□ Content frame = FILL height, top-centre aligned? (primaryAxisAlignItems: MIN)
+□ Text nodes in cards = HUG / WIDTH_AND_HEIGHT? (never FILL / HEIGHT)
+□ Search input = 350px? (when present)
+□ Icon buttons = Status=default? (never hover/focused)
+□ Tabs outside panels, 32px gap between tabs? (when present)
+□ Building on Pastebin page? (not Sandbox)
+□ Any values not from documented rules? → CHECK or ASK
+```
+
+### Gate 4: Build
+
+- Use the Standard Preamble (next section) for boilerplate
+- One phase at a time
+- Screenshot after each phase
+
+### Gate 5: Post-Build Verification
+
+After building, systematically compare against the reference:
+
+```
+□ Header: breadcrumb level, CTA text, visible icons match?
+□ Panel count and layout match reference?
+□ Spacing between panels = 32px?
+□ All text content matches reference exactly?
+□ Content alignment correct (top-centre)?
+□ No hardcoded RGB — all variable-bound?
+□ Side menu section matches product area?
+□ Overall proportions match reference at 1x scale?
+```
+
+If any check fails → fix before presenting to user.
+
+---
+
+## Standard Preamble (copy into every build script)
+
+```javascript
+// === STANDARD PREAMBLE ===
+async function bindFill(node, variableId) {
+  const variable = await figma.variables.getVariableByIdAsync(variableId);
+  const baseFill = node.fills?.length > 0 ? { ...node.fills[0] } : { type: 'SOLID', color: { r: 1, g: 1, b: 1 } };
+  node.fills = [figma.variables.setBoundVariableForPaint(baseFill, 'color', variable)];
+}
+async function bindStroke(node, variableId) {
+  const variable = await figma.variables.getVariableByIdAsync(variableId);
+  const base = node.strokes?.length > 0 ? { ...node.strokes[0] } : { type: 'SOLID', color: { r: 0, g: 0, b: 0 } };
+  node.strokes = [figma.variables.setBoundVariableForPaint(base, 'color', variable)];
+}
+const V = {
+  white:    'VariableID:28:5',
+  mono100:  'VariableID:28:6',
+  mono200:  'VariableID:28:7',
+  mono300:  'VariableID:28:8',
+  mono400:  'VariableID:28:9',
+  mono500:  'VariableID:28:10',
+  mono600:  'VariableID:28:11',
+  mono700:  'VariableID:28:12',
+  black:    'VariableID:28:13',
+  pink500:  'VariableID:28:17',
+  green400: 'VariableID:28:46',
+  red500:   'VariableID:28:37',
+  yellow400:'VariableID:28:31',
+  blue600:  'VariableID:28:28',
+};
+await figma.loadFontAsync({family:'Inter', style:'Regular'});
+await figma.loadFontAsync({family:'Inter', style:'Bold'});
+await figma.loadFontAsync({family:'Inter', style:'Medium'});
+const baseTemplate = await figma.getNodeByIdAsync('94:21370');
+// === END PREAMBLE ===
+```
+
+---
 
 ## Variable Binding Helpers (MANDATORY — never hardcode colours)
 
@@ -91,8 +239,11 @@ await figma.loadFontAsync(subtitleNode.fontName);
 subtitleNode.characters = 'Description text';
 
 // Page Header breadcrumbs + CTA
+// IMPORTANT: Detach the header FIRST if you need to swap breadcrumbs or insert/remove children.
+// Without detaching, insertChild fails with "Cannot move node. New parent is an instance."
 // CTA text is SENTENCE CASE: "Add Player", "Save Changes", "Create Campaign" — NOT uppercase
-const header = screen.children.find(c => c.name === 'Page Header' || c.name === 'Header');
+let header = screen.children.find(c => c.name === 'Page Header' || c.name === 'Header');
+if (header?.type === 'INSTANCE') header = header.detachInstance();
 const allTexts = header.findAll(n => n.type === 'TEXT');
 for (const t of allTexts) {
   await figma.loadFontAsync(t.fontName);
@@ -298,7 +449,8 @@ if (icon) {
   if (iconText) {
     await figma.loadFontAsync(iconText.fontName);
     iconText.characters = 'circle';
-    iconText.fills = [{ type: 'SOLID', color: { r: 0.7, g: 0.7, b: 0.7 } }]; // gray
+    // Use variable binding for standard colours; hardcode only for per-cell dynamic colours
+    await bindFill(iconText, V.mono400); // gray dot — swap to green400/red500 etc. per status
   }
 }
 ```
@@ -323,7 +475,7 @@ const rowSet = await figma.getNodeByIdAsync('91:39179');
 const iconEven = rowSet.children.find(v => v.name === 'Type=Icon, Position=EVEN');
 const iconOdd = rowSet.children.find(v => v.name === 'Type=Icon, Position=ODD');
 
-const RED = { type: 'SOLID', color: { r: 0.87, g: 0.25, b: 0.25 } };
+// Use variable for red — bindFill(iconText, V.red500) after creating the cell
 
 // Inside row loop — replace text cell with icon cell for "x" values:
 const isEven = i % 2 === 0;
@@ -337,7 +489,7 @@ if (iconInstance) {
   if (iconText) {
     await figma.loadFontAsync(iconText.fontName);
     iconText.characters = 'xmark';
-    iconText.fills = [RED];
+    await bindFill(iconText, V.red500);
   }
 }
 ```
@@ -517,7 +669,7 @@ const toolbar = figma.createFrame();
 toolbar.name = 'Icon Toolbar';
 toolbar.layoutMode = 'HORIZONTAL';
 toolbar.itemSpacing = 8;
-toolbar.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }]; // WHITE background with padding
+toolbar.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }]; // white bg — bind after: await bindFill(toolbar, V.white);
 toolbar.paddingTop = 8;
 toolbar.paddingBottom = 8;
 contentFrame.insertChild(1, toolbar); // after tabs
@@ -559,6 +711,8 @@ Tag components don't inherit row backgrounds. Wrap in a frame with manually matc
 - `Position=ODD` → **gray fill** (`#FAFAFA` / `{ r: 0.9804, g: 0.9804, b: 0.9804 }`)
 
 ```javascript
+// Zebra gray = mono-100. Use bindFill for variable binding where possible.
+// For tag wrappers that need inline fill matching, hardcoded is acceptable:
 const ZEBRA_GRAY = { type: 'SOLID', color: { r: 0.9804, g: 0.9804, b: 0.9804 } };
 
 const tagWrapper = figma.createFrame();
@@ -586,4 +740,150 @@ for (const key of Object.keys(props)) {
     try { tag.setProperties({ [key]: false }); } catch(e) {}
   }
 }
+```
+
+## Hub Card Grid (Navigation Pages)
+
+Hub pages have multiple white panels, each containing a row of action cards. No tables, no forms — purely navigational.
+
+**Key rules:**
+- Content area spacing: **32px** (same as all multi-panel layouts)
+- Panels: white fill, no stroke, cornerRadius 0, 1700px FIXED
+- Content placeholder: **FILL** width, no padding, no fill
+- Card Row: separate HORIZONTAL frame with 16px gap + 16px padding all
+- Cards: FILL width, HUG height, mono-100 fill, 8px corner radius
+- Text: **HUG / WIDTH_AND_HEIGHT** — NOT FILL / HEIGHT
+- Card's `counterAxisAlignItems: CENTER` centres the HUG text horizontally
+- Description colour: **mono-500** (#959595)
+- Icon: 32px FA 6 Pro Solid inside a wrapper FRAME
+
+```javascript
+// Main content area — 32px gap (universal rule for all multi-panel layouts)
+contentFrame.itemSpacing = 32;
+
+// --- Helper: create hub panel ---
+async function createHubPanel(title, subtitle) {
+  const tempInst = baseTemplate.createInstance();
+  const tempScreen = tempInst.detachInstance();
+  const tempCF = tempScreen.children.find(c => c.name === 'Frame 1317');
+  const tempPanel = tempCF.children.find(c => c.name === 'Standard Panel');
+  let panel = tempPanel.type === 'INSTANCE' ? tempPanel.detachInstance() : tempPanel;
+  contentFrame.appendChild(panel);
+  panel.layoutSizingHorizontal = 'FIXED';
+  panel.resize(1700, panel.height);
+  tempScreen.remove();
+
+  // Hub style: white, no stroke, no corners
+  await bindFill(panel, V.white);
+  panel.strokes = [];
+  panel.cornerRadius = 0;
+
+  // Panel Header
+  let ph = panel.children.find(c => c.name === 'Panel Header');
+  if (ph?.type === 'INSTANCE') ph = ph.detachInstance();
+  const titleNode = ph.findOne(n => n.type === 'TEXT' && n.name === 'Title');
+  if (titleNode) { await figma.loadFontAsync(titleNode.fontName); titleNode.characters = title; }
+  const subNode = ph.findOne(n => n.type === 'TEXT' && n.name === 'Sub-Title');
+  if (subNode) { await figma.loadFontAsync(subNode.fontName); subNode.characters = subtitle; }
+
+  // Content placeholder — FILL, no padding, no fill
+  const content = panel.children.find(c => c.name === 'content placeholder');
+  content.layoutSizingHorizontal = 'FILL';
+  content.layoutMode = 'VERTICAL';
+  content.itemSpacing = 0;
+  content.paddingTop = 0; content.paddingBottom = 0;
+  content.paddingLeft = 0; content.paddingRight = 0;
+  content.fills = [];
+  while (content.children.length > 0) content.children[0].remove();
+
+  // Card Row — wraps the cards
+  const cardRow = figma.createFrame();
+  cardRow.name = 'Card Row';
+  cardRow.layoutMode = 'HORIZONTAL';
+  cardRow.itemSpacing = 16;
+  cardRow.paddingTop = 16; cardRow.paddingBottom = 16;
+  cardRow.paddingLeft = 16; cardRow.paddingRight = 16;
+  cardRow.fills = [];
+  content.appendChild(cardRow);
+  cardRow.layoutSizingHorizontal = 'FILL';
+  cardRow.layoutSizingVertical = 'HUG';
+
+  panel.layoutSizingVertical = 'HUG';
+  return cardRow;
+}
+
+// --- Helper: create hub card ---
+// padTop/padBot: use 24/24 for 3-column, 40/32 for 2-column and 1-column
+async function createHubCard(cardRow, iconName, title, desc, padTop = 24, padBot = 24) {
+  const card = figma.createFrame();
+  card.name = title;
+  card.layoutMode = 'VERTICAL';
+  card.primaryAxisAlignItems = 'CENTER';
+  card.counterAxisAlignItems = 'CENTER';
+  card.itemSpacing = 8;
+  card.paddingTop = padTop;
+  card.paddingBottom = padBot;
+  card.paddingLeft = 24;
+  card.paddingRight = 24;
+  card.cornerRadius = 8;
+  cardRow.appendChild(card);
+  card.layoutSizingHorizontal = 'FILL';
+  card.layoutSizingVertical = 'HUG';
+  await bindFill(card, V.mono100);
+
+  // Icon — wrapper frame with FA text
+  const iconWrap = figma.createFrame();
+  iconWrap.name = 'Icon';
+  iconWrap.layoutMode = 'HORIZONTAL';
+  iconWrap.primaryAxisAlignItems = 'CENTER';
+  iconWrap.counterAxisAlignItems = 'CENTER';
+  iconWrap.fills = [];
+  card.appendChild(iconWrap);
+  iconWrap.layoutSizingHorizontal = 'HUG';
+  iconWrap.layoutSizingVertical = 'HUG';
+
+  await figma.loadFontAsync({family:'Font Awesome 6 Pro', style:'Solid'});
+  const iconText = figma.createText();
+  iconText.fontName = {family:'Font Awesome 6 Pro', style:'Solid'};
+  iconText.fontSize = 32;
+  iconText.characters = iconName;
+  iconText.lineHeight = { value: 48, unit: 'PIXELS' };
+  iconWrap.appendChild(iconText);
+  await bindFill(iconText, V.mono500);
+
+  // Title — HUG, natural size, centred by card
+  await figma.loadFontAsync({family:'Inter', style:'Bold'});
+  const t = figma.createText();
+  t.fontName = {family:'Inter', style:'Bold'};
+  t.fontSize = 16;
+  t.characters = title;
+  t.textAlignHorizontal = 'CENTER';
+  card.appendChild(t);
+  await bindFill(t, V.mono700);
+
+  // Description — HUG, natural size, centred by card
+  await figma.loadFontAsync({family:'Inter', style:'Regular'});
+  const d = figma.createText();
+  d.fontName = {family:'Inter', style:'Regular'};
+  d.fontSize = 14;
+  d.characters = desc;
+  d.textAlignHorizontal = 'CENTER';
+  card.appendChild(d);
+  await bindFill(d, V.mono500); // mono-500, NOT mono-600
+
+  return card;
+}
+
+// --- Build: Integration Settings ---
+const row1 = await createHubPanel('Tools & Guides', 'All you need to help you with the integration of FT CRM');
+await createHubCard(row1, 'plug', 'Integration Hub', 'Validate and test your integration');
+await createHubCard(row1, 'terminal', 'Live Debug Console', 'Verify all service calls in real time');
+await createHubCard(row1, 'book', 'The Integration Manual', 'Learn how to integrate FT CRM');
+
+const row2 = await createHubPanel('Migrations Wizard', '...');
+await createHubCard(row2, 'server', 'Data Migration', 'Full migration of historical data via CSV files', 40, 32);
+await createHubCard(row2, 'poll-people', 'User Migration', 'Migration of user details, blocks and consents via the Operator API', 40, 32);
+
+const row3 = await createHubPanel('Greco', '...');
+await createHubCard(row3, 'chart-bar', 'Batch Data Analysis', '...', 40, 32);
 ```

@@ -242,7 +242,7 @@ Content Area
 **Composition rules:**
 - **Tabs live OUTSIDE panels** — at the content area level, above the panel
 - Tab bar width must match panel width exactly
-- Tab bar is a horizontal frame (gap: 16), inserted as first child of content area
+- Tab bar is a horizontal frame (gap: 32), inserted as first child of content area
 - Content area itemSpacing: 16 between tab bar and panel
 - Only 1 tab is Selected, rest are Default
 - Hide badge and alert circle on tabs unless brief specifies counts
@@ -284,7 +284,7 @@ Content Area
 |------|-----------|----|----------------|
 | Tabs | tab | `91:19098` | Type=tab-text |
 | Filter tags | Tag | `91:10023` | Type=Icon-solid, Size=Small |
-| Icon toolbar | Icons in a slim Standard Panel | — | No Panel Header, 32px padding |
+| Icon toolbar | Icons in a slim Standard Panel | — | No Panel Header, 8px vertical padding, white bg |
 | Table + Pagination | Same as LIST-SIMPLE | — | — |
 | Search | Built into Panel Header | — | `Search#4635:14: true` |
 
@@ -455,10 +455,15 @@ Root frame (1920 × 1080, NONE layout)
 - Slide-in is the preferred pattern for create/edit flows in FT
 - **Buttons live in the slide-in header** — NOT in a footer. Main CTA (Save) right-aligned.
 - Content area uses **multiple Standard Panels stacked** (gap: 32) — same as Settings multi-panel
+- Content area: **FILL height** (stretches to bottom of slide-in), **top-centre aligned** (primaryAxisAlignItems: MIN)
 - Each panel has its own Panel Header
 - Slide-in header shows: X close → ID tag → entity name breadcrumb → icon buttons → alt CTA → main CTA → kebab
+- Simpler slide-ins (e.g. Send Email) may only show: X close → title → ⓘ → Save (pink) — hide unused header elements
 - Block Selectors for multi-option grids (Player Origin, Market) — wrap in horizontal Frame (gap: 8)
 - Tab-switch components for mode selection (Specific Date / Recurring)
+- Bordered sub-panels (e.g. Provider settings) use mono-300 stroke, 1px weight, 0 corner radius
+- Helper/description text below a field: group field + text in a frame with 12px gap
+- Required fields: use the `Required` component property — don't manually add asterisks to labels
 
 ---
 
@@ -529,6 +534,82 @@ Content Area
 
 ---
 
+## Pattern 7: Hub / Navigation Grid (`HUB`)
+
+**Purpose:** Navigation landing page with categorised action cards. No tables, no forms — purely navigational.
+
+**Pages using this pattern:** Integration Settings.
+
+**Structure:**
+```
+Content Area (VERTICAL, gap: 32)
+├── Standard Panel 1 — Category
+│   ├── Panel Header (title + description)
+│   └── content placeholder (FILL, no padding, no fill)
+│       └── Card Row (HORIZONTAL, gap: 16, pad: 16 all)
+│           ├── Card (FILL, ~152-176px tall)
+│           ├── Card
+│           └── Card
+├── Standard Panel 2 — Category
+│   ├── Panel Header
+│   └── content placeholder
+│       └── Card Row
+│           ├── Card
+│           └── Card
+└── Standard Panel 3 — Category
+    ├── Panel Header
+    └── content placeholder
+        └── Card Row
+            └── Card (full width)
+```
+
+**Key components:**
+
+| Slot | What | Notes |
+|------|------|-------|
+| Panels | Standard Panel (white, no stroke, cornerRadius 0) | One per category |
+| Card Row | Custom FRAME (HORIZONTAL) | gap: 16, pad: 16 all, no fill |
+| Cards | Custom FRAME (VERTICAL) | FILL width, HUG height, mono-100, 8px radius |
+| Icons | FA 6 Pro Solid text in wrapper FRAME | 32px, mono-500 colour |
+| Info icon | FA `circle-info` text | 16px, optional, absolute-positioned top-right |
+
+**Card anatomy (critical — all values proven):**
+```
+Card (VERTICAL, CENTER/CENTER, gap: 8)
+├── padding: 24px all (3-col) or 40/32 top/bot (2-col, 1-col)
+├── cornerRadius: 8
+├── fill: mono-100 (#FAFAFA)
+├── sizingH: FILL
+│
+├── Icon wrapper (FRAME, HORIZONTAL, HUG)
+│   └── FA text (32px, Solid, mono-500 #959595)
+├── Title (TEXT, 16px Bold, CENTER, HUG, mono-700)
+├── Description (TEXT, 14px Regular, CENTER, HUG, mono-500)
+└── [circle-info icon (TEXT, 16px FA Solid, positioned top-right)]
+```
+
+**Composition rules:**
+- Content area spacing: **32px** between panels (same as all other multi-panel layouts)
+- Panels: white fill, NO stroke, cornerRadius 0
+- Content placeholder: **FILL** width (critical — HUG breaks card layout)
+- Content placeholder: **no padding, no fill** — Card Row handles padding
+- Card Row frame wraps all cards: HORIZONTAL, gap 16, 16px padding all sides
+- Text nodes use **HUG / WIDTH_AND_HEIGHT** (natural size, NOT FILL/HEIGHT)
+- Card's counterAxisAlignItems: CENTER handles horizontal centering of HUG text
+- Description color: **mono-500** (#959595) — NOT mono-600 (too dark)
+- No search, no pagination, no tabs — pure navigation
+- Icon names from live platform: `plug`, `terminal`, `book`, `server`, `poll-people`, `chart-bar`
+
+**Anti-patterns specific to HUB:**
+- Do NOT force text to FILL + textAutoResize HEIGHT — use HUG + WIDTH_AND_HEIGHT
+- Do NOT pad the content placeholder — pad the Card Row instead
+- Do NOT guess icon names — check scan data or live screenshot
+- Do NOT overpad cards (40-48px) — 24px is correct for 3-column
+
+> See `code-patterns.md` § Hub Card Grid for assembly code
+
+---
+
 ## Anti-Patterns
 
 | Don't do this | Do this instead |
@@ -548,3 +629,8 @@ Content Area
 | One panel for everything | Complex forms use multiple Standard Panels stacked (gap: 32) |
 | Footer buttons in slide-ins | Buttons live in the slide-in header |
 | Building table header from text | Use Header component instances with sort icon |
+| Text FILL + textAutoResize HEIGHT in cards | Use HUG + WIDTH_AND_HEIGHT — let card CENTER alignment handle positioning |
+| Padding on content placeholder for card grids | Pad the Card Row frame instead — content placeholder stays FILL with 0 padding |
+| Guessing FA icon names from screenshots | Check scan data, existing builds, or live DOM — icon names are specific |
+| Using mono-600 for card descriptions | Use mono-500 (#959595) — lighter gray for proper hierarchy |
+| Overriding 32px panel spacing based on observed builds | Panel spacing is ALWAYS 32px — rules override observed deviations |
