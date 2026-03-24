@@ -13,7 +13,7 @@
 | Side Menu section | CRM |
 | Breadcrumb | Single-level (Nav/1): "Action Type Management" |
 | Page title | Action Type Management |
-| Main CTA | None |
+| Main CTA | Add Action Type |
 | Right-side icons | Hidden |
 
 ## Content
@@ -32,7 +32,7 @@
 
 | # | Header | Width | Cell Type | Notes |
 |---|---|---|---|---|
-| 1 | Preview | 100px FIXED | action icons (detached, single btn) | 32px button-btn with color fill + FA icon |
+| 1 | Preview | 100px FIXED | `action icons solo` | Single colored circle button. Toggle visibility, set fill color + FA icon. |
 | 2 | Id | 60px FIXED | Text | Numeric ID |
 | 3 | Name | FILL | Text | Action name |
 | 4 | Notification Type | FILL | Text | CamelCase identifier |

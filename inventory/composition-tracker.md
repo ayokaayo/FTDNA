@@ -2,7 +2,7 @@
 
 > Tracks page generation progress: which pages are built, which patterns are codified, reproduction test results.
 > Updated after every page build session.
-> Last updated: 2026-03-20
+> Last updated: 2026-03-23
 
 ---
 
@@ -10,10 +10,10 @@
 
 | Metric | Value |
 |---|---|
-| Pages composed | 14 / 48 |
+| Pages composed | 24 / 48 (+ 3 blocked) |
 | Layout types verified | 0 / 8 |
 | Code patterns proven | 17 / 18 |
-| Reproduction tests passed | 0 |
+| Reproduction tests passed | 8 / 8 |
 
 ---
 
@@ -25,11 +25,11 @@
 | List + Tabs | `LIST-TAB` | 3 | 3 | No | Yes |
 | List + Tabs + Toolbar | `LIST-FULL` | 2 | 1 | No | Partial |
 | Settings Form | `FORM` | ~4 | 3 | No | Yes |
-| Dashboard | `DASH` | 5 | 0 | No | No |
-| Detail Page | `DETAIL` | ~5 | 0 | No | No |
+| Dashboard | `DASH` | 5 | 1 | No | Partial |
+| Detail Page | `DETAIL` | ~5 | 0 (1 mapped) | No | Partial |
 | Slide-In | `SLIDEIN` | ~8 | 2 | No | Partial |
 | Hub | `HUB` | ~1 | 1 | No | Yes |
-| Grid | `GRID` | ~2 | 0 | No | No |
+| Grid / Nested | `GRID` / `LIST-NESTED` | ~2 | 1 | No | Partial |
 
 **Verified** = a fresh Claude session can reproduce the page cold from a brief.
 **Patterns codified** = composition rules written back into page-patterns.md + code-patterns.md.
@@ -42,9 +42,9 @@
 |---|---|---|---|---|---|---|---|
 | — | Activity Settings (V1) | FORM | pre-T0 | Built (primitives) | No | No | First attempt, manual frames |
 | — | Broadcast Settings (V2) | FORM | pre-T0 | Built (hybrid) | No | No | Real components, proved bootstrap pattern |
-| 1 | Communication Profiles | LIST-SIMPLE | T1 | Done | Yes | Pending | Figma `134:78852`. Breadcrumb/1, info+CTA header, green dots, flags, hyperlink URL col. Manual polish by Miguel. |
-| 2 | Triggers | LIST-SIMPLE | T1 | Done | Yes | Pending | Figma `134:89784`. Breadcrumb/1 left-aligned, no CTA. Search input (HUG) in panel header. Panel 1700px FIXED. Gray content area (32px pad). 4 cols (Id↓/Name/Event/Activities), zebra striping, red "x" for zero activities. Manual polish: Miguel fixed search HUG + panel width. |
-| 3 | Manage Action Types | LIST-SIMPLE | T1 | Done | Yes | Pending | Figma `134:92934`. Breadcrumb/1 left-aligned, no CTA. Search (HUG). Panel 1700px. 5 cols (Preview icons/Id/Name/Notification Type/Enabled ✓/x). Colored circle icons in Preview. No subtitle in panel header. |
+| 1 | Communication Profiles | LIST-SIMPLE | T1 | Done | Yes | PASS | Figma `134:78852`. Repro `238:100183`. Flags solo + green status circles + blue hyperlink URLs. Fixed: single flags, hyperlink color, left-aligned header. |
+| 2 | Triggers | LIST-SIMPLE | T1 | Done | Yes | PASS | Figma `134:89784`. Repro `238:101632`. Nav/1, "Add Trigger" CTA, search, sort on Id, red xmarks, 13 rows. Fixed: header alignment + CTA. |
+| 3 | Manage Action Types | LIST-SIMPLE | T1 | Done | Yes | PASS | Figma `134:92934`. Repro `238:102764`. Nav/1, "Add Action Type" CTA, search, action icons solo (colored circles), green/red enabled. Fixed: solo icons + header + CTA. |
 | 4 | CRM Segments | LIST-TAB | T2 | Done | No | — | Figma Sandbox. Tabs, no-subtitle panel, search, alert banner (instance), red "x" indicators, zebra. |
 | 5 | Settings Localisation | FORM | T2 | Done | No | — | Figma Sandbox. Multi-panel (3), dropdowns half-width + info icon, blue "SYSTEM DEFAULT" tags, radio buttons, toggles. |
 | 6 | Lifecycle Automation | LIST-TAB | T2 | Done | No | — | Figma Sandbox. 8 tabs, filter tags (IN DEV/QA/READY/PROD), leading icon overrides (arrows-spin, circle, bolt, clock, users), status circle+text pattern. |
@@ -55,11 +55,20 @@
 | 8 | Activity Nested Edit LVL2 (Send Email) | SLIDEIN | T3 | Done | No | — | Figma Pastebin `193:51713`. Full nested composite: All Activities bg + overlay + LVL1 Activity Builder + overlay + LVL2 1125px slide-in. "Send Email" form: template dropdown (required), sender name, email subject (required), checkbox, bordered provider sub-panel (Sendgrid/sender email/IP pool), action scheduling toggle. Content FILL height, top-aligned. |
 | 10 | Player Origins | LIST-SIMPLE | Test | Done | No | — | Figma Pastebin `194:60902`. Validation test: new page from screenshot. Nav/1 breadcrumb, search, 2-row table (image cell + text + Id + Origin Key + status circle green + trash icon), simple count. |
 | 11 | Exclusion Groups (DEV-14482) | SLIDEIN | Test | Done | No | — | Figma Pastebin `193:59163`. Feature design from ClickUp brief. 3-state component (collapsed/dropdown/selected) integrated into Activity Builder Segment section. Red tags, categorised dropdown, "479 excluded" count. |
-| 9 | CRM Dashboard | DASH | T4 | Not started | — | — | Landing page |
-| 10 | Performance Dashboard | DASH | T4 | Not started | — | — | Validates DASH pattern |
+| 12 | CRM Dashboard | DASH | T4 | Done | No | — | Figma Pastebin `201:64415`. Multi-section compound page: top-level tabs (Active Dashboard/Operations Planning), date filter bar in header (DASHBOARD/TODAY badges + Last month + date range), 3 panels stacked. Panel 1: Planned Send-Outs (title+subtitle+search+empty state). Panel 2: Lifecycles (8 sub-tabs inside panel + table: Name/Status/Trigger/Players/Origins, 2 rows + display count). Panel 3: Ongoing Activities (title+subtitle+empty state). Proved DASH is actually multi-section LIST-TAB variant, not metric cards. |
+| 13 | Performance Dashboard | DASH | T4 | Skipped | — | — | Empty state only ("Haven't setup your personal dashboard yet"). No useful content for composition. |
 | 11 | Project Detail | DETAIL | T5 | Not started | — | — | Split panel |
-| 12 | Email Templates | GRID | T5 | Not started | — | — | Card grid |
-| 13 | Oracle Chat | CHAT | T5 | Not started | — | — | One-off stress test |
+| 14 | Email Templates | LIST-NESTED | T5 | Done | No | — | Figma Pastebin `216:91149`. Cloned from Miguel's reference `180:69323`. 3 tabs (Standard/Content Blocks/Brand Templates), search row, dashed CTA banner ("Add Standard Template"), 4 template sections (Easter/Christmas/Standard/Fast Track AI) each with: title + action icons (+/copy/trash/clock) + count badge + "Used by X" tag, inline table (Status code icon + ACTIVE tag + Version name + Player Origins + dates + eye/copy actions), "Add new version" button, section count. Global count "1-4 of 4". Old bad attempt `204:66515` removed. |
+| 15 | Oracle / Fast Track AI | CHAT | T5 | Blocked | — | — | Rough build at `207:69893`. Needs Chat Input Box, Suggestion Pill, AI Disclaimer Banner components — see `component-gap-map.md` #13-14, #18. Cannot be accurately composed until components exist. |
+| 16 | Media Library | FILE-BROWSER | T5 | Blocked | — | — | Rough build at `208:70958`. Needs Folder Tree Sidebar, Split Panel Layout, View Toggle components — see `component-gap-map.md` #15-17. Cannot be accurately composed until components exist. |
+| 18 | Content Features | LIST-SIMPLE | T5 | Done | Yes | PASS | Figma Pastebin `216:78050`. Breadcrumb/2 (Singularity Model > Content Features), "New Content Feature" CTA. Panel: title+subtitle, table 4 cols (Id 60px/Name FILL/Description FILL/Feature Type 220px), 10 data rows, pagination "10/13, 20 items per page". Clean LIST-SIMPLE built from brief. |
+| 19 | Test Users | LIST-SIMPLE | T5 | Done | No | — | Figma Pastebin `216:74917`. Single breadcrumb, "New Test User" CTA. Panel: title+subtitle, table 5 cols (Display Name/Name with Player Id subtitle/Email/Phone/Origin image), 4 rows, pagination. Proves 2-line text cells + image cells. |
+| 20 | QA Portal | LIST-FULL | T5 | Done | No | — | Figma Pastebin `216:75956`. No CTA. Two stacked panels: Section 1 "Activities to be Quality Assured" (search, table 5 cols with pen icon in Name cells, 7 rows, pagination), Section 2 "Activities that have been Quality Assured" (empty state). Multi-section LIST-FULL variant. |
+| 21 | Player Profile | DETAIL | T5 | Blocked | — | — | Screenshot from other environment (not in scan manifest). Split layout: icon tab cards (4 sections), left Favourites panel (drop zone), right Player info panel (warning alert, collapsible section, 2-col attribute grid). Needs Icon Tab Card (#19), Channel Action Icons (#20), User ID Badge (#21), Collapsible Section Header (#22), Key-Value Attribute Grid (#23), Favourites Drop Zone (#24). |
+| 22 | Feature Types | LIST-SIMPLE | T5 | Done | Yes | PASS | Figma Pastebin `216:79179`. Breadcrumb/2 (Singularity Model > Feature Types), "New Feature Type" CTA. Panel: title+subtitle+search, table 3 cols (Id 60px/Name FILL/Classes FILL), 10 rows, pagination "10/19". |
+| 23 | Trigger Events | LIST-SIMPLE | T5 | Done | Yes | PASS | Figma Pastebin `216:80023`. Breadcrumb/1 "Trigger Events", "Create Event" CTA. Panel: title+search (no subtitle), table 6 cols (Id/Name/Notification Type/Description/Triggers Count/Enabled), 10 rows, no pagination. |
+| 24 | Player Features | LIST-SIMPLE (multi) | T5 | Done | Yes | PASS | Figma Pastebin `216:81175`. Breadcrumb/2 (Singularity Model > Player Features), "New Player Feature" CTA. 2 panels: Panel 1 "Features to Install" (2 cols, 1 row), Panel 2 "Player Features" (4 cols, 7 rows, pagination "7/8"). Proves multi-panel LIST-SIMPLE. |
+| 25 | Segment Fields | LIST-TAB | T5 | Done | Yes | PASS | Figma Pastebin `216:83645`. Breadcrumb/1 "Segment Fields", "New Smart Segment" CTA. 3 tabs (Smart Segments/Segment Fields/Calculated). Panel: search, table 5 cols (Status dot/Name/Label/Description/Segments Count), 13 rows. |
 
 ---
 

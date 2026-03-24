@@ -51,8 +51,13 @@
 
 **More rows below fold. Pagination at bottom (Type=go to page).**
 
-## Custom Cell Patterns
+## Cell Type Selection
 
-**Status cell:** Wrapper frame (80x60, centered), 10px green ellipse (`{ r: 0.2, g: 0.78, b: 0.35 }`).
-**Preview cell:** Wrapper frame (100x60, centered), Flag instance scaled to 32px width.
-**Zebra:** ODD rows = `#FAFAFA`, EVEN rows = no fill.
+| Column | Row Type variant | Notes |
+|---|---|---|
+| Status | `Type=status circle` | Green dot — bind icon fill to green-400 variable |
+| Preview | `Type=flags solo` | **Single** flag per row. Hide all Flag children, show one, set `Country` property. |
+| Name / Language | `Type=Text` | Standard text cell |
+| Unsubscribe Base URL | `Type=Text` | **Hyperlink styling** — bind text fill to blue-600 variable |
+
+**Zebra:** EVEN = no fill, ODD = `#FAFAFA`.

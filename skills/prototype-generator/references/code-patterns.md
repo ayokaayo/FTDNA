@@ -37,6 +37,7 @@
 | Activity Builder Recurring | Activity Builder/Recurring | `92:55332` |
 | Overlay (small) | Overlay blur-small | `92:55554` |
 | Overlay (full page) | Overlay blur-full | `92:55556` |
+| LIST-NESTED | Email Templates (Standard) | `180:69323` |
 
 ### Gate 1: Load Context — Read ONLY What This Build Needs
 
@@ -80,9 +81,12 @@ Before writing code, verify:
 □ All fills/strokes use variable binding? (bindFill/bindStroke with V.xxx)
 □ Content frame = FILL height, top-centre aligned? (primaryAxisAlignItems: MIN)
 □ Text nodes in cards = HUG / WIDTH_AND_HEIGHT? (never FILL / HEIGHT)
-□ Search input = 350px? (when present)
+□ Search input = 350px? (when standalone — NOT in Panel Header)
+□ Panel Header search = built-in icon button? (not standalone Search input)
 □ Icon buttons = Status=default? (never hover/focused)
 □ Tabs outside panels, 32px gap between tabs? (when present)
+□ Table header sort icons = ALL HIDDEN? (never show sort arrows unless brief explicitly asks)
+□ Page Header present? (check screenshot — some pages have NO header at all)
 □ Building on Pastebin page? (not Sandbox)
 □ Any values not from documented rules? → CHECK or ASK
 ```
@@ -217,6 +221,7 @@ const contentFrame = screen.children.find(c => c.name === 'Frame 1317');
 const panelInstance = contentFrame.children.find(c => c.name === 'Standard Panel');
 
 let panel = panelInstance.type === 'INSTANCE' ? panelInstance.detachInstance() : panelInstance;
+panel.itemSpacing = 32; // RULE: 32px between Panel Header and content — always
 let panelHeader = panel.children.find(c => c.name === 'Panel Header');
 if (panelHeader?.type === 'INSTANCE') panelHeader = panelHeader.detachInstance();
 
@@ -494,6 +499,71 @@ if (iconInstance) {
   }
 }
 ```
+
+## Solo Cell Variants (Single Image / Flag / Action Icon)
+
+Use the `solo` variants when a column shows **one** image, flag, or action icon per row — NOT the multi variants which show 5+ items with overflow.
+
+```javascript
+const rowSet = await figma.getNodeByIdAsync('91:39179');
+
+// --- SINGLE FLAG ---
+const flagSoloE = rowSet.children.find(v => v.name === 'Type=flags solo, Position=EVEN');
+const flagSoloO = rowSet.children.find(v => v.name === 'Type=flags solo, Position=ODD');
+
+const flagCell = (isEven ? flagSoloE : flagSoloO).createInstance();
+row.appendChild(flagCell);
+flagCell.layoutSizingHorizontal = 'FIXED';
+flagCell.resize(100, flagCell.height);
+
+// Show only the desired flag — hide all, then show one and set its Country
+const flags = flagCell.findAll(n => n.name === 'Flag' && n.type === 'INSTANCE');
+flags.forEach(f => f.visible = false);
+flags[0].visible = true;
+flags[0].setProperties({ 'Country': 'united kingdom' }); // lowercase country name
+
+// --- SINGLE ACTION ICON ---
+const actionSoloE = rowSet.children.find(v => v.name === 'Type=action icons solo, Position=EVEN');
+const actionSoloO = rowSet.children.find(v => v.name === 'Type=action icons solo, Position=ODD');
+
+const actionCell = (isEven ? actionSoloE : actionSoloO).createInstance();
+row.appendChild(actionCell);
+actionCell.layoutSizingHorizontal = 'FIXED';
+actionCell.resize(100, actionCell.height);
+
+// Show only the desired button — hide all, show one, set color + icon
+const btns = actionCell.findAll(n => n.name === 'button-btn' && n.type === 'INSTANCE');
+btns.forEach(b => b.visible = false);
+btns[0].visible = true;
+// Override fill color on the button
+await bindFill(btns[0], V.green400); // or any color variable
+// Override icon name
+const iconInst = btns[0].findOne(n => n.name === 'v7-icon');
+const iconText = iconInst?.findOne(n => n.type === 'TEXT' && n.name === 'icon');
+if (iconText) { await figma.loadFontAsync(iconText.fontName); iconText.characters = 'gift'; }
+
+// --- SINGLE IMAGE ---
+const imageSoloE = rowSet.children.find(v => v.name === 'Type=image solo, Position=EVEN');
+const imageSoloO = rowSet.children.find(v => v.name === 'Type=image solo, Position=ODD');
+
+const imgCell = (isEven ? imageSoloE : imageSoloO).createInstance();
+row.appendChild(imgCell);
+imgCell.layoutSizingHorizontal = 'FIXED';
+imgCell.resize(100, imgCell.height);
+// Single image — no visibility toggling needed, just one image instance
+```
+
+**Pre-loaded action icon options (hidden layers):**
+
+| Index | Color | Icon | Use for |
+|---|---|---|---|
+| 0 | Pink (#E961) | `message` | SMS/chat actions |
+| 1 | Orange (#E869) | `gift` | Bonus/promo |
+| 2 | Teal (#8ACC) | `mobile` | Mobile/push |
+| 3 | Blue (#0F5D) | `envelope` | Email |
+| 4 | Yellow (#FFDB) | `bell` | Notifications |
+
+**Pre-loaded flag options:** East Timor, Anguilla, India, Myanmar, Hungary (override `Country` property for any other).
 
 ## Form Fields (Settings/Detail Pages)
 

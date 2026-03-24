@@ -15,6 +15,7 @@
 | `SLIDEIN` | Modal / Slide-In | Pattern 4 |
 | `DASH` | Dashboard | Pattern 5 |
 | `GRID` | Grid (cards) | Pattern 6 |
+| `LIST-NESTED` | Nested Template List | Pattern 8 |
 
 Also read: **Shared Shell** (applies to all), **Shared Table Rules** (applies to all LIST-*), **Anti-Patterns** (always)
 
@@ -312,7 +313,7 @@ Content Area
 - **CRITICAL: Header cell widths MUST match data cell widths**
 - **CRITICAL: Header column COUNT must match data row column count** — if a data row has an extra cell (e.g. avatar image), add a matching spacer/header in the header row
 
-**Row type selection (12 cell types — always use the right component, never fake with primitives):**
+**Row type selection (15 cell types — always use the right component, never fake with primitives):**
 
 | Column content | Row Type | Example |
 |---|---|---|
@@ -324,63 +325,80 @@ Content Area
 | Tag / badge | `tag` | Status tag (Active, Disabled) |
 | Checkbox | `checkbox` | Multi-select rows |
 | Action menu | `ellipsis` | Kebab — always last column |
-| Action type icons | `action icons` | Colored circle + FA icon |
-| Avatars | `image` | User/player thumbnails |
-| Country flags | `flags` | Market/locale indicators |
+| Multiple action icons | `action icons` | Colored circles row (multi-origin) |
+| Single action icon | `action icons solo` | **One** colored circle + FA icon per row |
+| Multiple avatars | `image` | User/player thumbnails (multi-origin) |
+| Single avatar | `image solo` | **One** avatar/image per row |
+| Multiple country flags | `flags` | Market/locale indicators (multi-origin) |
+| Single country flag | `flags solo` | **One** flag per row (e.g. Communication Profiles) |
 | Number / version | `number/version` | Numeric badge in pill |
+
+**Solo vs Multi rule:** Use `solo` when a column shows ONE item per row (e.g. a single country flag for language). Use the multi variant when showing multiple items with overflow (e.g. 5+ player origins).
 
 ---
 
-## Pattern 3: Detail Page
+## Pattern 3: Detail Page (`DETAIL`)
 
 **Purpose:** View/edit a single entity with multiple sections of information.
 
-**Structure — Single Panel:**
-```
-Standard Panel (Full)
-├── Panel Header (entity name + description)
-├── [Alert — status/info message]
-├── Info Section
-│   ├── Section Title
-│   ├── Key-Value Rows (label: value pairs)
-│   └── Tags (status indicators)
-├── Configuration Section
-│   ├── Section Title
-│   ├── Form fields (editable)
-│   └── Toggles
-└── Related Data Section
-    ├── Section Title
-    └── Mini table or card list
-```
+**Reality check (2026-03-23):** The Player Profile page (from external environment screenshot) reveals the DETAIL pattern is significantly richer than originally documented. It uses icon tab navigation, split panels, collapsible attribute sections, and a two-column key-value grid — many of which have no existing Figma component.
 
-**Structure — Split Panel (common for player profiles, activity details):**
+**Structure — Player Profile (canonical DETAIL page):**
 ```
+Page Header
+├── Breadcrumb/2 ("Player Profile" > "Skin 3" with status dot)
+└── Right area
+    ├── Channel Action Icons (5 dark circle buttons: email, SMS, push, messenger, phone)
+    └── User ID Badge ("USER ID 10" dark pill)
+
 Content Area
-├── Standard Panel (2/3)
-│   ├── Panel Header
-│   ├── Main content sections
-│   └── ...
-└── Standard Panel (1/3)
-    ├── Panel Header (sidebar title)
-    ├── Summary info
-    └── Quick actions
+├── Icon Tab Cards (horizontal row, 4 sections)
+│   ├── PLAYER INFO (selected — pink/purple bg, white icon+text)
+│   ├── LOGS & TIMELINE (unselected — icon + text)
+│   ├── MOVEMENTS (unselected)
+│   └── REWARDS (unselected)
+├── Split Layout (horizontal)
+│   ├── Left Panel — "Favourites" (narrow, ~1/3)
+│   │   ├── Title + lock icon
+│   │   ├── Drop Zone (purple/placeholder area)
+│   │   └── "Drop here to add to Favourites" text
+│   └── Right Panel — "Player info" (wide, ~2/3)
+│       ├── Title + search input + icon button
+│       ├── Alert (warning — yellow, sensitivity notice)
+│       └── Collapsible Section "Player Features"
+│           ├── Section header (▼ arrow + title + icon)
+│           └── Two-column Key-Value Grid
+│               ├── Row: Acquisition Source | Direct
+│               ├── Row: Active State | Idle (2 Days)
+│               ├── Row: Churn Generosity Model | —
+│               └── ...~20 attribute rows
 ```
 
 **Key components:**
 
-| Slot | Component | ID |
-|------|-----------|----|
-| Main panel | Standard Panel | `92:46583` — Side-Width=Full or 2/3 |
-| Sidebar panel | Standard Panel | `92:46583` — Side-Width=1/3 |
-| Status tags | Tag | `91:10023` |
-| Info fields | Text nodes (label + value) | — |
-| Edit fields | Input Fields | `91:6537` |
+| Slot | Component | ID | Status |
+|------|-----------|----|--------|
+| Main panel | Standard Panel | `92:46583` — Side-Width=2/3 | Exists |
+| Sidebar panel | Standard Panel | `92:46583` — Side-Width=1/3 | Exists |
+| Warning alert | alert | `92:40484` — Status=warning | Exists |
+| Search input | Input Fields | `91:6537` | Exists |
+| Breadcrumb/2 | Left - Breadcrumb Nav/2 | `94:21125` | Exists |
+| Icon Tab Cards | Block Selector `91:8712`? | — | **Needs new variant** — wider, icon above text, pink selected state |
+| Channel Action Icons | — | — | **Missing** — dark filled circle icon buttons (#20) |
+| User ID Badge | — | — | **Missing** — dark pill with white text (#21) |
+| Collapsible Section Header | — | — | **Missing** — ▼ arrow + title + icon (#22) |
+| Key-Value Attribute Grid | — | — | **Missing** — 2-col label:value pairs (#23) |
+| Favourites Drop Zone | — | — | **Missing** — drag target placeholder (#24) |
 
 **Composition rules:**
 - Split layout: wrap two Standard Panel instances in a horizontal auto-layout frame
-- Key-value display: horizontal frame with label (12px bold, mono-500) and value (14px regular, mono-700)
-- Related data: mini table (3-5 rows) or horizontal card scroll
-- Edit mode: swap text values for Input Field instances
+- Icon tab cards sit ABOVE the split layout, full-width, in a horizontal row
+- Key-value grid: NOT a Table component — it's a definition list with 2 columns, each row is label (left) + value (right), subtle dividers between rows, "—" for empty values
+- Collapsible sections: arrow icon toggles visibility of content below
+- Channel icons: dark circles (~32px) with white FA icons inside, horizontal row with 8px spacing
+- User ID badge: dark bg (#2C2C2C), white text, pill radius, positioned at far right of header
+
+**Status:** Blocked — 6 components need creation. See `component-gap-map.md` #19-24.
 
 ---
 
@@ -468,30 +486,48 @@ Root frame (1920 × 1080, NONE layout)
 
 ---
 
-## Pattern 5: Dashboard / Overview
+## Pattern 5: Dashboard / Overview (`DASH`)
 
-**Purpose:** High-level summary with metrics, charts, and quick-access actions.
+**Purpose:** Multi-section summary page with mixed content types — tables, empty states, sub-tabs, and date filtering.
 
-**Structure:**
+**Reality check (2026-03-23):** The live CRM Dashboard is NOT a classic metrics/chart dashboard. It's a multi-section compound page closer to LIST-TAB with date filter controls and multiple independent panels.
+
+**Structure (from live CRM Dashboard):**
 ```
+Page Header
+├── Breadcrumb/1 ("Dashboard")
+└── Right area
+    ├── Date Filter Bar (DASHBOARD badge, TODAY badge, separator, "Last month", date range)
+    └── CTA ("New Activity")
+
 Content Area
-├── [Alert — system-wide notification]
-├── Metric Cards Row (horizontal)
-│   ├── Card (1/3)
-│   ├── Card (1/3)
-│   └── Card (1/3)
-├── Standard Panel (Full) — main chart/table
-│   ├── Panel Header
-│   └── Content (table or chart area)
-└── Standard Panel Row (horizontal)
-    ├── Standard Panel (1/2) — secondary data
-    └── Standard Panel (1/2) — secondary data
+├── Tab Bar (top-level: "Active Dashboard" | "Operations / Planning")
+├── Standard Panel — "Planned Send-Outs"
+│   ├── Panel Header (title + subtitle + search)
+│   └── Content (empty state OR table)
+├── Standard Panel — "Lifecycles"
+│   ├── Panel Header (title only)
+│   └── Content
+│       ├── Sub-Tab Bar (8 category tabs inside panel)
+│       ├── Table (Name/Status/Trigger/Players/Origins/ellipsis)
+│       └── Display count ("Displaying 1-2 of 2")
+└── Standard Panel — "Ongoing Activities"
+    ├── Panel Header (title + subtitle)
+    └── Content (empty state OR table)
 ```
 
 **Composition rules:**
+- Date filter bar in header: custom frame with badge pills (mono-200 bg, 4px radius, 11px Bold text) + separator (1px mono-300) + date text (13px Regular mono-600/500)
+- Top-level tabs: same as LIST-TAB, 1700px bar, 32px gap between tabs
+- Multiple panels stacked vertically: 32px spacing, 1700px FIXED each
+- Sub-tabs INSIDE panel content: when a panel has its own category navigation (e.g. Lifecycles), tabs go inside the content area, not at the page level
+- Mix of populated tables and empty states in the same page
+- Display count as simple text below table (12px Regular mono-600) — NOT pagination component
+
+**Planned extension (if metrics pages are found):**
 - Metric cards: custom frames (not a standard component), use border + large number + label
-- Multiple panels: wrap in horizontal auto-layout frame, use width variants
 - Charts: placeholder frame with label (Figma can't render real charts)
+- Multiple panels in horizontal row: wrap in horizontal auto-layout frame, use panel width variants
 
 ---
 
@@ -532,6 +568,41 @@ Content Area
 - Pagination same as LIST-SIMPLE
 
 **Status:** Placeholder — not yet verified. Will be codified during Tier 5 page builds.
+
+---
+
+## Pattern 8: Nested Template List (`LIST-NESTED`)
+
+**Purpose:** Template management pages where each template is a collapsible section with its own mini-table and actions. Not a card grid — each template is a full-width white panel with version history.
+
+**Pages using this pattern:** Email Templates (Standard tab).
+
+**Structure (from live Email Templates page):**
+```
+Content Area
+├── Tab Bar (Standard | Content Blocks | Brand Templates)
+├── Action Row (search input + "Edit your Standard Templates" CTA)
+├── Template Section 1 — "Easter Template"
+│   ├── Title Row (template name + action icon buttons)
+│   ├── Table Header (Status | Version name | Player Origins | Created on | Last updated)
+│   ├── Data Row(s) (tag cell + text + image + dates)
+│   ├── Count ("1-1 of 1")
+│   └── "Add new version" button (dark/sub, centered)
+├── Template Section 2 — "Christmas Template"
+│   └── [same structure]
+└── ...more templates
+```
+
+**Composition rules:**
+- Each template section is a white frame (1700px FIXED, 24px padding, cornerRadius 0)
+- Title row: bold 16px title + spacer (FILL) + icon buttons (eye, pen)
+- Mini-table inside section: same Header + Row components as LIST-SIMPLE
+- Count text: 12px Regular mono-600, not pagination component
+- "Add new version" button: `Type=sub` variant, centered in row
+- Sections stacked vertically, 32px gap between them
+- Top-level tabs + search/CTA row are separate from sections
+
+**Key difference from GRID:** Templates are not cards in a wrapping grid — they're full-width collapsible sections, each with its own inline table. More like stacked LIST-SIMPLE panels than a card layout.
 
 ---
 

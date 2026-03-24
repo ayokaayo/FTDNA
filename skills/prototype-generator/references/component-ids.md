@@ -42,9 +42,12 @@
 | Tag / status badge | `Type=tag` | `Tag` instance | Uses Tag component. Override text + variant (color/size). |
 | Checkbox | `Type=checkbox` | `v7-icon` instance | Check/uncheck. Override icon character + fill. |
 | Action menu | `Type=ellipsis` | `button-btn` instance | Kebab menu. Always last column. |
-| Action type icons | `Type=action icons` | `button-btn` instances (×6) | Colored circle buttons with FA icon text. Detach, show 1 btn per row, set fill color + icon name. |
-| Avatar / thumbnail | `Type=image` | `image` instances (×5) + overflow btn | Multiple avatar circles. Detach, show needed count. |
-| Country flags | `Type=flags` | `Flag` instances (×5) + overflow btn | Country flag circles. Detach, show needed count. |
+| Action type icons (multi) | `Type=action icons` | `button-btn` instances (×6) | Multiple colored circle buttons. Detach, show needed count. |
+| Action type icon (single) | `Type=action icons solo` | `button-btn` instances (×5, 1 visible) | **Single** colored circle button. Toggle visibility to pick icon. Override fill color + icon name on visible btn. |
+| Avatar / thumbnail (multi) | `Type=image` | `image` instances (×5) + overflow btn | Multiple avatar circles. Detach, show needed count. |
+| Avatar / thumbnail (single) | `Type=image solo` | `image` instance (×1) | **Single** avatar/image circle. Direct use, no detaching needed. |
+| Country flags (multi) | `Type=flags` | `Flag` instances (×5) + overflow btn | Multiple country flag circles. Detach, show needed count. |
+| Country flag (single) | `Type=flags solo` | `Flag` instances (×5, 1 visible) | **Single** country flag. Toggle visibility to pick flag, set `Country` variant property on visible instance. |
 | Number / version | `Type=number/version` | `button-btn` frame | Numeric badge in a pill shape. |
 
 All row types have `Position=EVEN` and `Position=ODD` variants for zebra striping.

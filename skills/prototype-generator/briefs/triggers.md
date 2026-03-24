@@ -13,7 +13,7 @@
 | Side Menu section | CRM |
 | Breadcrumb | Single-level (Nav/1): "Triggers" |
 | Page title | Triggers |
-| Main CTA | None (no header buttons visible) |
+| Main CTA | Add Trigger |
 | Right-side icons | Hidden |
 
 ## Content

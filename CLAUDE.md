@@ -5,18 +5,18 @@
 
 ## Project Status
 
-**Version:** 0.2.8 (testing)
-**Last updated:** 2026-03-20
+**Version:** 0.3.7
+**Last updated:** 2026-03-24
 
 | Track | Status | Detail |
 |---|---|---|
 | Platform scanner | Done | `scan.js` discovers 34 pages, saves DOM structure to `scan-manifest.json`. Screenshots on demand via `snap.js`. |
-| Page composition | T2 done (7/13 pages) | LIST-SIMPLE, LIST-TAB, FORM proven. T3-T5 ready to start. |
+| Page composition | 24/48 pages (8 repro-tested) | LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM, HUB, SLIDEIN, DASH, LIST-NESTED proven. 3 blocked (missing components). |
 | Component audit | Not started | Will use existing vue-lib meta.json + prop interfaces. |
 | Code Connect | Not started | Depends on component audit. |
 | Design critique | Done | design-system.md refreshed from Figma variables. Compact summary output as default. |
 
-**What's next:** T3 page composition (LIST-FULL, SLIDEIN). Screenshot each page on demand with `npm run snap <path>`.
+**What's next:** Content Variables (GRID), Manage Unsubscribe Pages (LIST-NESTED), remaining page briefs + screenshots. Screenshot each page on demand with `npm run snap <path>`.
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`
 **Page progress:** `inventory/composition-tracker.md`
 
@@ -131,6 +131,8 @@ Skills are Claude instruction packages in `skills/`. Registry: `skills/registry.
 | `skill-architect` | meta | Create new production-ready skills |
 | `design-critique` | product-design | Review designs for compliance and quality |
 | `prototype-generator` | prototyping | Generate branded Figma prototypes from briefs |
+| `kb` | knowledge-management | Search the GitBook knowledgebase for platform answers |
+| `tutor` | training | Teach FT CRM knowledge — adaptive, source-grounded tutoring with quizzes and scenarios |
 
 To create a new skill, use the skill-architect. To discover skills programmatically, read `skills/registry.json`.
 
