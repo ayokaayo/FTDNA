@@ -1,7 +1,7 @@
 # Code Patterns
 
-> Executable code snippets for the prototype-generator skill. Each pattern is proven and tested.
-> Last updated: 2026-03-23
+> Build engine for the prototype-generator skill. Helper library + pattern recipes.
+> Last updated: 2026-03-24
 
 ---
 
@@ -45,15 +45,15 @@
 
 | Building... | Read from page-patterns.md | Read from code-patterns.md | Clone from |
 |---|---|---|---|
-| `LIST-SIMPLE` | §Shared Shell, §Pattern 2a, §Shared Table Rules | §Bootstrap, §Table Composition, §Pagination | `92:55380` (adapt) |
-| `LIST-TAB` | §Shared Shell, §Pattern 2b, §Shared Table Rules | §Bootstrap, §Tabs, §Table Composition | `92:55380` or `181:72894` |
-| `LIST-FULL` | §Shared Shell, §Pattern 2c, §Shared Table Rules | §Bootstrap, §Tabs, §Icon Toolbar, §Table Composition | `92:55380` |
-| `FORM` | §Shared Shell, §Pattern 1 | §Bootstrap, §Form Fields, §Multi-Panel, §Dropdown, §Radio, §Toggle | — |
-| `SLIDEIN` | §Pattern 4 (relevant sub-pattern) | §Bootstrap, §Form Fields, §Multi-Panel | `92:56151` or `92:54631` |
-| `HUB` | §Pattern 7 | §Hub Card Grid | — |
-| `DASH` | §Shared Shell, §Pattern 5 | §Bootstrap, §Multi-Panel | — |
-| `DETAIL` | §Shared Shell, §Pattern 3 | §Bootstrap, §Form Fields | — |
-| `GRID` | §Shared Shell, §Pattern 6 | §Bootstrap, §Table Composition (for pagination) | — |
+| `LIST-SIMPLE` | §Shared Shell, §Pattern 2a, §Shared Table Rules | §Helper Library, §LIST-SIMPLE recipe | `92:55380` (adapt) |
+| `LIST-TAB` | §Shared Shell, §Pattern 2b, §Shared Table Rules | §Helper Library, §LIST-TAB recipe | `92:55380` or `181:72894` |
+| `LIST-FULL` | §Shared Shell, §Pattern 2c, §Shared Table Rules | §Helper Library, §LIST-FULL recipe | `92:55380` |
+| `FORM` | §Shared Shell, §Pattern 1 | §Helper Library, §FORM recipe | — |
+| `SLIDEIN` | §Pattern 4 (relevant sub-pattern) | §Helper Library, §SLIDEIN recipe | `92:56151` or `92:54631` |
+| `HUB` | §Pattern 7 | §Helper Library, §HUB recipe | — |
+| `DASH` | §Shared Shell, §Pattern 5 | §Helper Library, §DASH recipe | — |
+| `DETAIL` | §Shared Shell, §Pattern 3 | §Helper Library, §FORM recipe | — |
+| `GRID` | §Shared Shell, §Pattern 6 | §Helper Library | — |
 
 **Always also read:**
 - component-ids.md §Component Property Registry (for property keys)
@@ -73,43 +73,23 @@ List every element from the reference screenshot. Map each to:
 
 ### Gate 3: Plan Verification — Check Against Rules
 
-Before writing code, verify:
-
-```
-□ Panel spacing = 32px? (universal — no exceptions)
-□ Panels = 1700px FIXED? (unless split panel or slide-in)
-□ All fills/strokes use variable binding? (bindFill/bindStroke with V.xxx)
-□ Content frame = FILL height, top-centre aligned? (primaryAxisAlignItems: MIN)
-□ Text nodes in cards = HUG / WIDTH_AND_HEIGHT? (never FILL / HEIGHT)
-□ Search input = 350px? (when standalone — NOT in Panel Header)
-□ Panel Header search = built-in icon button? (not standalone Search input)
-□ Icon buttons = Status=default? (never hover/focused)
-□ Tabs outside panels, 32px gap between tabs? (when present)
-□ Table header sort icons = ALL HIDDEN? (never show sort arrows unless brief explicitly asks)
-□ Page Header present? (check screenshot — some pages have NO header at all)
-□ Building on Pastebin page? (not Sandbox)
-□ Any values not from documented rules? → CHECK or ASK
-```
+Before writing code, verify against the Rules Reference (§R1-R15) at the bottom of this file.
 
 ### Gate 4: Build
 
-- Use the Standard Preamble (next section) for boilerplate
-- One phase at a time
+- Prepend the Helper Library to every `figma_execute` call
+- Call `await init()` first, then use helpers
 - Screenshot after each phase
 
 ### Gate 5: Post-Build Verification
 
-After building, systematically compare against the reference:
-
 ```
 □ Header: breadcrumb level, CTA text, visible icons match?
 □ Panel count and layout match reference?
-□ Spacing between panels = 32px?
 □ All text content matches reference exactly?
 □ Content alignment correct (top-centre)?
 □ No hardcoded RGB — all variable-bound?
-□ Side menu section matches product area?
-□ Header columns align 1:1 with data row columns? (every data cell needs a matching header cell/spacer)
+□ Header columns align 1:1 with data row columns?
 □ Overall proportions match reference at 1x scale?
 ```
 
@@ -117,844 +97,583 @@ If any check fails → fix before presenting to user.
 
 ---
 
-## Standard Preamble (copy into every build script)
+## Helper Library (INJECTABLE PREAMBLE)
+
+> Copy this entire block as the prefix of every `figma_execute` call.
+> Call `await init()` once at the top of your build code.
 
 ```javascript
-// === STANDARD PREAMBLE ===
-async function bindFill(node, variableId) {
-  const variable = await figma.variables.getVariableByIdAsync(variableId);
-  const baseFill = node.fills?.length > 0 ? { ...node.fills[0] } : { type: 'SOLID', color: { r: 1, g: 1, b: 1 } };
-  node.fills = [figma.variables.setBoundVariableForPaint(baseFill, 'color', variable)];
-}
-async function bindStroke(node, variableId) {
-  const variable = await figma.variables.getVariableByIdAsync(variableId);
-  const base = node.strokes?.length > 0 ? { ...node.strokes[0] } : { type: 'SOLID', color: { r: 0, g: 0, b: 0 } };
-  node.strokes = [figma.variables.setBoundVariableForPaint(base, 'color', variable)];
-}
+// ═══════════════════════════════════════════════════
+// FT DNA Build Helpers v1.0
+// Prepend to every figma_execute call
+// ═══════════════════════════════════════════════════
+
+// --- Layer 1: Variables & Binding ---
 const V = {
-  white:    'VariableID:28:5',
-  mono100:  'VariableID:28:6',
-  mono200:  'VariableID:28:7',
-  mono300:  'VariableID:28:8',
-  mono400:  'VariableID:28:9',
-  mono500:  'VariableID:28:10',
-  mono600:  'VariableID:28:11',
-  mono700:  'VariableID:28:12',
-  black:    'VariableID:28:13',
-  pink500:  'VariableID:28:17',
-  green400: 'VariableID:28:46',
-  red500:   'VariableID:28:37',
-  yellow400:'VariableID:28:31',
-  blue600:  'VariableID:28:28',
+  white:'VariableID:28:5', mono100:'VariableID:28:6', mono200:'VariableID:28:7',
+  mono300:'VariableID:28:8', mono400:'VariableID:28:9', mono500:'VariableID:28:10',
+  mono600:'VariableID:28:11', mono700:'VariableID:28:12', black:'VariableID:28:13',
+  pink500:'VariableID:28:17', green400:'VariableID:28:46', red500:'VariableID:28:37',
+  yellow400:'VariableID:28:31', blue600:'VariableID:28:28',
 };
-await figma.loadFontAsync({family:'Inter', style:'Regular'});
-await figma.loadFontAsync({family:'Inter', style:'Bold'});
-await figma.loadFontAsync({family:'Inter', style:'Medium'});
-const baseTemplate = await figma.getNodeByIdAsync('94:21370');
-// === END PREAMBLE ===
-```
-
----
-
-## Variable Binding Helpers (MANDATORY — never hardcode colours)
-
-Include these helpers at the top of every build script. All fills and strokes MUST use variable binding.
-
-```javascript
-// Bind a colour variable to a node's fill
-async function bindFill(node, variableId) {
-  const variable = await figma.variables.getVariableByIdAsync(variableId);
-  const baseFill = node.fills?.length > 0 ? { ...node.fills[0] } : { type: 'SOLID', color: { r: 1, g: 1, b: 1 } };
-  const boundFill = figma.variables.setBoundVariableForPaint(baseFill, 'color', variable);
-  node.fills = [boundFill];
+async function bindFill(node, vid) {
+  const v = await figma.variables.getVariableByIdAsync(vid);
+  const bf = node.fills?.length > 0 ? {...node.fills[0]} : {type:'SOLID',color:{r:1,g:1,b:1}};
+  node.fills = [figma.variables.setBoundVariableForPaint(bf, 'color', v)];
+}
+async function bindStroke(node, vid) {
+  const v = await figma.variables.getVariableByIdAsync(vid);
+  const bs = node.strokes?.length > 0 ? {...node.strokes[0]} : {type:'SOLID',color:{r:0,g:0,b:0}};
+  node.strokes = [figma.variables.setBoundVariableForPaint(bs, 'color', v)];
 }
 
-// Bind a colour variable to a node's stroke
-async function bindStroke(node, variableId) {
-  const variable = await figma.variables.getVariableByIdAsync(variableId);
-  const baseStroke = node.strokes?.length > 0 ? { ...node.strokes[0] } : { type: 'SOLID', color: { r: 0, g: 0, b: 0 } };
-  const boundStroke = figma.variables.setBoundVariableForPaint(baseStroke, 'color', variable);
-  node.strokes = [boundStroke];
-}
-
-// Common variable IDs — see component-ids.md for full list
-const V = {
-  white:    'VariableID:28:5',   // #FFFFFF
-  mono100:  'VariableID:28:6',   // #FAFAFA — panel bg, secondary surface
-  mono200:  'VariableID:28:7',   // #F5F5F5 — card bg, tertiary surface
-  mono300:  'VariableID:28:8',   // #E5E5E5 — border base
-  mono400:  'VariableID:28:9',   // #CACACA — border subtle
-  mono500:  'VariableID:28:10',  // #959595 — text tertiary
-  mono600:  'VariableID:28:11',  // #666666 — text secondary
-  mono700:  'VariableID:28:12',  // #2C2C2C — text primary
-  black:    'VariableID:28:13',  // #000000
-  pink500:  'VariableID:28:17',  // #D52454 — primary/CTA
-  green400: 'VariableID:28:46',  // #3AAA35 — success/active
-  red500:   'VariableID:28:37',  // #CD1913 — error
-  yellow400:'VariableID:28:31',  // #FFDB14 — warning
-  blue600:  'VariableID:28:28',  // #105DBA — info/link
-};
-
-// Usage:
-// await bindFill(panel, V.mono100);
-// await bindStroke(panel, V.mono300);
-// await bindFill(card, V.white);
-```
-
----
-
-## Bootstrap: Instantiate Base Template
-
-```javascript
-const baseTemplate = await figma.getNodeByIdAsync('94:21370');
-const instance = baseTemplate.createInstance();
-const sandbox = figma.root.children.find(p => p.name === '🧪 Sandbox');
-await figma.setCurrentPageAsync(sandbox);
-sandbox.appendChild(instance);
-instance.x = DESIRED_X;
-instance.y = 0;
-
-const screen = instance.detachInstance();
-screen.name = 'Screen Name — State';
-
-const contentFrame = screen.children.find(c => c.name === 'Frame 1317');
-const panelInstance = contentFrame.children.find(c => c.name === 'Standard Panel');
-
-let panel = panelInstance.type === 'INSTANCE' ? panelInstance.detachInstance() : panelInstance;
-panel.itemSpacing = 32; // RULE: 32px between Panel Header and content — always
-let panelHeader = panel.children.find(c => c.name === 'Panel Header');
-if (panelHeader?.type === 'INSTANCE') panelHeader = panelHeader.detachInstance();
-
-const content = panel.children.find(c => c.name === 'content placeholder');
-
-await figma.loadFontAsync({family:'Inter', style:'Regular'});
-await figma.loadFontAsync({family:'Inter', style:'Bold'});
-await figma.loadFontAsync({family:'Inter', style:'Medium'});
-```
-
-## Override Shell Text
-
-```javascript
-// Panel Header
-const titleNode = panelHeader.findOne(n => n.type === 'TEXT' && n.name === 'Title');
-await figma.loadFontAsync(titleNode.fontName);
-titleNode.characters = 'Panel Title';
-
-const subtitleNode = panelHeader.findOne(n => n.type === 'TEXT' && n.name === 'Sub-Title');
-await figma.loadFontAsync(subtitleNode.fontName);
-subtitleNode.characters = 'Description text';
-
-// Page Header breadcrumbs + CTA
-// IMPORTANT: Detach the header FIRST if you need to swap breadcrumbs or insert/remove children.
-// Without detaching, insertChild fails with "Cannot move node. New parent is an instance."
-// CTA text is SENTENCE CASE: "Add Player", "Save Changes", "Create Campaign" — NOT uppercase
-let header = screen.children.find(c => c.name === 'Page Header' || c.name === 'Header');
-if (header?.type === 'INSTANCE') header = header.detachInstance();
-const allTexts = header.findAll(n => n.type === 'TEXT');
-for (const t of allTexts) {
-  await figma.loadFontAsync(t.fontName);
-  if (t.characters === 'Level 1') t.characters = 'Home';
-  if (t.characters === 'Level 2') t.characters = 'Page Name';
-  if (t.characters === 'Button text') t.characters = 'Add Player'; // Sentence case
-  if (t.characters === 'Heading') t.characters = 'Page Name';
-}
-```
-
-## Tabs (List Pages)
-
-Tabs go at the **content area level**, ABOVE the panel. Width must match the panel.
-
-```javascript
-const tabSet = await figma.getNodeByIdAsync('91:19098');
-const tabSelected = tabSet.children.find(v => v.name.includes('Type=tab-text') && v.name.includes('Status=Selected'));
-const tabDefault = tabSet.children.find(v => v.name.includes('Type=tab-text') && v.name.includes('Status=Default'));
-
-const tabBar = figma.createFrame();
-tabBar.name = 'Tab Bar';
-tabBar.layoutMode = 'HORIZONTAL';
-tabBar.itemSpacing = 32; // RULE: always 32px between tabs
-tabBar.fills = [];
-contentFrame.insertChild(0, tabBar);
-tabBar.layoutSizingHorizontal = 'FIXED';
-tabBar.resize(panel.width, 32); // Match panel width exactly
-contentFrame.itemSpacing = 16;
-
-const tabs = [['Active', true], ['VIP', false], ['Suspended', false]];
-for (const [name, selected] of tabs) {
-  const tab = (selected ? tabSelected : tabDefault).createInstance();
-  tabBar.appendChild(tab);
-  const titleFrame = tab.findOne(n => n.name === 'tab title and alert circle');
-  if (titleFrame) {
-    const titleText = titleFrame.findOne(n => n.type === 'TEXT');
-    if (titleText) { await figma.loadFontAsync(titleText.fontName); titleText.characters = name; }
-    const alert = titleFrame.findOne(n => n.name === 'alert circle');
-    if (alert) alert.visible = false;
+// --- Layer 2: Initialization (call once per execution) ---
+let _base, _hdr, _row, ROW = {}, _tag, _tab, _input, _btn, _pag;
+async function init() {
+  // Fonts — load all upfront, never again per-cell
+  await Promise.all([
+    figma.loadFontAsync({family:'Inter',style:'Regular'}),
+    figma.loadFontAsync({family:'Inter',style:'Bold'}),
+    figma.loadFontAsync({family:'Inter',style:'Medium'}),
+    figma.loadFontAsync({family:'Font Awesome 6 Pro',style:'Solid'}).catch(()=>{}),
+  ]);
+  // Components — parallel fetch
+  const ids = {
+    base:'94:21370', hdr:'91:39176', row:'91:39179', tag:'91:10023',
+    tab:'91:19098', input:'91:6537', btn:'91:8299', pag:'92:40394',
+  };
+  const [base,hdr,row,tag,tab,input,btn,pag] = await Promise.all(
+    Object.values(ids).map(id => figma.getNodeByIdAsync(id))
+  );
+  _base=base; _hdr=hdr; _row=row; _tag=tag; _tab=tab; _input=input; _btn=btn; _pag=pag;
+  // Pre-resolve row variants into lookup map
+  const typeMap = {
+    'Text':'text','Text+leading icon':'texticon','Text+trailing icon':'texttrailing',
+    'Icon':'icon','ellipsis':'ellipsis','checkbox':'checkbox','status circle':'status',
+    'tag':'tag','image':'image','image solo':'image-solo','action icons':'action',
+    'action icons solo':'action-solo','number/version':'number','flags':'flags','flags solo':'flags-solo',
+  };
+  for (const v of _row.children) {
+    const m = v.name.match(/Type=(.+), Position=(EVEN|ODD)/);
+    if (m) ROW[typeMap[m[1]] + '-' + m[2].toLowerCase()] = v;
   }
-  const badge = tab.findOne(n => n.name === 'Badge');
-  if (badge) badge.visible = false;
 }
-```
 
-## Table Composition
+// --- Layer 3: Build Helpers ---
+function detach(node) { return node?.type === 'INSTANCE' ? node.detachInstance() : node; }
 
-Each table row is a **horizontal Frame** containing multiple **Row cell instances** side by side.
-
-```javascript
-content.layoutMode = 'VERTICAL';
-content.itemSpacing = 0;
-while (content.children.length > 0) content.children[0].remove();
-
-// Get components
-const headerComp = await figma.getNodeByIdAsync('91:39176');
-const rowSet = await figma.getNodeByIdAsync('91:39179');
-const textEven = rowSet.children.find(v => v.name === 'Type=Text, Position=EVEN');
-const textOdd = rowSet.children.find(v => v.name === 'Type=Text, Position=ODD');
-const textIconEven = rowSet.children.find(v => v.name === 'Type=Text+leading icon, Position=EVEN');
-const textIconOdd = rowSet.children.find(v => v.name === 'Type=Text+leading icon, Position=ODD');
-const ellipsisEven = rowSet.children.find(v => v.name === 'Type=ellipsis, Position=EVEN');
-const ellipsisOdd = rowSet.children.find(v => v.name === 'Type=ellipsis, Position=ODD');
-
-// HEADER ROW — uses Header component instances
-const headerRow = figma.createFrame();
-headerRow.name = 'Table Header';
-headerRow.layoutMode = 'HORIZONTAL';
-headerRow.itemSpacing = 0;
-headerRow.fills = [];
-content.appendChild(headerRow);
-headerRow.layoutSizingHorizontal = 'FILL';
-headerRow.layoutSizingVertical = 'HUG';
-
-for (const col of columns) {
-  const cell = headerComp.createInstance();
-  headerRow.appendChild(cell);
-  const text = cell.findOne(n => n.type === 'TEXT' && n.name === 'Heading');
-  if (text) { await figma.loadFontAsync(text.fontName); text.characters = col; }
-  cell.layoutSizingHorizontal = 'FILL';
-  // Sort icon OFF by default — only enable when brief explicitly asks for sorting
-  const sortIcon = cell.findOne(n => n.name === 'v7-icon' || n.name === 'icon');
-  if (sortIcon) sortIcon.visible = false;
-  // For fixed-width columns: cell.layoutSizingHorizontal = 'FIXED'; cell.resize(150, cell.height);
+function setText(parent, name, text, style) {
+  const node = parent.findOne(n => n.type === 'TEXT' && n.name === name);
+  if (!node) return null;
+  node.fontName = {family:'Inter', style: style || 'Regular'};
+  node.characters = String(text);
+  return node;
 }
-// Action column spacer
-const actionSpacer = figma.createFrame();
-actionSpacer.resize(56, 40); actionSpacer.fills = [];
-headerRow.appendChild(actionSpacer);
 
-// DATA ROWS
-for (let i = 0; i < data.length; i++) {
-  const isEven = i % 2 === 0;
+function setIcon(parent, iconName) {
+  const icon = parent.findOne(n => n.name === 'v7-icon');
+  if (!icon) return;
+  const t = icon.findOne(n => n.type === 'TEXT' && n.name === 'icon');
+  if (t) { t.fontName = {family:'Font Awesome 6 Pro', style:'Solid'}; t.characters = iconName; }
+  return t;
+}
+
+function createRow(name, parent) {
   const row = figma.createFrame();
-  row.name = data[i].name;
-  row.layoutMode = 'HORIZONTAL';
-  row.itemSpacing = 0;
-  row.fills = [];
-  content.appendChild(row);
-  row.layoutSizingHorizontal = 'FILL';
-  row.layoutSizingVertical = 'HUG';
-
-  // Add cells — match type to column content
-  // Name (text+leading icon):
-  const nameCell = (isEven ? textIconEven : textIconOdd).createInstance();
-  row.appendChild(nameCell);
-  nameCell.layoutSizingHorizontal = 'FILL';
-  const nameText = nameCell.findOne(n => n.type === 'TEXT' && n.name === 'Row');
-  if (nameText) { await figma.loadFontAsync(nameText.fontName); nameText.characters = data[i].name; }
-
-  // Plain text cells:
-  const cell = (isEven ? textEven : textOdd).createInstance();
-  row.appendChild(cell);
-  cell.layoutSizingHorizontal = 'FILL';
-  const t = cell.findOne(n => n.type === 'TEXT' && n.name === 'Row');
-  if (t) { await figma.loadFontAsync(t.fontName); t.characters = 'value'; }
-
-  // Ellipsis (always last):
-  const action = (isEven ? ellipsisEven : ellipsisOdd).createInstance();
-  row.appendChild(action);
+  row.name = name; row.layoutMode = 'HORIZONTAL'; row.itemSpacing = 0; row.fills = [];
+  parent.appendChild(row);
+  row.layoutSizingHorizontal = 'FILL'; row.layoutSizingVertical = 'HUG';
+  return row;
 }
 
-// CRITICAL: Header cell widths MUST match data cell widths
-// Fixed-width columns: set BOTH header and data cells to same fixed width
-// Fill columns: use layoutSizingHorizontal = 'FILL' on both
-
-// PAGINATION
-const paginationSet = await figma.getNodeByIdAsync('92:40394');
-const goToPage = paginationSet.children.find(v => v.name.includes('Type=go to page'));
-const pagination = goToPage.createInstance();
-content.appendChild(pagination);
-pagination.layoutSizingHorizontal = 'FILL';
-
-// PAGINATION TEXT OVERRIDES — numbers must match visible rows
-// Structure: Tag "N/total" | Tag "N items per page ▼" | ‹ | page 1 | page 2 | ... | › | "Go to page"
-const allPagTexts = pagination.findAll(n => n.type === 'TEXT');
-for (const t of allPagTexts) {
-  await figma.loadFontAsync(t.fontName);
-  if (t.characters.includes('/')) t.characters = `${data.length}/${totalItems}`;         // e.g. "10/345"
-  if (t.characters.includes('items per page')) t.characters = `${data.length} items per page`; // match row count
+function cell(type, isEven) {
+  const key = type + '-' + (isEven ? 'even' : 'odd');
+  return ROW[key];
 }
-// Replace last page number with "..." to indicate more pages
-const pageNums = allPagTexts.filter(t => /^\d+$/.test(t.characters) && t.parent?.name === 'page number');
-if (pageNums.length >= 3) {
-  const lastPage = pageNums[pageNums.length - 1];
-  await figma.loadFontAsync(lastPage.fontName);
-  lastPage.characters = '...';
+
+async function bootstrapScreen(name, x, y) {
+  const pb = figma.root.children.find(p => p.name.includes('Pastebin'));
+  await figma.setCurrentPageAsync(pb);
+  const inst = _base.createInstance();
+  pb.appendChild(inst); inst.x = x || 0; inst.y = y || 0;
+  const screen = inst.detachInstance();
+  screen.name = name;
+  const main = screen.children.find(c => c.name === 'Frame 1317');
+  main.name = 'Main'; main.primaryAxisAlignItems = 'MIN'; main.counterAxisAlignItems = 'CENTER';
+  const panel = detach(main.children.find(c => c.name === 'Standard Panel'));
+  panel.layoutSizingHorizontal = 'FIXED'; panel.resize(1700, panel.height);
+  const panelHeader = detach(panel.children.find(c => c.name === 'Panel Header'));
+  const content = panel.children.find(c => c.name === 'content placeholder');
+  content.layoutMode = 'VERTICAL'; content.itemSpacing = 0;
+  while (content.children.length > 0) content.children[0].remove();
+  const header = detach(screen.children.find(c => c.name === 'Page Header' || c.name === 'Header'));
+  return { screen, main, panel, panelHeader, content, header };
 }
-```
 
-## Status Tag Cells
-
-Replace plain text cells with Tag instances for status columns.
-
-```javascript
-const tagSet = await figma.getNodeByIdAsync('91:10023');
-const tagVariant = tagSet.children.find(v =>
-  v.name.includes('Size=Small') && v.name.includes('Type=Icon - solid') && v.name.includes('Status=Default')
-);
-
-const tagWrapper = figma.createFrame();
-tagWrapper.name = 'Status Cell';
-tagWrapper.layoutMode = 'HORIZONTAL';
-tagWrapper.counterAxisAlignItems = 'CENTER';
-tagWrapper.paddingLeft = 16;
-tagWrapper.resize(150, 75); // Match column width and row height
-tagWrapper.fills = [];
-
-const tag = tagVariant.createInstance();
-tagWrapper.appendChild(tag);
-
-const tagText = tag.findOne(n => n.type === 'TEXT' && n.name === 'I am a tag');
-if (tagText) { await figma.loadFontAsync(tagText.fontName); tagText.characters = 'Online'; }
-
-// Hide icons for clean display
-const props = tag.componentProperties;
-const trailingKey = Object.keys(props).find(k => k.includes('Trailing') || k.includes('trailing'));
-if (trailingKey) tag.setProperties({ [trailingKey]: false });
-const leadingKey = Object.keys(props).find(k => k.includes('Leading') || k.includes('leading'));
-if (leadingKey) tag.setProperties({ [leadingKey]: false });
-
-row.insertChild(STATUS_COLUMN_INDEX, tagWrapper);
-```
-
-## Status Circle with Text (Leading Icon Pattern)
-
-For columns showing a colored dot + status text (e.g. "In Dev", "Running"), use `Type=Text+leading icon` cells with `circle` as the icon name and override the icon color.
-
-```javascript
-const cell = (isEven ? textIconEven : textIconOdd).createInstance();
-row.appendChild(cell);
-cell.layoutSizingHorizontal = 'FIXED';
-cell.resize(120, cell.height);
-
-// Set status text
-const statusText = cell.findOne(n => n.type === 'TEXT' && n.name === 'Row');
-if (statusText) { await figma.loadFontAsync(statusText.fontName); statusText.characters = 'In Dev'; }
-
-// Set icon to circle and color it
-const icon = cell.findOne(n => n.name === 'v7-icon');
-if (icon) {
-  const iconText = icon.findOne(n => n.type === 'TEXT' && n.name === 'icon');
-  if (iconText) {
-    await figma.loadFontAsync(iconText.fontName);
-    iconText.characters = 'circle';
-    // Use variable binding for standard colours; hardcode only for per-cell dynamic colours
-    await bindFill(iconText, V.mono400); // gray dot — swap to green400/red500 etc. per status
+async function setShell(refs, cfg) {
+  // Panel header
+  if (cfg.title) setText(refs.panelHeader, 'Title', cfg.title, 'Bold');
+  if (cfg.subtitle) setText(refs.panelHeader, 'Sub-Title', cfg.subtitle);
+  if (cfg.subtitle === false) { const sn = refs.panelHeader.findOne(n => n.name === 'Sub-Title'); if (sn) sn.visible = false; }
+  // Page header texts
+  const texts = refs.header.findAll(n => n.type === 'TEXT');
+  for (const t of texts) {
+    try { await figma.loadFontAsync(t.fontName); } catch(e) { continue; }
+    if (cfg.breadcrumb) {
+      if (cfg.breadcrumb.length === 1) {
+        if (t.characters === 'Level 1') t.characters = cfg.breadcrumb[0];
+        if (t.characters === 'Level 2') t.characters = '';
+      } else if (cfg.breadcrumb.length >= 2) {
+        if (t.characters === 'Level 1') t.characters = cfg.breadcrumb[0];
+        if (t.characters === 'Level 2') t.characters = cfg.breadcrumb[1];
+      }
+    }
+    if (cfg.cta && t.characters === 'Button text') t.characters = cfg.cta;
+    if (t.characters === 'Heading') t.characters = cfg.breadcrumb?.[cfg.breadcrumb.length - 1] || cfg.title || '';
   }
-}
-```
-
-## Leading Icon Override
-
-To change the icon on any `Text+leading icon` cell, find the `v7-icon` instance's text child and set the Font Awesome icon name.
-
-```javascript
-const icon = cell.findOne(n => n.name === 'v7-icon');
-const iconText = icon.findOne(n => n.type === 'TEXT' && n.name === 'icon');
-await figma.loadFontAsync(iconText.fontName);
-iconText.characters = 'arrows-spin'; // FA icon name: bolt, clock, users, etc.
-```
-
-## Xmark Icon Cells (No-Data Indicators)
-
-Columns that show a red "x" for zero/null values MUST use `Type=Icon` cell variant with the `xmark` FontAwesome icon — never plain red text in a Text cell.
-
-```javascript
-const rowSet = await figma.getNodeByIdAsync('91:39179');
-const iconEven = rowSet.children.find(v => v.name === 'Type=Icon, Position=EVEN');
-const iconOdd = rowSet.children.find(v => v.name === 'Type=Icon, Position=ODD');
-
-// Use variable for red — bindFill(iconText, V.red500) after creating the cell
-
-// Inside row loop — replace text cell with icon cell for "x" values:
-const isEven = i % 2 === 0;
-const iconCell = (isEven ? iconEven : iconOdd).createInstance();
-row.appendChild(iconCell);
-iconCell.layoutSizingHorizontal = 'FILL';
-
-const iconInstance = iconCell.findOne(n => n.name === 'v7-icon');
-if (iconInstance) {
-  const iconText = iconInstance.findOne(n => n.type === 'TEXT' && n.name === 'icon');
-  if (iconText) {
-    await figma.loadFontAsync(iconText.fontName);
-    iconText.characters = 'xmark';
-    await bindFill(iconText, V.red500);
+  // No CTA — hide right area buttons but keep frame visible for alignment
+  if (cfg.cta === false) {
+    const btns = refs.header.findAll(n => n.name === 'button-btn' && n.type === 'INSTANCE');
+    btns.forEach(b => b.visible = false);
   }
-}
-```
-
-## Solo Cell Variants (Single Image / Flag / Action Icon)
-
-Use the `solo` variants when a column shows **one** image, flag, or action icon per row — NOT the multi variants which show 5+ items with overflow.
-
-```javascript
-const rowSet = await figma.getNodeByIdAsync('91:39179');
-
-// --- SINGLE FLAG ---
-const flagSoloE = rowSet.children.find(v => v.name === 'Type=flags solo, Position=EVEN');
-const flagSoloO = rowSet.children.find(v => v.name === 'Type=flags solo, Position=ODD');
-
-const flagCell = (isEven ? flagSoloE : flagSoloO).createInstance();
-row.appendChild(flagCell);
-flagCell.layoutSizingHorizontal = 'FIXED';
-flagCell.resize(100, flagCell.height);
-
-// Show only the desired flag — hide all, then show one and set its Country
-const flags = flagCell.findAll(n => n.name === 'Flag' && n.type === 'INSTANCE');
-flags.forEach(f => f.visible = false);
-flags[0].visible = true;
-flags[0].setProperties({ 'Country': 'united kingdom' }); // lowercase country name
-
-// --- SINGLE ACTION ICON ---
-const actionSoloE = rowSet.children.find(v => v.name === 'Type=action icons solo, Position=EVEN');
-const actionSoloO = rowSet.children.find(v => v.name === 'Type=action icons solo, Position=ODD');
-
-const actionCell = (isEven ? actionSoloE : actionSoloO).createInstance();
-row.appendChild(actionCell);
-actionCell.layoutSizingHorizontal = 'FIXED';
-actionCell.resize(100, actionCell.height);
-
-// Show only the desired button — hide all, show one, set color + icon
-const btns = actionCell.findAll(n => n.name === 'button-btn' && n.type === 'INSTANCE');
-btns.forEach(b => b.visible = false);
-btns[0].visible = true;
-// Override fill color on the button
-await bindFill(btns[0], V.green400); // or any color variable
-// Override icon name
-const iconInst = btns[0].findOne(n => n.name === 'v7-icon');
-const iconText = iconInst?.findOne(n => n.type === 'TEXT' && n.name === 'icon');
-if (iconText) { await figma.loadFontAsync(iconText.fontName); iconText.characters = 'gift'; }
-
-// --- SINGLE IMAGE ---
-const imageSoloE = rowSet.children.find(v => v.name === 'Type=image solo, Position=EVEN');
-const imageSoloO = rowSet.children.find(v => v.name === 'Type=image solo, Position=ODD');
-
-const imgCell = (isEven ? imageSoloE : imageSoloO).createInstance();
-row.appendChild(imgCell);
-imgCell.layoutSizingHorizontal = 'FIXED';
-imgCell.resize(100, imgCell.height);
-// Single image — no visibility toggling needed, just one image instance
-```
-
-**Pre-loaded action icon options (hidden layers):**
-
-| Index | Color | Icon | Use for |
-|---|---|---|---|
-| 0 | Pink (#E961) | `message` | SMS/chat actions |
-| 1 | Orange (#E869) | `gift` | Bonus/promo |
-| 2 | Teal (#8ACC) | `mobile` | Mobile/push |
-| 3 | Blue (#0F5D) | `envelope` | Email |
-| 4 | Yellow (#FFDB) | `bell` | Notifications |
-
-**Pre-loaded flag options:** East Timor, Anguilla, India, Myanmar, Hungary (override `Country` property for any other).
-
-## Form Fields (Settings/Detail Pages)
-
-```javascript
-const inputSet = await figma.getNodeByIdAsync('91:6537');
-const emptyInput = inputSet.children.find(v =>
-  v.name.includes('Type=Text input') && v.name.includes('State=default-empty')
-);
-const filledInput = inputSet.children.find(v =>
-  v.name.includes('Type=Text input') && v.name.includes('State=default-filled')
-);
-const dropdown = inputSet.children.find(v =>
-  v.name.includes('Type=Dropdown - Regular') && v.name.includes('State=default-empty')
-);
-
-// 2-column form row
-const row = figma.createFrame();
-row.name = 'Form Row';
-row.layoutMode = 'HORIZONTAL';
-row.itemSpacing = 24;
-row.fills = [];
-content.appendChild(row);
-row.layoutSizingHorizontal = 'FILL';
-row.layoutSizingVertical = 'HUG';
-
-const input1 = filledInput.createInstance();
-row.appendChild(input1);
-input1.layoutSizingHorizontal = 'FILL';
-
-// Override label + value
-const label = input1.findOne(n => n.type === 'TEXT' && n.name.includes('Label'));
-if (label) { await figma.loadFontAsync(label.fontName); label.characters = 'Field Name'; }
-const value = input1.findOne(n => n.type === 'TEXT' && n.name === 'Placeholder');
-if (value) { await figma.loadFontAsync(value.fontName); value.characters = 'Field value'; }
-```
-
-## Multi-Panel Settings Pages
-
-Settings pages use multiple Standard Panel instances stacked vertically. Each panel is FIXED 1700px wide (not FILL).
-
-```javascript
-// Content frame holds multiple panels
-contentFrame.layoutMode = 'VERTICAL';
-contentFrame.itemSpacing = 32;
-
-// Each panel: FIXED 1700px, HUG vertically
-// Clone panels from base template (create temp instance, detach, extract panel, remove temp)
-const tempInst = baseTemplate.createInstance();
-const tempScreen = tempInst.detachInstance();
-const tempCF = tempScreen.children.find(c => c.name === 'Frame 1317');
-const tempPanel = tempCF.children.find(c => c.name === 'Standard Panel');
-let panel = tempPanel.type === 'INSTANCE' ? tempPanel.detachInstance() : tempPanel;
-contentFrame.appendChild(panel);
-panel.layoutSizingHorizontal = 'FIXED';
-panel.resize(1700, panel.height);
-tempScreen.remove();
-
-// Detach + set panel header, then HUG
-panel.layoutSizingVertical = 'HUG';
-```
-
-## Dropdown with Info Icon (Settings Pages)
-
-Dropdowns on settings pages are half-width with the info icon enabled.
-
-```javascript
-const inputSet = await figma.getNodeByIdAsync('91:6537');
-const dropdownFilled = inputSet.children.find(v =>
-  v.name.includes('Type=Dropdown - Regular') && v.name.includes('State=default-filled')
-);
-
-const dd = dropdownFilled.createInstance();
-content.appendChild(dd);
-dd.layoutSizingHorizontal = 'FIXED';
-dd.resize(content.width / 2, dd.height); // Half-width
-
-// Enable info icon, disable unnecessary features
-dd.setProperties({
-  'Info icon#4283:93': true,
-  'Tags#4281:31': false,
-  'AI+Emoji#4369:0': false,
-});
-
-// Override label + value
-const label = dd.findOne(n => n.type === 'TEXT' && n.characters.includes('Label'));
-if (label) { await figma.loadFontAsync(label.fontName); label.characters = 'Field label'; }
-const val = dd.findOne(n => n.type === 'TEXT' && n.name === 'Placeholder');
-if (val) { await figma.loadFontAsync(val.fontName); val.characters = 'Selected value'; }
-```
-
-## Radio Buttons (Settings Pages)
-
-Use `setProperties` to override text — direct text editing fails on instances.
-
-```javascript
-const radioSet = await figma.getNodeByIdAsync('91:8595');
-const radioChecked = radioSet.children.find(v => v.name === 'Type=Checked, Status=Default');
-const radioUnchecked = radioSet.children.find(v => v.name === 'Type=Unchecked, Status=Default');
-
-const radioRow = figma.createFrame();
-radioRow.name = 'Radio Row';
-radioRow.layoutMode = 'HORIZONTAL';
-radioRow.itemSpacing = 24;
-radioRow.fills = [];
-content.appendChild(radioRow);
-radioRow.layoutSizingHorizontal = 'HUG';
-radioRow.layoutSizingVertical = 'HUG';
-
-const r1 = radioChecked.createInstance();
-radioRow.appendChild(r1);
-r1.setProperties({ 'Text#9:9': 'Option A' });
-
-const r2 = radioUnchecked.createInstance();
-radioRow.appendChild(r2);
-r2.setProperties({ 'Text#9:9': 'Option B' });
-```
-
-## Toggle Switches (Settings Pages)
-
-Use `setProperties` for text — same pattern as radio buttons.
-
-```javascript
-const toggleSet = await figma.getNodeByIdAsync('91:8647');
-const toggleChecked = toggleSet.children.find(v =>
-  v.name === 'Type=Checked, Status=Default, Alignment=Default'
-);
-
-const toggle = toggleChecked.createInstance();
-content.appendChild(toggle);
-toggle.setProperties({ 'Text#9:17': 'Toggle label text here' });
-// Toggles are always HUG, never FILL
-```
-
-## Panel Header — Enable Search
-
-The Panel Header has a hidden `Search + Action Icons` frame. Replace the search button with a full Search input at **350px width**.
-
-```javascript
-const panelHeader = await figma.getNodeByIdAsync(PANEL_HEADER_ID);
-const searchFrame = panelHeader.findOne(n => n.name === 'Search + Action Icons');
-searchFrame.visible = true;
-
-// Hide toggle and action icons — keep only search input
-const toggle = searchFrame.findOne(n => n.name === 'Toggle');
-if (toggle) toggle.visible = false;
-const actionIcons = searchFrame.findOne(n => n.name === 'Action icons');
-if (actionIcons) actionIcons.visible = false;
-
-// Replace search button with full search input (ALWAYS 350px)
-const inputSet = await figma.getNodeByIdAsync('91:6537');
-const searchVariant = inputSet.children.find(v =>
-  v.name.includes('Type=Search') && v.name.includes('State=default-empty')
-);
-const oldSearch = searchFrame.findOne(n => n.name === 'Input Fields');
-const newSearch = searchVariant.createInstance();
-searchFrame.insertChild(searchFrame.children.indexOf(oldSearch), newSearch);
-oldSearch.remove();
-newSearch.layoutSizingHorizontal = 'FIXED';
-newSearch.resize(350, newSearch.height);
-newSearch.setProperties({ 'Label#4339:0': false, 'AI+Emoji#4369:0': false });
-```
-
-## Icon Toolbar Strip (LIST-FULL pages)
-
-Row of icon-only buttons between tabs and panel. **No background fill.** All icons use `Status=default`.
-
-```javascript
-const btnSet = await figma.getNodeByIdAsync('91:8299');
-const iconBtnDefault = btnSet.children.find(v =>
-  v.name === 'Type=icon, Status=default, Size=M, Leading icon=No'
-);
-
-const toolbar = figma.createFrame();
-toolbar.name = 'Icon Toolbar';
-toolbar.layoutMode = 'HORIZONTAL';
-toolbar.itemSpacing = 8;
-toolbar.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }]; // white bg — bind after: await bindFill(toolbar, V.white);
-toolbar.paddingTop = 8;
-toolbar.paddingBottom = 8;
-contentFrame.insertChild(1, toolbar); // after tabs
-toolbar.layoutSizingHorizontal = 'FIXED';
-toolbar.resize(panel.width, 48);
-
-const icons = ['clock', 'tag', 'users', 'sliders', 'filter'];
-for (const iconName of icons) {
-  const btn = iconBtnDefault.createInstance();
-  toolbar.appendChild(btn);
-  const iconNode = btn.findOne(n => n.name === 'v7-icon');
-  if (iconNode) {
-    const iconText = iconNode.findOne(n => n.type === 'TEXT' && n.name === 'icon');
-    if (iconText) {
-      await figma.loadFontAsync(iconText.fontName);
-      iconText.characters = iconName;
+  // Search in panel header
+  if (cfg.search) {
+    const sf = refs.panelHeader.findOne(n => n.name === 'Search + Action Icons');
+    if (sf) {
+      sf.visible = true;
+      const tg = sf.findOne(n => n.name === 'Toggle'); if (tg) tg.visible = false;
+      const ai = sf.findOne(n => n.name === 'Action icons'); if (ai) ai.visible = false;
+      const sv = _input.children.find(v => v.name.includes('Type=Search') && v.name.includes('default-empty'));
+      const old = sf.findOne(n => n.name === 'Input Fields');
+      if (old && sv) {
+        const ns = sv.createInstance();
+        sf.insertChild(sf.children.indexOf(old), ns); old.remove();
+        ns.layoutSizingHorizontal = 'FIXED'; ns.resize(350, ns.height);
+        ns.setProperties({'Label#4339:0': false, 'AI+Emoji#4369:0': false});
+      }
     }
   }
 }
-```
 
-## Content Frame Rules
-
-The main content frame (`Frame 1317`) must be renamed to **"Main"** and **top-aligned**:
-
-```javascript
-const mainFrame = screen.children.find(c => c.name === 'Frame 1317');
-mainFrame.name = 'Main';
-mainFrame.primaryAxisAlignItems = 'MIN';     // top
-mainFrame.counterAxisAlignItems = 'CENTER';  // horizontal center
-```
-
-## Tag Cell with Zebra Striping
-
-Tag components don't inherit row backgrounds. Wrap in a frame with manually matched fill.
-
-**GOTCHA:** Row variant naming is counter-intuitive:
-- `Position=EVEN` → **no fill** (white/transparent)
-- `Position=ODD` → **gray fill** (`#FAFAFA` / `{ r: 0.9804, g: 0.9804, b: 0.9804 }`)
-
-```javascript
-// Zebra gray = mono-100. Use bindFill for variable binding where possible.
-// For tag wrappers that need inline fill matching, hardcoded is acceptable:
-const ZEBRA_GRAY = { type: 'SOLID', color: { r: 0.9804, g: 0.9804, b: 0.9804 } };
-
-const tagWrapper = figma.createFrame();
-tagWrapper.name = 'Status Cell';
-tagWrapper.layoutMode = 'HORIZONTAL';
-tagWrapper.counterAxisAlignItems = 'CENTER';
-tagWrapper.paddingLeft = 16;
-// EVEN rows (i%2===0) have no fill, ODD rows have gray
-tagWrapper.fills = (i % 2 === 0) ? [] : [ZEBRA_GRAY];
-row.appendChild(tagWrapper);
-tagWrapper.layoutSizingHorizontal = 'FIXED';
-tagWrapper.resize(COLUMN_WIDTH, 75);
-tagWrapper.layoutSizingVertical = 'FIXED';
-
-const tag = tagVariant.createInstance();
-tagWrapper.appendChild(tag);
-
-const tagText = tag.findOne(n => n.type === 'TEXT' && n.name === 'I am a tag');
-if (tagText) { await figma.loadFontAsync(tagText.fontName); tagText.characters = 'Active'; }
-
-// Hide trailing/leading icons for clean display
-const props = tag.componentProperties;
-for (const key of Object.keys(props)) {
-  if (key.toLowerCase().includes('trailing') || key.toLowerCase().includes('leading')) {
-    try { tag.setProperties({ [key]: false }); } catch(e) {}
+function buildHeaderRow(columns, parent) {
+  const row = createRow('Table Header', parent);
+  for (const col of columns) {
+    const c = _hdr.createInstance(); row.appendChild(c);
+    setText(c, 'Heading', col.name, 'Bold');
+    const si = c.findOne(n => n.name === 'v7-icon'); if (si) si.visible = !!col.sortable;
+    if (col.width) { c.layoutSizingHorizontal = 'FIXED'; c.resize(col.width, c.height); }
+    else c.layoutSizingHorizontal = 'FILL';
   }
+  return row;
+}
+
+function buildDataRow(columns, data, index, parent) {
+  const isEven = index % 2 === 0;
+  const row = createRow('Row ' + (data[0] || index), parent);
+  for (let c = 0; c < columns.length; c++) {
+    const col = columns[c];
+    const type = col.type || 'text';
+    const variant = cell(type, isEven);
+    if (!variant) continue;
+    const inst = variant.createInstance(); row.appendChild(inst);
+    if (col.width) { inst.layoutSizingHorizontal = 'FIXED'; inst.resize(col.width, inst.height); }
+    else inst.layoutSizingHorizontal = 'FILL';
+    // Set text for text-based cells
+    if (['text','texticon','texttrailing','number'].includes(type)) {
+      setText(inst, 'Row', data[c] || '');
+    }
+  }
+  return row;
+}
+
+async function buildTable(columns, data, parent) {
+  const headerRow = buildHeaderRow(columns, parent);
+  const dataRows = [];
+  for (let i = 0; i < data.length; i++) {
+    dataRows.push(buildDataRow(columns, data[i], i, parent));
+  }
+  return { headerRow, dataRows };
+}
+
+async function addPagination(parent, showing, total) {
+  const gtp = _pag.children.find(v => v.name.includes('Type=go to page'));
+  const pag = gtp.createInstance();
+  parent.appendChild(pag); pag.layoutSizingHorizontal = 'FILL';
+  const tags = pag.findAll(n => n.name === 'Tag' && n.type === 'INSTANCE');
+  for (const tag of tags) {
+    const tn = tag.findOne(n => n.type === 'TEXT' && n.name === 'I am a tag');
+    if (tn && tn.characters.includes('/')) tag.setProperties({'Tag text#26:8': showing + '/' + total});
+  }
+  return pag;
+}
+
+async function addTabs(contentFrame, tabs, panel) {
+  const tabSel = _tab.children.find(v => v.name.includes('tab-text') && v.name.includes('Selected'));
+  const tabDef = _tab.children.find(v => v.name.includes('tab-text') && v.name.includes('Default'));
+  const bar = figma.createFrame();
+  bar.name = 'Tab Bar'; bar.layoutMode = 'HORIZONTAL'; bar.itemSpacing = 32; bar.fills = [];
+  contentFrame.insertChild(0, bar);
+  bar.layoutSizingHorizontal = 'FIXED'; bar.resize(panel.width, 32);
+  contentFrame.itemSpacing = 16;
+  for (const [name, selected] of tabs) {
+    const tab = (selected ? tabSel : tabDef).createInstance(); bar.appendChild(tab);
+    const tf = tab.findOne(n => n.name === 'tab title and alert circle');
+    if (tf) { const tt = tf.findOne(n => n.type === 'TEXT');
+      if (tt) { tt.fontName = {family:'Inter',style:'Bold'}; tt.characters = name; }
+      const ac = tf.findOne(n => n.name === 'alert circle'); if (ac) ac.visible = false; }
+    const badge = tab.findOne(n => n.name === 'Badge'); if (badge) badge.visible = false;
+  }
+  return bar;
+}
+
+async function addToolbar(contentFrame, icons, panel) {
+  const iconBtn = _btn.children.find(v => v.name === 'Type=icon, Status=default, Size=M, Leading icon=No');
+  const toolbar = figma.createFrame();
+  toolbar.name = 'Icon Toolbar'; toolbar.layoutMode = 'HORIZONTAL'; toolbar.itemSpacing = 8;
+  toolbar.paddingTop = 8; toolbar.paddingBottom = 8;
+  await bindFill(toolbar, V.white);
+  contentFrame.insertChild(1, toolbar);
+  toolbar.layoutSizingHorizontal = 'FIXED'; toolbar.resize(panel.width, 48);
+  for (const name of icons) {
+    const btn = iconBtn.createInstance(); toolbar.appendChild(btn); setIcon(btn, name);
+  }
+  return toolbar;
+}
+
+async function clonePanel(contentFrame, title, subtitle) {
+  const tempInst = _base.createInstance();
+  const tempScreen = tempInst.detachInstance();
+  const tempCF = tempScreen.children.find(c => c.name === 'Frame 1317');
+  const tempPanel = detach(tempCF.children.find(c => c.name === 'Standard Panel'));
+  contentFrame.appendChild(tempPanel);
+  tempPanel.layoutSizingHorizontal = 'FIXED'; tempPanel.resize(1700, tempPanel.height);
+  tempScreen.remove();
+  const ph = detach(tempPanel.children.find(c => c.name === 'Panel Header'));
+  if (title) setText(ph, 'Title', title, 'Bold');
+  if (subtitle) setText(ph, 'Sub-Title', subtitle);
+  const content = tempPanel.children.find(c => c.name === 'content placeholder');
+  content.layoutMode = 'VERTICAL'; content.itemSpacing = 0;
+  while (content.children.length > 0) content.children[0].remove();
+  tempPanel.layoutSizingVertical = 'HUG';
+  return { panel: tempPanel, panelHeader: ph, content };
+}
+
+// Reattach to existing screen by IDs (for multi-phase builds)
+async function reattach(ids) {
+  const [screen, main, panel, content] = await Promise.all([
+    figma.getNodeByIdAsync(ids.screen), figma.getNodeByIdAsync(ids.main),
+    figma.getNodeByIdAsync(ids.panel), figma.getNodeByIdAsync(ids.content),
+  ]);
+  return { screen, main, panel, content };
 }
 ```
 
-## Hub Card Grid (Navigation Pages)
+---
 
-Hub pages have multiple white panels, each containing a row of action cards. No tables, no forms — purely navigational.
+## Quick Reference
 
-**Key rules:**
-- Content area spacing: **32px** (same as all multi-panel layouts)
-- Panels: white fill, no stroke, cornerRadius 0, 1700px FIXED
-- Content placeholder: **FILL** width, no padding, no fill
-- Card Row: separate HORIZONTAL frame with 16px gap + 16px padding all
-- Cards: FILL width, HUG height, mono-100 fill, 8px corner radius
-- Text: **HUG / WIDTH_AND_HEIGHT** — NOT FILL / HEIGHT
-- Card's `counterAxisAlignItems: CENTER` centres the HUG text horizontally
-- Description colour: **mono-500** (#959595)
-- Icon: 32px FA 6 Pro Solid inside a wrapper FRAME
+| Helper | Signature | Purpose |
+|---|---|---|
+| `init()` | `await init()` | Load fonts, cache components, build ROW map. **Call once per execution.** |
+| `bootstrapScreen` | `(name, x, y)` → `{screen, main, panel, panelHeader, content, header}` | Instantiate base template, detach, return all refs |
+| `setShell` | `(refs, {breadcrumb, cta, title, subtitle, search})` | Override header + panel texts. `cta:false` hides buttons. `search:true` enables panel search. |
+| `buildTable` | `(columns, data, parent)` → `{headerRow, dataRows}` | Build complete table. `columns`: `[{name, type, width?}]`. `data`: `[['val','val',...], ...]` |
+| `addPagination` | `(parent, showing, total)` | Append pagination row |
+| `addTabs` | `(contentFrame, tabs, panel)` | Add tab bar. `tabs`: `[['Name', true/false], ...]` |
+| `addToolbar` | `(contentFrame, icons, panel)` | Add icon toolbar. `icons`: `['clock','tag',...]` |
+| `clonePanel` | `(contentFrame, title, subtitle)` → `{panel, panelHeader, content}` | Add extra panel (multi-panel pages) |
+| `reattach` | `(ids)` → `{screen, main, panel, content}` | Reconnect to existing nodes in Phase 2 |
+| `cell` | `(type, isEven)` → component variant | Get cached row variant. Types: `text`, `texticon`, `texttrailing`, `icon`, `ellipsis`, `checkbox`, `status`, `tag`, `image`, `image-solo`, `action`, `action-solo`, `number`, `flags`, `flags-solo` |
+| `setText` | `(parent, nodeName, text, style?)` | Find text node + set. Style defaults to 'Regular'. |
+| `setIcon` | `(parent, iconName)` | Set FA icon name on v7-icon child |
+| `createRow` | `(name, parent)` → frame | Create horizontal auto-layout row |
+| `bindFill` | `(node, V.xxx)` | Bind colour variable to fill |
+| `detach` | `(node)` → frame | Safe detach (no-op if already frame) |
+
+---
+
+## Pattern Recipes
+
+### LIST-SIMPLE
 
 ```javascript
-// Main content area — 32px gap (universal rule for all multi-panel layouts)
-contentFrame.itemSpacing = 32;
+await init();
+const refs = await bootstrapScreen('Page Name — LIST-SIMPLE', 0, 0);
+await setShell(refs, {
+  breadcrumb: ['Section', 'Page Name'], // or single: ['Page Name']
+  cta: 'Add Item',                      // or false for no CTA
+  title: 'Panel Title',
+  subtitle: 'Panel subtitle text',
+  search: true,                          // or false
+});
 
-// --- Helper: create hub panel ---
+const columns = [
+  { name: 'Id', type: 'text', width: 60 },
+  { name: 'Name', type: 'text' },         // omit width → FILL
+  { name: 'Description', type: 'text' },
+  { name: 'Type', type: 'text', width: 220 },
+];
+
+const data = [
+  ['1', 'Item Name', 'Item description text', 'Category'],
+  ['2', 'Another Item', 'Another description', 'Category'],
+  // ... 8-10 rows
+];
+
+await buildTable(columns, data, refs.content);
+await addPagination(refs.content, data.length, 100);
+refs.panel.layoutSizingVertical = 'HUG';
+figma.viewport.scrollAndZoomIntoView([refs.screen]);
+return { screenId: refs.screen.id };
+```
+
+### LIST-TAB
+
+```javascript
+await init();
+const refs = await bootstrapScreen('Page Name — LIST-TAB', 0, 0);
+await setShell(refs, {
+  breadcrumb: ['Page Name'], cta: 'Add Item',
+  title: false, subtitle: false, search: true, // title hidden, search enabled
+});
+
+await addTabs(refs.main, [
+  ['Tab One', false], ['Tab Two', true], ['Tab Three', false]
+], refs.panel);
+
+// Table same as LIST-SIMPLE
+await buildTable(columns, data, refs.content);
+await addPagination(refs.content, data.length, 100);
+refs.panel.layoutSizingVertical = 'HUG';
+```
+
+### LIST-FULL (tabs + toolbar + table)
+
+```javascript
+await init();
+const refs = await bootstrapScreen('Page Name — LIST-FULL', 0, 0);
+await setShell(refs, { breadcrumb: ['Section', 'Page'], cta: 'Create Item', search: true });
+
+await addTabs(refs.main, [['All', true], ['Active', false], ['Archived', false]], refs.panel);
+await addToolbar(refs.main, ['clock', 'tag', 'users', 'sliders', 'filter'], refs.panel);
+
+await buildTable(columns, data, refs.content);
+await addPagination(refs.content, data.length, 345);
+refs.panel.layoutSizingVertical = 'HUG';
+```
+
+### FORM (multi-panel settings)
+
+```javascript
+await init();
+const refs = await bootstrapScreen('Settings — FORM', 0, 0);
+await setShell(refs, { breadcrumb: ['Settings', 'Page'], cta: false, title: 'General Settings' });
+refs.main.itemSpacing = 32; // multi-panel spacing
+
+// Panel 1: form fields
+const filledInput = _input.children.find(v => v.name.includes('Type=Text input') && v.name.includes('default-filled'));
+const dropdown = _input.children.find(v => v.name.includes('Type=Dropdown - Regular') && v.name.includes('default-filled'));
+
+const formRow = createRow('Form Row', refs.content);
+formRow.itemSpacing = 24;
+const input1 = filledInput.createInstance(); formRow.appendChild(input1); input1.layoutSizingHorizontal = 'FILL';
+const input2 = filledInput.createInstance(); formRow.appendChild(input2); input2.layoutSizingHorizontal = 'FILL';
+refs.panel.layoutSizingVertical = 'HUG';
+
+// Panel 2: additional section
+const p2 = await clonePanel(refs.main, 'Section Title', 'Section subtitle');
+// Add fields to p2.content...
+```
+
+### SLIDEIN
+
+Use Quick Access templates for slide-ins — clone `92:54631` (LVL1) or `92:55549` (LVL2), then customize.
+
+### HUB (Navigation Cards)
+
+```javascript
+await init();
+const refs = await bootstrapScreen('Integration Settings — HUB', 0, 0);
+await setShell(refs, { breadcrumb: ['Integration Settings'], cta: false });
+refs.main.itemSpacing = 32;
+// Remove default panel — HUB builds panels via createHubPanel
+refs.panel.remove();
+
+// Hub panels use custom factory (defined inline — not in preamble due to size)
 async function createHubPanel(title, subtitle) {
-  const tempInst = baseTemplate.createInstance();
+  const tempInst = _base.createInstance();
   const tempScreen = tempInst.detachInstance();
   const tempCF = tempScreen.children.find(c => c.name === 'Frame 1317');
-  const tempPanel = tempCF.children.find(c => c.name === 'Standard Panel');
-  let panel = tempPanel.type === 'INSTANCE' ? tempPanel.detachInstance() : tempPanel;
-  contentFrame.appendChild(panel);
-  panel.layoutSizingHorizontal = 'FIXED';
-  panel.resize(1700, panel.height);
+  let panel = detach(tempCF.children.find(c => c.name === 'Standard Panel'));
+  refs.main.appendChild(panel);
+  panel.layoutSizingHorizontal = 'FIXED'; panel.resize(1700, panel.height);
   tempScreen.remove();
-
-  // Hub style: white, no stroke, no corners
-  await bindFill(panel, V.white);
-  panel.strokes = [];
-  panel.cornerRadius = 0;
-
-  // Panel Header
-  let ph = panel.children.find(c => c.name === 'Panel Header');
-  if (ph?.type === 'INSTANCE') ph = ph.detachInstance();
-  const titleNode = ph.findOne(n => n.type === 'TEXT' && n.name === 'Title');
-  if (titleNode) { await figma.loadFontAsync(titleNode.fontName); titleNode.characters = title; }
-  const subNode = ph.findOne(n => n.type === 'TEXT' && n.name === 'Sub-Title');
-  if (subNode) { await figma.loadFontAsync(subNode.fontName); subNode.characters = subtitle; }
-
-  // Content placeholder — FILL, no padding, no fill
+  await bindFill(panel, V.white); panel.strokes = []; panel.cornerRadius = 0;
+  const ph = detach(panel.children.find(c => c.name === 'Panel Header'));
+  setText(ph, 'Title', title, 'Bold');
+  setText(ph, 'Sub-Title', subtitle);
   const content = panel.children.find(c => c.name === 'content placeholder');
-  content.layoutSizingHorizontal = 'FILL';
-  content.layoutMode = 'VERTICAL';
-  content.itemSpacing = 0;
-  content.paddingTop = 0; content.paddingBottom = 0;
-  content.paddingLeft = 0; content.paddingRight = 0;
-  content.fills = [];
+  content.layoutSizingHorizontal = 'FILL'; content.layoutMode = 'VERTICAL';
+  content.itemSpacing = 0; content.paddingTop = 0; content.paddingBottom = 0;
+  content.paddingLeft = 0; content.paddingRight = 0; content.fills = [];
   while (content.children.length > 0) content.children[0].remove();
-
-  // Card Row — wraps the cards
   const cardRow = figma.createFrame();
-  cardRow.name = 'Card Row';
-  cardRow.layoutMode = 'HORIZONTAL';
-  cardRow.itemSpacing = 16;
-  cardRow.paddingTop = 16; cardRow.paddingBottom = 16;
-  cardRow.paddingLeft = 16; cardRow.paddingRight = 16;
-  cardRow.fills = [];
-  content.appendChild(cardRow);
-  cardRow.layoutSizingHorizontal = 'FILL';
-  cardRow.layoutSizingVertical = 'HUG';
-
+  cardRow.name = 'Card Row'; cardRow.layoutMode = 'HORIZONTAL'; cardRow.itemSpacing = 16;
+  cardRow.paddingTop = 16; cardRow.paddingBottom = 16; cardRow.paddingLeft = 16; cardRow.paddingRight = 16;
+  cardRow.fills = []; content.appendChild(cardRow);
+  cardRow.layoutSizingHorizontal = 'FILL'; cardRow.layoutSizingVertical = 'HUG';
   panel.layoutSizingVertical = 'HUG';
   return cardRow;
 }
 
-// --- Helper: create hub card ---
-// padTop/padBot: use 24/24 for 3-column, 40/32 for 2-column and 1-column
-async function createHubCard(cardRow, iconName, title, desc, padTop = 24, padBot = 24) {
+async function createHubCard(cardRow, iconName, title, desc, padTop, padBot) {
   const card = figma.createFrame();
-  card.name = title;
-  card.layoutMode = 'VERTICAL';
-  card.primaryAxisAlignItems = 'CENTER';
-  card.counterAxisAlignItems = 'CENTER';
-  card.itemSpacing = 8;
-  card.paddingTop = padTop;
-  card.paddingBottom = padBot;
-  card.paddingLeft = 24;
-  card.paddingRight = 24;
-  card.cornerRadius = 8;
+  card.name = title; card.layoutMode = 'VERTICAL';
+  card.primaryAxisAlignItems = 'CENTER'; card.counterAxisAlignItems = 'CENTER';
+  card.itemSpacing = 8; card.paddingTop = padTop||24; card.paddingBottom = padBot||24;
+  card.paddingLeft = 24; card.paddingRight = 24; card.cornerRadius = 8;
   cardRow.appendChild(card);
-  card.layoutSizingHorizontal = 'FILL';
-  card.layoutSizingVertical = 'HUG';
+  card.layoutSizingHorizontal = 'FILL'; card.layoutSizingVertical = 'HUG';
   await bindFill(card, V.mono100);
-
-  // Icon — wrapper frame with FA text
-  const iconWrap = figma.createFrame();
-  iconWrap.name = 'Icon';
-  iconWrap.layoutMode = 'HORIZONTAL';
-  iconWrap.primaryAxisAlignItems = 'CENTER';
-  iconWrap.counterAxisAlignItems = 'CENTER';
-  iconWrap.fills = [];
-  card.appendChild(iconWrap);
-  iconWrap.layoutSizingHorizontal = 'HUG';
-  iconWrap.layoutSizingVertical = 'HUG';
-
-  await figma.loadFontAsync({family:'Font Awesome 6 Pro', style:'Solid'});
-  const iconText = figma.createText();
-  iconText.fontName = {family:'Font Awesome 6 Pro', style:'Solid'};
-  iconText.fontSize = 32;
-  iconText.characters = iconName;
-  iconText.lineHeight = { value: 48, unit: 'PIXELS' };
-  iconWrap.appendChild(iconText);
-  await bindFill(iconText, V.mono500);
-
-  // Title — HUG, natural size, centred by card
-  await figma.loadFontAsync({family:'Inter', style:'Bold'});
-  const t = figma.createText();
-  t.fontName = {family:'Inter', style:'Bold'};
-  t.fontSize = 16;
-  t.characters = title;
-  t.textAlignHorizontal = 'CENTER';
-  card.appendChild(t);
-  await bindFill(t, V.mono700);
-
-  // Description — HUG, natural size, centred by card
-  await figma.loadFontAsync({family:'Inter', style:'Regular'});
-  const d = figma.createText();
-  d.fontName = {family:'Inter', style:'Regular'};
-  d.fontSize = 14;
-  d.characters = desc;
-  d.textAlignHorizontal = 'CENTER';
-  card.appendChild(d);
-  await bindFill(d, V.mono500); // mono-500, NOT mono-600
-
+  // Icon
+  const iw = figma.createFrame(); iw.name = 'Icon'; iw.layoutMode = 'HORIZONTAL';
+  iw.primaryAxisAlignItems = 'CENTER'; iw.counterAxisAlignItems = 'CENTER'; iw.fills = [];
+  card.appendChild(iw); iw.layoutSizingHorizontal = 'HUG'; iw.layoutSizingVertical = 'HUG';
+  const it = figma.createText();
+  it.fontName = {family:'Font Awesome 6 Pro',style:'Solid'}; it.fontSize = 32;
+  it.characters = iconName; it.lineHeight = {value:48,unit:'PIXELS'};
+  iw.appendChild(it); await bindFill(it, V.mono500);
+  // Title
+  const t = figma.createText(); t.fontName = {family:'Inter',style:'Bold'};
+  t.fontSize = 16; t.characters = title; t.textAlignHorizontal = 'CENTER';
+  card.appendChild(t); await bindFill(t, V.mono700);
+  // Description
+  const d = figma.createText(); d.fontName = {family:'Inter',style:'Regular'};
+  d.fontSize = 14; d.characters = desc; d.textAlignHorizontal = 'CENTER';
+  card.appendChild(d); await bindFill(d, V.mono500);
   return card;
 }
 
-// --- Build: Integration Settings ---
-const row1 = await createHubPanel('Tools & Guides', 'All you need to help you with the integration of FT CRM');
+// Usage:
+const row1 = await createHubPanel('Tools & Guides', 'All you need for integration');
 await createHubCard(row1, 'plug', 'Integration Hub', 'Validate and test your integration');
-await createHubCard(row1, 'terminal', 'Live Debug Console', 'Verify all service calls in real time');
-await createHubCard(row1, 'book', 'The Integration Manual', 'Learn how to integrate FT CRM');
-
-const row2 = await createHubPanel('Migrations Wizard', '...');
-await createHubCard(row2, 'server', 'Data Migration', 'Full migration of historical data via CSV files', 40, 32);
-await createHubCard(row2, 'poll-people', 'User Migration', 'Migration of user details, blocks and consents via the Operator API', 40, 32);
-
-const row3 = await createHubPanel('Greco', '...');
-await createHubCard(row3, 'chart-bar', 'Batch Data Analysis', '...', 40, 32);
+await createHubCard(row1, 'terminal', 'Debug Console', 'Verify service calls in real time');
 ```
+
+### DASH (Multi-panel dashboard)
+
+```javascript
+await init();
+const refs = await bootstrapScreen('Dashboard — DASH', 0, 0);
+await setShell(refs, { breadcrumb: ['Dashboard'], cta: false, title: 'Overview' });
+refs.main.itemSpacing = 32;
+
+// Panel 1 already exists (refs.panel/content)
+// Add more panels:
+const p2 = await clonePanel(refs.main, 'Section 2', 'Details');
+const p3 = await clonePanel(refs.main, 'Section 3', 'More details');
+```
+
+---
+
+## Cell-Specific Patterns
+
+### Status Tag Cell (zebra-aware wrapper)
+
+Tags don't inherit row backgrounds. Wrap in a frame with matched fill.
+
+```javascript
+const ZEBRA_GRAY = {type:'SOLID',color:{r:0.9804,g:0.9804,b:0.9804}};
+const tagVariant = _tag.children.find(v =>
+  v.name.includes('Size=Small') && v.name.includes('Type=Icon - solid') && v.name.includes('Status=Default')
+);
+
+function addTagCell(row, text, index, width) {
+  const wrapper = figma.createFrame();
+  wrapper.name = 'Status Cell'; wrapper.layoutMode = 'HORIZONTAL';
+  wrapper.counterAxisAlignItems = 'CENTER'; wrapper.paddingLeft = 16;
+  wrapper.fills = (index % 2 === 0) ? [] : [ZEBRA_GRAY];
+  row.appendChild(wrapper);
+  wrapper.layoutSizingHorizontal = 'FIXED'; wrapper.resize(width, 75);
+  wrapper.layoutSizingVertical = 'FIXED';
+  const tag = tagVariant.createInstance(); wrapper.appendChild(tag);
+  setText(tag, 'I am a tag', text);
+  // Hide icons
+  const props = tag.componentProperties;
+  for (const key of Object.keys(props)) {
+    if (key.toLowerCase().includes('trailing') || key.toLowerCase().includes('leading'))
+      try { tag.setProperties({[key]: false}); } catch(e) {}
+  }
+  return wrapper;
+}
+```
+
+### Solo Variants (single flag / action icon / image)
+
+```javascript
+// SINGLE FLAG
+const flagCell = cell('flags-solo', isEven).createInstance();
+row.appendChild(flagCell); flagCell.layoutSizingHorizontal = 'FIXED'; flagCell.resize(100, flagCell.height);
+const flags = flagCell.findAll(n => n.name === 'Flag' && n.type === 'INSTANCE');
+flags.forEach(f => f.visible = false);
+flags[0].visible = true;
+flags[0].setProperties({'Country': 'united kingdom'});
+
+// SINGLE ACTION ICON
+const actionCell = cell('action-solo', isEven).createInstance();
+row.appendChild(actionCell); actionCell.layoutSizingHorizontal = 'FIXED'; actionCell.resize(100, actionCell.height);
+const btns = actionCell.findAll(n => n.name === 'button-btn' && n.type === 'INSTANCE');
+btns.forEach(b => b.visible = false);
+btns[0].visible = true;
+await bindFill(btns[0], V.green400);
+setIcon(btns[0], 'gift');
+
+// SINGLE IMAGE
+const imgCell = cell('image-solo', isEven).createInstance();
+row.appendChild(imgCell); imgCell.layoutSizingHorizontal = 'FIXED'; imgCell.resize(100, imgCell.height);
+```
+
+### Xmark Icon (red "x" for no-data)
+
+```javascript
+const iconCell = cell('icon', isEven).createInstance();
+row.appendChild(iconCell); iconCell.layoutSizingHorizontal = 'FIXED'; iconCell.resize(120, iconCell.height);
+const iconText = setIcon(iconCell, 'xmark');
+if (iconText) await bindFill(iconText, V.red500);
+```
+
+### Form Fields
+
+```javascript
+const filledInput = _input.children.find(v => v.name.includes('Type=Text input') && v.name.includes('default-filled'));
+const dropdown = _input.children.find(v => v.name.includes('Type=Dropdown - Regular') && v.name.includes('default-filled'));
+
+// 2-column form row
+const formRow = createRow('Form Row', content);
+formRow.itemSpacing = 24;
+const f1 = filledInput.createInstance(); formRow.appendChild(f1); f1.layoutSizingHorizontal = 'FILL';
+const f2 = dropdown.createInstance(); formRow.appendChild(f2); f2.layoutSizingHorizontal = 'FILL';
+// Override via setProperties or setText
+```
+
+---
+
+## Rules Reference
+
+| Code | Rule |
+|---|---|
+| R1 | Panel spacing = **32px** between panels (always) |
+| R2 | Panel width = **1700px FIXED** (unless slide-in or split panel) |
+| R3 | Panel corner radius = **0** (never rounded) |
+| R4 | Content frame = **FILL height, top-centre aligned** (`primaryAxisAlignItems: MIN`) |
+| R5 | Sort icons = **HIDDEN by default** (only show when brief explicitly asks) |
+| R6 | Search input = **350px** when standalone |
+| R7 | Icon buttons = **Status=default** (never hover/focused) |
+| R8 | Tabs = **outside panels**, 32px gap between tabs |
+| R9 | CTA text = **sentence case** ("Add Player", not "ADD PLAYER") |
+| R10 | All fills/strokes = **variable-bound** (bindFill/bindStroke, never hardcode RGB) |
+| R11 | Build on **Pastebin page** (not Sandbox) |
+| R12 | Append to parent **before** setting `layoutSizingHorizontal = 'FILL'` |
+| R13 | Detach top-level instance **first**, then children (reverse order crashes) |
+| R14 | Header cell widths **must match** data cell widths (FILL↔FILL, FIXED↔FIXED) |
+| R15 | Realistic data from **FT iGaming context** (player names, triggers, segments) |

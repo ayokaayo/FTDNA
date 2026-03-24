@@ -32,6 +32,33 @@ Read references in this priority order — stop when you have enough:
 
 ## Process
 
+### Step 0: Generate Brief (if none exists)
+
+When no brief exists in `briefs/` for the requested page, generate one before building:
+
+1. **Identify the page** — from prompt, screenshot, or task reference
+2. **Gather data** — read `scan-manifest.json` for DOM structure; take screenshot with `npm run snap <path>` if needed
+3. **Match layout type** — using `page-patterns.md` selection logic:
+   - Single table, no tabs → LIST-SIMPLE
+   - Top tabs + table → LIST-TAB or LIST-FULL
+   - Form fields / settings → FORM
+   - Slide-in panel → SLIDEIN
+   - Navigation cards → HUB
+   - Multiple metric panels → DASH
+   - Card grid → GRID
+4. **Fill brief template** — following `briefs/_TEMPLATE.md`:
+   - Shell: side menu section, breadcrumb levels, CTA text
+   - Content: search, tabs, toolbar, columns (name + width + cell type), sample rows, pagination
+   - Cell types: pick from the 15 types in `code-patterns.md` Quick Reference
+5. **Present brief for approval** — show to user, let them adjust
+6. **Save** to `briefs/{page-name}.md` and proceed to Step 1
+
+**From screenshot:** Analyse layout, count columns, identify cell types (icons, tags, flags, status dots), read text content, map to components.
+
+**From prompt:** Match keywords to layout type, ask for specifics (column names, data examples, CTA text).
+
+**From ClickUp task:** Fetch task, extract requirements, map to layout + columns.
+
 ### Step 1: Understand the Brief
 
 Extract from the input:

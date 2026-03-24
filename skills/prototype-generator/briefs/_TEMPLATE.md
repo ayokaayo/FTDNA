@@ -72,3 +72,17 @@
 **Card type:** [template card / media card / lifecycle card]
 **Card count:** [number to show]
 **Card content:** [title, thumbnail, status, etc.]
+
+## Construction Notes
+
+- [Any page-specific gotchas or deviations from standard pattern]
+- [e.g. "No page header — remove Header instance after bootstrap"]
+- [e.g. "Panel header search uses built-in icon button, not standalone Search input"]
+- [e.g. "Single breadcrumb level — use Nav/1"]
+
+## Clone Source
+
+| Template | Node ID | Customization needed |
+|---|---|---|
+| [e.g. "All Activities"] | [e.g. `92:55380`] | [e.g. "Change columns, update data, remove toolbar"] |
+| — | — | Build from components (no clone available) |
