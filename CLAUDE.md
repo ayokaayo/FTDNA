@@ -5,13 +5,14 @@
 
 ## Project Status
 
-**Version:** 0.3.7
+**Version:** 0.3.9
 **Last updated:** 2026-03-24
 
 | Track | Status | Detail |
 |---|---|---|
 | Platform scanner | Done | `scan.js` discovers 34 pages, saves DOM structure to `scan-manifest.json`. Screenshots on demand via `snap.js`. |
 | Page composition | 24/48 pages (8 repro-tested) | LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM, HUB, SLIDEIN, DASH, LIST-NESTED proven. 3 blocked (missing components). |
+| Build engine | v1.0 validated | Helper library with `init()` + `Promise.all` caching. Single-call builds proven (10-row table in 1 call vs 3-5 before). Brief generator in SKILL.md Step 0. |
 | Component audit | Not started | Will use existing vue-lib meta.json + prop interfaces. |
 | Code Connect | Not started | Depends on component audit. |
 | Design critique | Done | design-system.md refreshed from Figma variables. Compact summary output as default. |
