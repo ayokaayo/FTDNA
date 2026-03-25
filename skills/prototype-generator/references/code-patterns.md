@@ -487,7 +487,27 @@ const p2 = await clonePanel(refs.main, 'Section Title', 'Section subtitle');
 
 ### SLIDEIN
 
-Use Quick Access templates for slide-ins — clone `92:54631` (LVL1) or `92:55549` (LVL2), then customize.
+Use Quick Access templates for slide-ins — clone then **detach before customizing**.
+
+```javascript
+await init();
+// Clone from Quick Access
+const qaSource = await figma.getNodeByIdAsync('92:54631'); // LVL1 shell (or 92:55549 for LVL2)
+const pb = figma.root.children.find(p => p.name.includes('Pastebin'));
+await figma.setCurrentPageAsync(pb);
+const clone = qaSource.clone();
+pb.appendChild(clone); clone.x = 0; clone.y = 0;
+
+// CRITICAL: detach before any text/property edits — instance edits are silently ignored
+const screen = clone.detachInstance();
+screen.name = 'My Slide-in Page';
+
+// Now you can find and edit text nodes, panels, etc.
+const slideIn = screen.findOne(n => n.name && n.name.includes('Slide in modal'));
+// ... customize panels, text, inputs
+```
+
+**Templates:** `92:54631` (LVL1 shell), `92:55549` (LVL2 shell), `92:56151` (SDT full comp), `92:56159` (Recurring full comp).
 
 ### HUB (Navigation Cards)
 

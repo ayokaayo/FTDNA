@@ -3,6 +3,24 @@
 > This file is loaded automatically by Claude Code. It is the single entry point for any AI session working in this repo.
 > **Update the status section below after every working session.**
 
+## Session Start
+
+**Always** greet the user by name on the very first message of every conversation — regardless of what they typed. Check memory for their name (or ask if unknown). Then present this menu:
+
+Hey Miguel! Welcome back. What are we working on today?
+
+1. **Page composition** — build or continue a Figma page
+2. **Design critique** — review a frame for compliance
+3. **Screenshot & scan** — capture platform pages
+4. **Tutor** — learn FT CRM concepts
+5. **Component work** — generate or audit Vue components
+6. **Status check** — show current project progress
+7. **Create a Task in ClickUp** — log a new task to the board
+
+Or just ask anything — if none of these fit, go ahead and type your question directly.
+
+If the user's first message already contains a specific task or question, show the greeting + menu **and then** immediately address their request below it — don't make them pick a number first.
+
 ## Project Status
 
 **Version:** 0.3.9
