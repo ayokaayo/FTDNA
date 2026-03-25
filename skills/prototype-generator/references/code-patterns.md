@@ -215,7 +215,7 @@ async function setShell(refs, cfg) {
   if (cfg.title) setText(refs.panelHeader, 'Title', cfg.title, 'Bold');
   if (cfg.subtitle) setText(refs.panelHeader, 'Sub-Title', cfg.subtitle);
   if (cfg.subtitle === false) { const sn = refs.panelHeader.findOne(n => n.name === 'Sub-Title'); if (sn) sn.visible = false; }
-  // Page header texts
+  // Page header texts (breadcrumbs + heading — NOT CTAs, those are handled below)
   const texts = refs.header.findAll(n => n.type === 'TEXT');
   for (const t of texts) {
     try { await figma.loadFontAsync(t.fontName); } catch(e) { continue; }
@@ -228,13 +228,40 @@ async function setShell(refs, cfg) {
         if (t.characters === 'Level 2') t.characters = cfg.breadcrumb[1];
       }
     }
-    if (cfg.cta && t.characters === 'Button text') t.characters = cfg.cta;
     if (t.characters === 'Heading') t.characters = cfg.breadcrumb?.[cfg.breadcrumb.length - 1] || cfg.title || '';
   }
-  // No CTA — hide right area buttons but keep frame visible for alignment
-  if (cfg.cta === false) {
-    const btns = refs.header.findAll(n => n.name === 'button-btn' && n.type === 'INSTANCE');
-    btns.forEach(b => b.visible = false);
+  // CTA buttons — find in "Right - CTA and icons" frame
+  // Structure: [Frame 1505 (icon btns), alt btn (hidden), main btn (visible), extra (hidden)]
+  const rightArea = refs.header.findOne(n => n.name === 'Right - CTA and icons');
+  if (rightArea) {
+    const directBtns = rightArea.children.filter(n => n.name === 'button-btn');
+    if (cfg.cta === false) {
+      directBtns.forEach(b => b.visible = false);
+    } else {
+      // Main CTA — the visible button
+      if (cfg.cta) {
+        const mainBtn = directBtns.find(b => b.visible);
+        if (mainBtn) {
+          const mt = mainBtn.findAll(n => n.type === 'TEXT');
+          for (const t of mt) {
+            try { await figma.loadFontAsync(t.fontName); } catch(e) { continue; }
+            if (t.characters === 'Button text') t.characters = cfg.cta;
+          }
+        }
+      }
+      // Secondary CTA — first hidden button (alt style)
+      if (cfg.secondaryCta) {
+        const altBtn = directBtns.find(b => !b.visible);
+        if (altBtn) {
+          altBtn.visible = true;
+          const at = altBtn.findAll(n => n.type === 'TEXT');
+          for (const t of at) {
+            try { await figma.loadFontAsync(t.fontName); } catch(e) { continue; }
+            if (t.characters === 'Button text') t.characters = cfg.secondaryCta;
+          }
+        }
+      }
+    }
   }
   // Search in panel header
   if (cfg.search) {
@@ -267,7 +294,7 @@ function buildHeaderRow(columns, parent) {
   return row;
 }
 
-function buildDataRow(columns, data, index, parent) {
+async function buildDataRow(columns, data, index, parent) {
   const isEven = index % 2 === 0;
   const row = createRow('Row ' + (data[0] || index), parent);
   for (let c = 0; c < columns.length; c++) {
@@ -278,19 +305,47 @@ function buildDataRow(columns, data, index, parent) {
     const inst = variant.createInstance(); row.appendChild(inst);
     if (col.width) { inst.layoutSizingHorizontal = 'FIXED'; inst.resize(col.width, inst.height); }
     else inst.layoutSizingHorizontal = 'FILL';
-    // Set text for text-based cells
+    const val = data[c] || '';
+    // --- Text-based cells ---
     if (['text','texticon','texttrailing','number'].includes(type)) {
-      setText(inst, 'Row', data[c] || '');
+      setText(inst, 'Row', val);
+      if (type === 'texticon' && col.icon) setIcon(inst, col.icon);
+      if (col.color) { const tn = inst.findOne(n => n.type === 'TEXT' && n.name === 'Row'); if (tn) await bindFill(tn, col.color); }
     }
+    // --- Status circle ---
+    else if (type === 'status') {
+      const ic = inst.findOne(n => n.name === 'v7-icon');
+      if (ic) { const it = ic.findOne(n => n.type === 'TEXT' && n.name === 'icon'); if (it) await bindFill(it, val || col.color || V.green400); }
+    }
+    // --- Icon (e.g. xmark/check) ---
+    else if (type === 'icon') {
+      const it = setIcon(inst, val || col.icon || 'xmark');
+      if (it && col.color) await bindFill(it, col.color);
+    }
+    // --- Tag ---
+    else if (type === 'tag') {
+      const tag = inst.findOne(n => n.name === 'Tag' && n.type === 'INSTANCE');
+      if (tag) tag.setProperties({'Tag text#26:8': val || ''});
+    }
+    // --- Flags solo ---
+    else if (type === 'flags-solo') {
+      const flags = inst.findAll(n => n.name === 'Flag' && n.type === 'INSTANCE');
+      flags.forEach(f => f.visible = false);
+      if (flags[0] && val) { flags[0].visible = true; flags[0].setProperties({'Country': val}); }
+    }
+    // --- Ellipsis (no content needed) ---
+    // else if (type === 'ellipsis') { /* kebab menu, no override */ }
   }
   return row;
 }
+
+// NOTE: buildDataRow is now async. buildTable must await each row.
 
 async function buildTable(columns, data, parent) {
   const headerRow = buildHeaderRow(columns, parent);
   const dataRows = [];
   for (let i = 0; i < data.length; i++) {
-    dataRows.push(buildDataRow(columns, data[i], i, parent));
+    dataRows.push(await buildDataRow(columns, data[i], i, parent));
   }
   return { headerRow, dataRows };
 }
@@ -376,8 +431,8 @@ async function reattach(ids) {
 |---|---|---|
 | `init()` | `await init()` | Load fonts, cache components, build ROW map. **Call once per execution.** |
 | `bootstrapScreen` | `(name, x, y)` → `{screen, main, panel, panelHeader, content, header}` | Instantiate base template, detach, return all refs |
-| `setShell` | `(refs, {breadcrumb, cta, title, subtitle, search})` | Override header + panel texts. `cta:false` hides buttons. `search:true` enables panel search. |
-| `buildTable` | `(columns, data, parent)` → `{headerRow, dataRows}` | Build table structure + text content. `columns`: `[{name, type, width?}]`. `data`: `[['val','val',...], ...]`. **Only text-based cells (`text`, `texticon`, `texttrailing`, `number`) get auto-populated.** Other types (`tag`, `status`, `icon`, `flags`, `image`, `action`, `ellipsis`) create the correct variant instance but need manual content setting after. |
+| `setShell` | `(refs, {breadcrumb, cta, secondaryCta, title, subtitle, search})` | Override header + panel texts. `cta:false` hides buttons. `secondaryCta:'Send Data'` shows the alt button. `search:true` enables panel search. |
+| `buildTable` | `async (columns, data, parent)` → `{headerRow, dataRows}` | Build table with auto-populated cells. `columns`: `[{name, type, width?, icon?, color?}]`. `data`: `[['val','val',...], ...]`. Supported auto-types: `text`, `texticon` (set `icon` in col), `texttrailing`, `number`, `status` (data = variable ID for dot color), `icon` (data = FA icon name, set `color` in col), `tag` (data = tag text), `flags-solo` (data = country name), `ellipsis` (no data needed). For `image`, `action`, `flags` (multi) — still needs manual post-processing. |
 | `addPagination` | `(parent, showing, total)` | Append pagination row |
 | `addTabs` | `(contentFrame, tabs, panel)` | Add tab bar. `tabs`: `[['Name', true/false], ...]` |
 | `addToolbar` | `(contentFrame, icons, panel)` | Add icon toolbar. `icons`: `['clock','tag',...]` |
