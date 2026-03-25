@@ -218,20 +218,34 @@ async function setShell(refs, cfg) {
   if (cfg.title) setText(refs.panelHeader, 'Title', cfg.title, 'Bold');
   if (cfg.subtitle) setText(refs.panelHeader, 'Sub-Title', cfg.subtitle);
   if (cfg.subtitle === false) { const sn = refs.panelHeader.findOne(n => n.name === 'Sub-Title'); if (sn) sn.visible = false; }
-  // Page header texts (breadcrumbs + heading — NOT CTAs, those are handled below)
-  const texts = refs.header.findAll(n => n.type === 'TEXT');
-  for (const t of texts) {
-    try { await figma.loadFontAsync(t.fontName); } catch(e) { continue; }
-    if (cfg.breadcrumb) {
+  // Breadcrumb — swap component for level count, then set texts. Page Header stays INSTANCE.
+  if (cfg.breadcrumb) {
+    const bc = refs.header.findOne(n => n.name && n.name.includes('Breadcrumb Navigation'));
+    if (bc && bc.type === 'INSTANCE') {
+      // Swap to Nav/1 for single-level breadcrumbs
       if (cfg.breadcrumb.length === 1) {
-        if (t.characters === 'Level 1') t.characters = cfg.breadcrumb[0];
-        if (t.characters === 'Level 2') t.characters = '';
-      } else if (cfg.breadcrumb.length >= 2) {
-        if (t.characters === 'Level 1') t.characters = cfg.breadcrumb[0];
-        if (t.characters === 'Level 2') t.characters = cfg.breadcrumb[1];
+        const nav1 = await figma.getNodeByIdAsync('134:84755');
+        bc.swapComponent(nav1);
+      }
+      // Set breadcrumb level texts
+      const bcTexts = bc.findAll(n => n.type === 'TEXT');
+      let levelIdx = 0;
+      for (const t of bcTexts) {
+        try { await figma.loadFontAsync(t.fontName); } catch(e) { continue; }
+        if (t.characters.match(/^Level \d+$/)) {
+          if (levelIdx < cfg.breadcrumb.length) {
+            t.characters = cfg.breadcrumb[levelIdx];
+          }
+          levelIdx++;
+        }
       }
     }
-    if (t.characters === 'Heading') t.characters = cfg.breadcrumb?.[cfg.breadcrumb.length - 1] || cfg.title || '';
+  }
+  // Heading text
+  const headingNode = refs.header.findOne(n => n.type === 'TEXT' && n.characters === 'Heading');
+  if (headingNode) {
+    try { await figma.loadFontAsync(headingNode.fontName); } catch(e) {}
+    headingNode.characters = cfg.breadcrumb?.[cfg.breadcrumb.length - 1] || cfg.title || '';
   }
   // CTA buttons — find in "Right - CTA and icons" frame
   // Structure: [Frame 1505 (icon btns), alt btn (hidden), main btn (visible), extra (hidden)]
@@ -654,6 +668,56 @@ refs.main.itemSpacing = 32;
 // Add more panels:
 const p2 = await clonePanel(refs.main, 'Section 2', 'Details');
 const p3 = await clonePanel(refs.main, 'Section 3', 'More details');
+```
+
+### GRID (Card Grid)
+
+Use the `card - markets` component (`92:46824`) as the general-purpose card. Override title, description, and tag text. Hide the main Flag if not needed for your domain.
+
+```javascript
+await init();
+const refs = await bootstrapScreen('Page Name — GRID', 0, 0);
+await setShell(refs, {
+  breadcrumb: ['Page Name'], cta: 'New Item',
+  title: 'Manage Items', subtitle: 'Description of the items.', search: true,
+});
+
+// Fetch card component
+const _card = await figma.getNodeByIdAsync('92:46824');
+const cardVariant = _card.children.find(v => v.name.includes('type=default') && v.name.includes('state=default'));
+
+// Card grid — wrapping horizontal layout inside content
+const grid = figma.createFrame();
+grid.name = 'Card Grid'; grid.layoutMode = 'HORIZONTAL';
+grid.layoutWrap = 'WRAP'; grid.itemSpacing = 16; grid.counterAxisSpacing = 16;
+grid.fills = [];
+refs.content.appendChild(grid);
+grid.layoutSizingHorizontal = 'FILL'; grid.layoutSizingVertical = 'HUG';
+
+const cards = [
+  { title: 'Card Title', desc: 'Card description text.', tag: '24 items' },
+  // ... more cards
+];
+
+for (const d of cards) {
+  const card = cardVariant.createInstance();
+  grid.appendChild(card);
+  card.layoutSizingHorizontal = 'FIXED'; card.resize(397, card.height);
+  // Override title (node named after default country text)
+  const titleNode = card.findOne(n => n.type === 'TEXT' && n.parent?.name === 'Frame 1388' && n.fontName?.style === 'Bold');
+  if (titleNode) { await figma.loadFontAsync(titleNode.fontName); titleNode.characters = d.title; }
+  // Override description
+  const descNode = card.findOne(n => n.type === 'TEXT' && n.parent?.name?.includes('card'));
+  if (descNode) { await figma.loadFontAsync(descNode.fontName); descNode.characters = d.desc; }
+  // Override tag count
+  const tag = card.findOne(n => n.name === 'Tag' && n.type === 'INSTANCE');
+  if (tag) tag.setProperties({'Tag text#26:8': d.tag});
+  // Hide main flag if not needed
+  const mainFlag = card.findOne(n => n.name === 'Flag' && n.parent?.name === 'Frame 1388');
+  if (mainFlag) mainFlag.visible = false;
+}
+
+refs.panel.layoutSizingVertical = 'HUG';
 ```
 
 ---

@@ -26,7 +26,9 @@
 | Placeholder (empty state) | `92:49611` | Size=XS/S/M/L/XL icon/XL gif + CTA/Learn more/Description toggles |
 | Date picker with input | `91:7183` | Type=time span/specific date × State=default/filled |
 | Overlay blur-small | `92:55554` | Standalone — 614px backdrop for slide-ins |
-| Lifecycle card | `92:46699` | 8 variants — domain-specific cards |
+| Lifecycle card | `92:46699` | 8 variants — lifecycle activity cards with QA states |
+| card - markets | `92:46824` | 4 variants — Flag + title + description + tag + comm profiles footer. **Best general-purpose card.** Override: title `"Ontario (CA)"`, desc `"All players registered..."`, tag via `Tag text#26:8`. Hide main Flag if not needed. |
+| card - rewards | `92:46874` | 2 variants — image + title + description + origins footer |
 | Action block | `92:55559` | 14 variants — Email/SMS/Push/Slack/Webhook/Bonus/etc. |
 | Actions Panel | `92:56107` | Empty/Fill variants for CRM action grids |
 
