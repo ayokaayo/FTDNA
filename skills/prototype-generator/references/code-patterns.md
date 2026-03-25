@@ -37,7 +37,7 @@
 | Activity Builder Recurring | Activity Builder/Recurring | `92:55332` |
 | Overlay (small) | Overlay blur-small | `92:55554` |
 | Overlay (full page) | Overlay blur-full | `92:55556` |
-| LIST-NESTED | Email Templates (Standard) | `180:69323` |
+| LIST-NESTED | Email Templates (Standard) | **DELETED** — build from components |
 
 ### Gate 1: Load Context — Read ONLY What This Build Needs
 
@@ -243,7 +243,7 @@ async function setShell(refs, cfg) {
       sf.visible = true;
       const tg = sf.findOne(n => n.name === 'Toggle'); if (tg) tg.visible = false;
       const ai = sf.findOne(n => n.name === 'Action icons'); if (ai) ai.visible = false;
-      const sv = _input.children.find(v => v.name.includes('Type=Search') && v.name.includes('default-empty'));
+      const sv = _input.children.find(v => v.name.includes('Type=Search,') && v.name.includes('default-empty'));
       const old = sf.findOne(n => n.name === 'Input Fields');
       if (old && sv) {
         const ns = sv.createInstance();
@@ -377,7 +377,7 @@ async function reattach(ids) {
 | `init()` | `await init()` | Load fonts, cache components, build ROW map. **Call once per execution.** |
 | `bootstrapScreen` | `(name, x, y)` → `{screen, main, panel, panelHeader, content, header}` | Instantiate base template, detach, return all refs |
 | `setShell` | `(refs, {breadcrumb, cta, title, subtitle, search})` | Override header + panel texts. `cta:false` hides buttons. `search:true` enables panel search. |
-| `buildTable` | `(columns, data, parent)` → `{headerRow, dataRows}` | Build complete table. `columns`: `[{name, type, width?}]`. `data`: `[['val','val',...], ...]` |
+| `buildTable` | `(columns, data, parent)` → `{headerRow, dataRows}` | Build table structure + text content. `columns`: `[{name, type, width?}]`. `data`: `[['val','val',...], ...]`. **Only text-based cells (`text`, `texticon`, `texttrailing`, `number`) get auto-populated.** Other types (`tag`, `status`, `icon`, `flags`, `image`, `action`, `ellipsis`) create the correct variant instance but need manual content setting after. |
 | `addPagination` | `(parent, showing, total)` | Append pagination row |
 | `addTabs` | `(contentFrame, tabs, panel)` | Add tab bar. `tabs`: `[['Name', true/false], ...]` |
 | `addToolbar` | `(contentFrame, icons, panel)` | Add icon toolbar. `icons`: `['clock','tag',...]` |
@@ -583,16 +583,16 @@ const p3 = await clonePanel(refs.main, 'Section 3', 'More details');
 Tags don't inherit row backgrounds. Wrap in a frame with matched fill.
 
 ```javascript
-const ZEBRA_GRAY = {type:'SOLID',color:{r:0.9804,g:0.9804,b:0.9804}};
 const tagVariant = _tag.children.find(v =>
   v.name.includes('Size=Small') && v.name.includes('Type=Icon - solid') && v.name.includes('Status=Default')
 );
 
-function addTagCell(row, text, index, width) {
+async function addTagCell(row, text, index, width) {
   const wrapper = figma.createFrame();
   wrapper.name = 'Status Cell'; wrapper.layoutMode = 'HORIZONTAL';
   wrapper.counterAxisAlignItems = 'CENTER'; wrapper.paddingLeft = 16;
-  wrapper.fills = (index % 2 === 0) ? [] : [ZEBRA_GRAY];
+  if (index % 2 !== 0) await bindFill(wrapper, V.mono100);
+  else wrapper.fills = [];
   row.appendChild(wrapper);
   wrapper.layoutSizingHorizontal = 'FIXED'; wrapper.resize(width, 75);
   wrapper.layoutSizingVertical = 'FIXED';

@@ -58,11 +58,15 @@ Every FT back-office page starts with the Base Template (`94:21370`). This gives
 └──────────────────────────────────────────┘
 ```
 
-**Shell defaults (apply to ALL patterns):**
+**Shell defaults (apply to ALL patterns unless overridden below):**
 1. Side menu → match `Section` to product area
 2. Page Header → 1 breadcrumb level, 1 main CTA only, all other header toggles OFF
 3. Content placeholder → 32px padding all sides, gray fill `#F5F5F5` (matches live platform rendering)
 4. Standard Panel → 1700px FIXED (max canvas width) unless brief says split
+
+**Exceptions (pattern-specific overrides):**
+- **HUB (Pattern 7):** Content placeholder has NO padding, NO fill — Card Row handles padding instead
+- **GRID (Pattern 6):** Content placeholder padding may differ — card wrapping layout manages spacing
 
 ---
 
@@ -201,7 +205,7 @@ Content Area
 | Table header cells | Header (standalone) | `91:39176` | Heading text + sort icon (sort hidden) |
 | Table row cells | Row | `91:39179` | Type=Text, Position=EVEN/ODD alternating |
 | Pagination | pagination | `92:40394` | Type=go to page |
-| Search | Built into Panel Header | — | `Search#4635:14: true` |
+| Search | Built into Panel Header | — | Enabled via `setShell({ search: true })` — toggles `Search + Action Icons` frame visibility |
 
 **Composition rules:**
 - Single panel, no tabs, no toolbar — simplest table layout
@@ -287,7 +291,7 @@ Content Area
 | Filter tags | Tag | `91:10023` | Type=Icon-solid, Size=Small |
 | Icon toolbar | Icons in a slim Standard Panel | — | No Panel Header, 8px vertical padding, white bg |
 | Table + Pagination | Same as LIST-SIMPLE | — | — |
-| Search | Built into Panel Header | — | `Search#4635:14: true` |
+| Search | Built into Panel Header | — | Enabled via `setShell({ search: true })` — toggles `Search + Action Icons` frame visibility |
 
 **Composition rules:**
 - Everything from LIST-TAB applies (tabs outside panels, width matching)
@@ -558,7 +562,7 @@ Content Area
 |------|-----------|----|-------|
 | Cards | Lifecycle card / template card | varies | Fixed width, variable height |
 | Pagination | pagination | `92:40394` | Type=go to page |
-| Search | Built into Panel Header | — | `Search#4635:14: true` |
+| Search | Built into Panel Header | — | Enabled via `setShell({ search: true })` — toggles `Search + Action Icons` frame visibility |
 
 **Composition rules:**
 - Card grid frame: `layoutMode: 'HORIZONTAL'`, `layoutWrap: 'WRAP'`, `itemSpacing: 16-24`

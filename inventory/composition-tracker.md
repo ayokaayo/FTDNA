@@ -12,7 +12,7 @@
 |---|---|
 | Pages composed | 24 / 48 (+ 3 blocked) |
 | Layout types verified | 0 / 8 |
-| Code patterns proven | 17 / 18 |
+| Code patterns proven | 19 / 23 |
 | Reproduction tests passed | 8 / 8 |
 
 ---
@@ -94,14 +94,13 @@
 | Toggle switches | Yes | Yes (Localisation) | T2 |
 | Alert banner (instance) | Yes | Yes (Segments) | T2 |
 | Red text indicators | Yes | Yes (Triggers) | T1 |
-| Filter tags row | No | — | T2 (planned) |
-| Icon toolbar strip | No | — | T2 (planned) |
-| Multi-panel stacking | No | — | T3 (planned) |
-| Slide-in overlay | No | — | T3 (planned) |
-| Block Selector grid | No | — | T3 (planned) |
-| Metric card row | No | — | T4 (planned) |
-| Split-panel layout | No | — | T5 (planned) |
-| Card grid | No | — | T5 (planned) |
+| Icon toolbar strip | Yes (`addToolbar`) | Yes (All Activities) | T3 |
+| Multi-panel stacking | Yes (`clonePanel`) | Yes (Localisation, Dashboard) | T2 |
+| Slide-in overlay | No (use QA templates) | Yes (Activity Create) | T3 |
+| Block Selector grid | No | Yes (Activity Create) | T3 |
+| Metric card row | No | — | — (planned) |
+| Split-panel layout | No | — | — (planned) |
+| Card grid | No | — | — (planned) |
 
 ---
 

@@ -46,6 +46,7 @@ When no brief exists in `briefs/` for the requested page, generate one before bu
    - Navigation cards → HUB
    - Multiple metric panels → DASH
    - Card grid → GRID
+   - Nested template sections with inline tables → LIST-NESTED
 4. **Fill brief template** — following `briefs/_TEMPLATE.md`:
    - Shell: side menu section, breadcrumb levels, CTA text
    - Content: search, tabs, toolbar, columns (name + width + cell type), sample rows, pagination

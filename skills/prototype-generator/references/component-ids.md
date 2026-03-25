@@ -125,7 +125,7 @@ The Tag component (`91:10023`) is used inline in dropdowns and table cells.
 |---|---|---|---|
 | `Tag text#26:8` | TEXT | "I am a tag" | Tag label text |
 | `Trailing icon#26:4` | BOOLEAN | true | X/close button — hide for read-only tags |
-| `Leading Icon#26:0` | BOOLEAN | false | Icon before text |
+| `Leading Icon#26:0` | BOOLEAN | true | Icon before text |
 
 **Variants:** `Size=Small/Medium/Large`, `Solid Colour=Black/Neutral`, `Status=Default/Hover/Focused/Locked-default/Disabled`
 

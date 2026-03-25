@@ -15,7 +15,7 @@
 | Build engine | v1.0 validated | Helper library with `init()` + `Promise.all` caching. Single-call builds proven (10-row table in 1 call vs 3-5 before). Brief generator in SKILL.md Step 0. |
 | Component audit | Not started | Will use existing vue-lib meta.json + prop interfaces. |
 | Code Connect | Not started | Depends on component audit. |
-| Design critique | Done | design-system.md refreshed from Figma variables. Compact summary output as default. |
+| Design critique | Done | Compact summary output as default. Colour variables documented in `component-ids.md`. |
 
 **What's next:** Content Variables (GRID), Manage Unsubscribe Pages (LIST-NESTED), remaining page briefs + screenshots. Screenshot each page on demand with `npm run snap <path>`.
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`
@@ -154,7 +154,7 @@ The component is staged locally in the vue-lib checkout before being pushed as a
 | Decision | Choice | Context |
 |----------|--------|---------|
 | Prototype approach | V2 Hybrid (clone + instances) | `importComponentByKeyAsync()` times out; clone from seed is instant |
-| Seed instance | Node `3:5535` in FT DNA Sandbox page | NEVER delete — source for all prototype clones |
+| Seed instance | **Deprecated** — was `3:5535`, now deleted | Builds use Base Template `94:21370` via `bootstrapScreen()` or Quick Access clones |
 | Base Template | Component `94:21370` on Workbench | Use `createInstance()` for new prototypes |
 | Component source | All local in FT DNA Workbench | Single source — no external library dependency |
 | Skills registry | `skills/registry.json` | Machine-readable, auto-populated by skill-architect |
