@@ -72,6 +72,20 @@
       "created": "2026-03-20",
       "updated": "2026-03-20",
       "status": "active"
+    },
+    {
+      "name": "tutor",
+      "path": "skills/tutor",
+      "description": "Teach Fast Track CRM platform knowledge through structured, adaptive tutoring. Source-grounded — every answer cites approved sources, never invents facts. Trigger on: teach me, learn about, tutor me, quiz me on, explain how X works, I'm new to FT, train me on, help me understand, what should I know about, CRM tutor, practice questions, test my knowledge, scenario exercise, onboarding training, how would I set up, walk me through.",
+      "author": "silvio-pelizza + miguel-angelo",
+      "domain": ["training", "knowledge-management", "onboarding"],
+      "autonomy": "semi-auto",
+      "inputs": ["user-prompt", "topic-request", "structured-input-json", "quiz-answers"],
+      "outputs": ["structured-lesson", "quiz", "scenario-exercise", "recap", "source-links"],
+      "complexity": "complex",
+      "created": "2026-03-24",
+      "updated": "2026-03-24",
+      "status": "active"
     }
   ]
 }
