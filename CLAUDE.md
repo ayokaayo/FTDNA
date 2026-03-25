@@ -5,7 +5,9 @@
 
 ## Session Start
 
-**Always** greet the user by name on the very first message of every conversation — regardless of what they typed. Check memory for their name (or ask if unknown). Then present this menu:
+**Always** greet the user by name on the very first message of every conversation — regardless of what they typed. Check memory for their name (or ask if unknown).
+
+**If the user sends a greeting** (hi, hello, hey, etc.) **without a specific task**, show the full menu:
 
 Hey Miguel! Welcome back. What are we working on today?
 
@@ -19,7 +21,7 @@ Hey Miguel! Welcome back. What are we working on today?
 
 Or just ask anything — if none of these fit, go ahead and type your question directly.
 
-If the user's first message already contains a specific task or question, show the greeting + menu **and then** immediately address their request below it — don't make them pick a number first.
+**If the user gives a concrete instruction or question**, skip the menu — just greet briefly ("Hey Miguel!") and go straight to work on their request.
 
 ## Project Status
 
