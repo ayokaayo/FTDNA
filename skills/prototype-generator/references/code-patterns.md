@@ -587,73 +587,37 @@ const slideIn = screen.findOne(n => n.name && n.name.includes('Slide in modal'))
 
 ### HUB (Navigation Cards)
 
+> **Component gap:** No navigation card component exists in the library. HUB cards require centered icon + title + description layout, which doesn't match any existing card variant. This recipe uses `clonePanel()` for the panel structure and `card-markets` (`92:46824`) for cards where the layout fits. For centered icon cards (Integration Settings style), primitives are still needed until a navigation card component is created.
+
 ```javascript
 await init();
 const refs = await bootstrapScreen('Integration Settings — HUB', 0, 0);
 await setShell(refs, { breadcrumb: ['Integration Settings'], cta: false });
 refs.main.itemSpacing = 32;
-// Remove default panel — HUB builds panels via createHubPanel
+// Remove default panel — HUB uses multiple panels
 refs.panel.remove();
 
-// Hub panels use custom factory (defined inline — not in preamble due to size)
-async function createHubPanel(title, subtitle) {
-  const tempInst = _base.createInstance();
-  const tempScreen = tempInst.detachInstance();
-  const tempCF = tempScreen.children.find(c => c.name === 'Frame 1317');
-  let panel = detach(tempCF.children.find(c => c.name === 'Standard Panel'));
-  refs.main.appendChild(panel);
-  panel.layoutSizingHorizontal = 'FIXED'; panel.resize(1700, panel.height);
-  tempScreen.remove();
-  await bindFill(panel, V.white); panel.strokes = []; panel.cornerRadius = 0;
-  const ph = panel.children.find(c => c.name === 'Panel Header'); // INSTANCE — no detach
-  setText(ph, 'Title', title, 'Bold');
-  setText(ph, 'Sub-Title', subtitle);
-  const content = panel.children.find(c => c.name === 'content placeholder');
-  content.layoutSizingHorizontal = 'FILL'; content.layoutMode = 'VERTICAL';
-  content.itemSpacing = 0; content.paddingTop = 0; content.paddingBottom = 0;
-  content.paddingLeft = 0; content.paddingRight = 0; content.fills = [];
-  while (content.children.length > 0) content.children[0].remove();
-  const cardRow = figma.createFrame();
-  cardRow.name = 'Card Row'; cardRow.layoutMode = 'HORIZONTAL'; cardRow.itemSpacing = 16;
-  cardRow.paddingTop = 16; cardRow.paddingBottom = 16; cardRow.paddingLeft = 16; cardRow.paddingRight = 16;
-  cardRow.fills = []; content.appendChild(cardRow);
-  cardRow.layoutSizingHorizontal = 'FILL'; cardRow.layoutSizingVertical = 'HUG';
-  panel.layoutSizingVertical = 'HUG';
-  return cardRow;
-}
+// Each category is a panel with cards inside
+const p1 = await clonePanel(refs.main, 'Tools & Guides', 'All you need for integration');
+await bindFill(p1.panel, V.white); p1.panel.strokes = []; p1.panel.cornerRadius = 0;
 
-async function createHubCard(cardRow, iconName, title, desc, padTop, padBot) {
-  const card = figma.createFrame();
-  card.name = title; card.layoutMode = 'VERTICAL';
-  card.primaryAxisAlignItems = 'CENTER'; card.counterAxisAlignItems = 'CENTER';
-  card.itemSpacing = 8; card.paddingTop = padTop||24; card.paddingBottom = padBot||24;
-  card.paddingLeft = 24; card.paddingRight = 24; card.cornerRadius = 8;
-  cardRow.appendChild(card);
-  card.layoutSizingHorizontal = 'FILL'; card.layoutSizingVertical = 'HUG';
-  await bindFill(card, V.mono100);
-  // Icon
-  const iw = figma.createFrame(); iw.name = 'Icon'; iw.layoutMode = 'HORIZONTAL';
-  iw.primaryAxisAlignItems = 'CENTER'; iw.counterAxisAlignItems = 'CENTER'; iw.fills = [];
-  card.appendChild(iw); iw.layoutSizingHorizontal = 'HUG'; iw.layoutSizingVertical = 'HUG';
-  const it = figma.createText();
-  it.fontName = {family:'Font Awesome 6 Pro',style:'Solid'}; it.fontSize = 32;
-  it.characters = iconName; it.lineHeight = {value:48,unit:'PIXELS'};
-  iw.appendChild(it); await bindFill(it, V.mono500);
-  // Title
-  const t = figma.createText(); t.fontName = {family:'Inter',style:'Bold'};
-  t.fontSize = 16; t.characters = title; t.textAlignHorizontal = 'CENTER';
-  card.appendChild(t); await bindFill(t, V.mono700);
-  // Description
-  const d = figma.createText(); d.fontName = {family:'Inter',style:'Regular'};
-  d.fontSize = 14; d.characters = desc; d.textAlignHorizontal = 'CENTER';
-  card.appendChild(d); await bindFill(d, V.mono500);
-  return card;
-}
+// Card row inside content
+const cardRow = figma.createFrame();
+cardRow.name = 'Card Row'; cardRow.layoutMode = 'HORIZONTAL'; cardRow.itemSpacing = 16;
+cardRow.paddingTop = 16; cardRow.paddingBottom = 16; cardRow.paddingLeft = 16; cardRow.paddingRight = 16;
+cardRow.fills = []; p1.content.appendChild(cardRow);
+cardRow.layoutSizingHorizontal = 'FILL'; cardRow.layoutSizingVertical = 'HUG';
 
-// Usage:
-const row1 = await createHubPanel('Tools & Guides', 'All you need for integration');
-await createHubCard(row1, 'plug', 'Integration Hub', 'Validate and test your integration');
-await createHubCard(row1, 'terminal', 'Debug Console', 'Verify service calls in real time');
+// Use card-markets for data cards, or build centered icon cards:
+const _card = await figma.getNodeByIdAsync('92:46824');
+const cardV = _card.children.find(v => v.name.includes('type=default') && v.name.includes('state=default'));
+const card = cardV.createInstance(); cardRow.appendChild(card);
+card.layoutSizingHorizontal = 'FILL';
+// Override title + description
+const titleN = card.findOne(n => n.type === 'TEXT' && n.parent?.name === 'Frame 1388' && n.fontName?.style === 'Bold');
+if (titleN) { await figma.loadFontAsync(titleN.fontName); titleN.characters = 'Integration Hub'; }
+const descN = card.findOne(n => n.type === 'TEXT' && n.characters === 'All players registered in Ontario Canada');
+if (descN) { await figma.loadFontAsync(descN.fontName); descN.characters = 'Validate and test your integration'; }
 ```
 
 ### DASH (Multi-panel dashboard)
