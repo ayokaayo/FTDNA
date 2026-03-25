@@ -327,11 +327,50 @@ The file doesn't exist. Update the status table to remove the "design-system.md 
 
 ---
 
+## Post-Regression Fixes (0.4.2–0.4.6)
+
+All P0–P2 recommended fixes were applied. Additional improvements made during live rendering tests:
+
+| Version | Fix |
+|---|---|
+| 0.4.2 | SLIDEIN clone recipe with detach requirement (R7 finding) |
+| 0.4.3 | `setShell()` supports `secondaryCta`. `buildDataRow()` auto-handles status, icon, tag, flags-solo, ellipsis cells. Both now async. |
+| 0.4.4 | **Minimal detach architecture:** Page Header INSTANCE always. Panel Header INSTANCE unless search enabled. |
+| 0.4.5 | Breadcrumb level swap via `swapComponent()` on instance — no detach. GRID recipe using `card-markets` component. |
+| 0.4.6 | HUB recipe uses `clonePanel()` + `card-markets`. Navigation card gap documented. R5v2 rebuilt with all new rules. |
+
+## Live Rendering Test Results
+
+| Test | Score | Pattern | Key findings |
+|---|---|---|---|
+| R1 — Cold-call LIST-SIMPLE | 12/13 | Brief → all-text table | Secondary CTA gap in setShell (fixed in 0.4.3) |
+| R2 — Non-text cells | 12/12 | Status circles, flags, hyperlinks | Manual post-processing needed (fixed in 0.4.3) |
+| R3 — Multi-panel FORM | 12/12 | Dropdowns, tags, radios, toggles | All form components work |
+| R4 — Multi-section, no header | 13/13 | clonePanel, Placeholder, no header | Headerless pages work |
+| R5 — GRID from screenshot | 12/12 | Card grid extrapolation | Rebuilt as R5v2 with card-markets component |
+| R6 — Modify existing page | 8/8 | Reattach + surgical insert | Column insert + CTA change |
+| R7 — SLIDEIN clone from QA | 4/5 | QA template clone | Must detach before customizing (documented) |
+| **Total** | **73/75 (97%)** | | |
+
+## Final Architecture (Engine v2.0)
+
+| Component | Detach? | Method |
+|---|---|---|
+| Screen (Base Template) | YES | `inst.detachInstance()` — always |
+| Page Header | **NEVER** | Text edits on instance. `swapComponent()` for breadcrumb levels. CTA via `Right - CTA and icons` button lookup. |
+| Panel Header | **Only for search** | Text edits (title/subtitle) work on instance. Detach needed only when search requires `insertChild()`. |
+| Standard Panel | YES | Must add children to content placeholder. |
+| Cards (GRID) | NO | Use `card-markets` (`92:46824`) instances. Override text, tag, flag visibility. |
+| Cards (HUB) | GAP | No navigation card component exists. Primitives still needed for centered icon+title cards. |
+
+---
+
 ## What's Working Well
 
 - **Component library is stable** — all 22 component IDs, 30 row variants, and 33 variable IDs are valid and correctly documented
 - **Helper library architecture** — `init()` + `Promise.all` caching pattern is proven and efficient
 - **Base Template structure** — exactly matches code expectations, no drift
-- **Feedback memory system** — 26 rules are internally consistent and complement the base instructions
+- **Feedback memory system** — 27 rules are internally consistent and complement the base instructions
 - **Brief template** — well-structured, covers all pattern types, includes construction notes and clone source fields
-- **4 core patterns fully operational** — LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM have complete recipes with proven builds
+- **7 patterns fully operational** — LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM, HUB, DASH, GRID have complete recipes with proven builds
+- **Minimal detach** — Page Header preserved as INSTANCE in all builds, maintaining component connections

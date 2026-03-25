@@ -23,19 +23,20 @@ If the user's first message already contains a specific task or question, show t
 
 ## Project Status
 
-**Version:** 0.3.9
-**Last updated:** 2026-03-24
+**Version:** 0.4.6
+**Last updated:** 2026-03-25
 
 | Track | Status | Detail |
 |---|---|---|
 | Platform scanner | Done | `scan.js` discovers 34 pages, saves DOM structure to `scan-manifest.json`. Screenshots on demand via `snap.js`. |
-| Page composition | 24/48 pages (8 repro-tested) | LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM, HUB, SLIDEIN, DASH, LIST-NESTED proven. 3 blocked (missing components). |
-| Build engine | v1.0 validated | Helper library with `init()` + `Promise.all` caching. Single-call builds proven (10-row table in 1 call vs 3-5 before). Brief generator in SKILL.md Step 0. |
+| Page composition | 24/48 pages (8 repro-tested) | LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM, HUB, SLIDEIN, DASH, LIST-NESTED, GRID proven. 3 blocked (missing components). |
+| Build engine | v2.0 regression-tested | Minimal detach (Page Header INSTANCE always, Panel Header INSTANCE unless search). `swapComponent()` for breadcrumb levels. `buildDataRow()` auto-handles 6 non-text cell types. `setShell()` supports `secondaryCta`. GRID recipe uses `card-markets` component. Full regression: 14 doc issues fixed, 7 render tests passed (73/75). |
 | Component audit | Not started | Will use existing vue-lib meta.json + prop interfaces. |
 | Code Connect | Not started | Depends on component audit. |
 | Design critique | Done | Compact summary output as default. Colour variables documented in `component-ids.md`. |
 
-**What's next:** Content Variables (GRID), Manage Unsubscribe Pages (LIST-NESTED), remaining page briefs + screenshots. Screenshot each page on demand with `npm run snap <path>`.
+**What's next:** Content Variables (GRID), Manage Unsubscribe Pages (LIST-NESTED), remaining page briefs + screenshots. Navigation card component needed for HUB pattern.
+**Regression report:** `.fasttrack/regression-report.md`
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`
 **Page progress:** `inventory/composition-tracker.md`
 
