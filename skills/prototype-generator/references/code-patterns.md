@@ -200,13 +200,16 @@ async function bootstrapScreen(name, x, y) {
   screen.name = name;
   const main = screen.children.find(c => c.name === 'Frame 1317');
   main.name = 'Main'; main.primaryAxisAlignItems = 'MIN'; main.counterAxisAlignItems = 'CENTER';
+  // Detach Standard Panel (need to add content children)
   const panel = detach(main.children.find(c => c.name === 'Standard Panel'));
   panel.layoutSizingHorizontal = 'FIXED'; panel.resize(1700, panel.height);
-  const panelHeader = detach(panel.children.find(c => c.name === 'Panel Header'));
+  // Panel Header — stays as INSTANCE (text edits work). Detach later in setShell only if search is needed.
+  const panelHeader = panel.children.find(c => c.name === 'Panel Header');
   const content = panel.children.find(c => c.name === 'content placeholder');
   content.layoutMode = 'VERTICAL'; content.itemSpacing = 0;
   while (content.children.length > 0) content.children[0].remove();
-  const header = detach(screen.children.find(c => c.name === 'Page Header' || c.name === 'Header'));
+  // Page Header — INSTANCE (text edits, CTA, breadcrumbs all work without detach)
+  const header = screen.children.find(c => c.name === 'Page Header' || c.name === 'Header');
   return { screen, main, panel, panelHeader, content, header };
 }
 
@@ -263,8 +266,11 @@ async function setShell(refs, cfg) {
       }
     }
   }
-  // Search in panel header
+  // Search in panel header — requires detaching Panel Header (can't insertChild inside instance)
   if (cfg.search) {
+    if (refs.panelHeader.type === 'INSTANCE') {
+      refs.panelHeader = detach(refs.panelHeader); // Detach only when search is needed
+    }
     const sf = refs.panelHeader.findOne(n => n.name === 'Search + Action Icons');
     if (sf) {
       sf.visible = true;
@@ -403,9 +409,10 @@ async function clonePanel(contentFrame, title, subtitle) {
   contentFrame.appendChild(tempPanel);
   tempPanel.layoutSizingHorizontal = 'FIXED'; tempPanel.resize(1700, tempPanel.height);
   tempScreen.remove();
-  const ph = detach(tempPanel.children.find(c => c.name === 'Panel Header'));
+  const ph = tempPanel.children.find(c => c.name === 'Panel Header'); // INSTANCE — text edits work
   if (title) setText(ph, 'Title', title, 'Bold');
   if (subtitle) setText(ph, 'Sub-Title', subtitle);
+  if (subtitle === false) { const sn = ph.findOne(n => n.name === 'Sub-Title'); if (sn) sn.visible = false; }
   const content = tempPanel.children.find(c => c.name === 'content placeholder');
   content.layoutMode = 'VERTICAL'; content.itemSpacing = 0;
   while (content.children.length > 0) content.children[0].remove();
@@ -584,7 +591,7 @@ async function createHubPanel(title, subtitle) {
   panel.layoutSizingHorizontal = 'FIXED'; panel.resize(1700, panel.height);
   tempScreen.remove();
   await bindFill(panel, V.white); panel.strokes = []; panel.cornerRadius = 0;
-  const ph = detach(panel.children.find(c => c.name === 'Panel Header'));
+  const ph = panel.children.find(c => c.name === 'Panel Header'); // INSTANCE — no detach
   setText(ph, 'Title', title, 'Bold');
   setText(ph, 'Sub-Title', subtitle);
   const content = panel.children.find(c => c.name === 'content placeholder');
@@ -749,6 +756,7 @@ const f2 = dropdown.createInstance(); formRow.appendChild(f2); f2.layoutSizingHo
 | R10 | All fills/strokes = **variable-bound** (bindFill/bindStroke, never hardcode RGB) |
 | R11 | Build on **Pastebin page** (not Sandbox) |
 | R12 | Append to parent **before** setting `layoutSizingHorizontal = 'FILL'` |
-| R13 | Detach top-level instance **first**, then children (reverse order crashes) |
+| R13 | **Minimal detach** — only detach Screen + Standard Panel. Keep **Page Header as INSTANCE** always. Keep **Panel Header as INSTANCE** unless search is enabled (search requires detach to insert children). Text edits work on all instances with font loading. |
 | R14 | Header cell widths **must match** data cell widths (FILL↔FILL, FIXED↔FIXED) |
 | R15 | Realistic data from **FT iGaming context** (player names, triggers, segments) |
+| R16 | **Use components** — never build from primitives when a library component exists. Cards, panels, inputs, buttons must be component instances. |
