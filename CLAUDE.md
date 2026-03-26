@@ -191,4 +191,18 @@ npm run snap --stop    # Stop persistent browser
 npm run snap <path>    # Screenshot a page (e.g. /v2/segments)
 npm run snap:paste <img>  # Copy screenshot to clipboard + paste into Figma
 node scripts/scan.js   # Discover all platform pages → scan-manifest.json + page-inventory.md
+npm run mcp:health     # Kill zombie MCP processes + connection report
+npm run mcp:status     # Connection status only (no cleanup)
 ```
+
+## MCP Connectivity
+
+Two Figma MCP servers are configured in `.mcp.json`:
+- **figma-remote-mcp** — Figma's official cloud server (read-only, 22 tools)
+- **figma-console-mcp** — Desktop Bridge plugin (read/write, 90+ tools, local WebSocket)
+
+A `SessionStart` hook runs `mcp-health.sh --quiet` automatically to clean zombie processes.
+
+If connection drops during a session, run `npm run mcp:health` or use the `figma_reconnect` MCP tool.
+
+Team setup guide: `references/mcp-setup-guide.md`

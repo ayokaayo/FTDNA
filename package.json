@@ -12,7 +12,9 @@
     "build:tokens": "node scripts/build-tokens.js",
     "snap": "node scripts/snap.js",
     "snap:login": "node scripts/snap.js --login",
-    "snap:paste": "node scripts/figma-paste.js"
+    "snap:paste": "node scripts/figma-paste.js",
+    "mcp:health": "bash scripts/mcp-health.sh",
+    "mcp:status": "bash scripts/mcp-health.sh --status"
   },
   "dependencies": {
     "puppeteer-core": "^24.0.0"

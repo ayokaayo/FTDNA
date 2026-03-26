@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/mcp-health.sh --quiet",
+            "timeout": 10,
+            "statusMessage": "Checking MCP health..."
+          }
+        ]
+      }
+    ]
+  }
+}
