@@ -72,37 +72,24 @@ If Figma pages aren't accurate, nothing downstream matters. Get the pages right 
 
 ---
 
-## Track C: Component Audit
+## Track C: Component Audit ✅ COMPLETE (2026-03-26)
 
-**Why:** 20 Vue components exist but none are verified against Figma variants. FTButton has 40 Figma variants — do the Vue props cover all of them? Unknown.
-
-**Process per component:**
-1. List all Figma variants (from component-catalog.md)
-2. List all Vue props (from vue-components-lib source)
-3. Create variant matrix: can every Figma variant be expressed with current props?
-4. Document gaps (missing props, missing variants, wrong defaults)
-5. Priority-fix critical gaps
-
-**Priority order (by usage in page compositions):**
-1. Table (Row + Header) — used in every LIST-* page
-2. Input Fields — used in every FORM + SLIDEIN page
-3. Button — used everywhere
-4. Tag — status columns
-5. Panel + Panel Header — structural
-6. Tabs — LIST-TAB + LIST-FULL
-7. Pagination — all list pages
-8. Toggle, Checkbox, Radio — forms
-9. Modal, Slide-In Header — overlays
-10. Remaining (Breadcrumb, Tooltip, Alert, etc.)
+**Approach:** Populated all 22 Figma-mapped `meta.json` files in vue-components-lib with variant axes, boolean props, propMap rules, and unmapped gap lists. Created `component-meta.schema.json` as the validation schema. Built `scripts/parity-report.js` for on-demand drift reporting.
 
 **Deliverables:**
-- Variant matrix per component (in `inventory/audits/`)
-- Gap list with severity + effort
-- PR to vue-components-lib for critical fixes
+- 22 populated `meta.json` files (variants, propMap, unmapped) in vue-components-lib
+- `tokens/component-meta.schema.json` — JSON Schema for meta.json validation
+- `scripts/parity-report.js` — parity report script (`npm run audit:parity`)
+- `inventory/parity-report.json` — machine-readable report output
 
-**Effort:** ~6-8 sessions (audit is mostly reading + comparing, fixes are targeted)
-**Depends on:** Token system (done), component-catalog.md (done)
-**Unblocks:** Code Connect, Figma→Vue pipeline
+**Results (first run):**
+- 22 Figma-mapped, 9 code-only, 20 populated, 2 empty stubs
+- 50 Figma-only gaps, 133 Vue-only gaps across all components
+- Top coverage: FTCheckbox, FTRadio, FTToggle, FTTooltip (100%)
+- Lowest coverage: FTSideMenu (0%), FTBreadcrumb/FTModal/FTSpinner (17%)
+
+**Effort:** ~2 sessions (down from estimated 3-4)
+**Unblocks:** Code Connect (Track D), Vue-lib cleanup (Track F)
 
 ---
 
@@ -209,12 +196,12 @@ If Figma pages aren't accurate, nothing downstream matters. Get the pages right 
 |---|---|---|
 | A: Platform Scanner | 3-4 | P1 (unblocks B) |
 | B: Page Composition (remaining) | 10 | P1 (core deliverable) |
-| C: Component Audit | 3-4 | P2 (after B is solid; uses existing meta.json) |
+| C: Component Audit | ~~3-4~~ 2 ✅ | P2 — COMPLETE (2026-03-26) |
 | D: Code Connect | 1-2 | P2 (after C) |
 | E: Design Critique Refresh | 1 | P1 (quick win) |
 | F: Vue-Lib Cleanup | 3-4 | P2 (after C) |
 | G: Documentation | 2 | P3 (after D, F) |
-| **Total** | **~23-27 sessions** | |
+| **Total** | **~21-25 sessions** | |
 
 ---
 

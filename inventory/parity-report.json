@@ -1,0 +1,629 @@
+{
+  "generatedDate": "2026-03-26",
+  "totalComponents": 31,
+  "figmaMapped": 22,
+  "codeOnly": 9,
+  "populated": 20,
+  "components": [
+    {
+      "name": "FTAlert",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 8,
+      "mappedCount": 6,
+      "figmaOnlyCount": 7,
+      "vueOnlyCount": 2,
+      "coverage": 46,
+      "figmaOnly": [
+        "Type",
+        "Show more#2821:10",
+        "Primary button#2821:15",
+        "Secondary Button#2821:20",
+        "Timer bar#2821:25",
+        "Show more text#2821:30",
+        "Buttons#2821:35"
+      ],
+      "vueOnly": [
+        "title",
+        "state"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTBreadcrumb",
+      "type": "figma-mapped",
+      "figmaAxes": 3,
+      "figmaBooleans": 2,
+      "mappedCount": 1,
+      "figmaOnlyCount": 5,
+      "vueOnlyCount": 3,
+      "coverage": 17,
+      "figmaOnly": [
+        "Type",
+        "Select state",
+        "Action State",
+        "Tag#3054:0",
+        "Dropdown#3054:12"
+      ],
+      "vueOnly": [
+        "items",
+        "maxVisible",
+        "ariaLabel"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTButton",
+      "type": "figma-mapped",
+      "figmaAxes": 4,
+      "figmaBooleans": 0,
+      "mappedCount": 7,
+      "figmaOnlyCount": 1,
+      "vueOnlyCount": 11,
+      "coverage": 88,
+      "figmaOnly": [
+        "Size"
+      ],
+      "vueOnly": [
+        "loading",
+        "tooltip",
+        "tooltipPosition",
+        "iconSmall",
+        "iconBig",
+        "active",
+        "info",
+        "warning",
+        "success",
+        "error",
+        "variant"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTCheckbox",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 0,
+      "mappedCount": 4,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 5,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "modelValue",
+        "value",
+        "trueValue",
+        "falseValue",
+        "flipped"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTDatePicker",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 0,
+      "mappedCount": 2,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 4,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "modelValue",
+        "columns",
+        "mode",
+        "disabled"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTFlag",
+      "type": "figma-mapped",
+      "figmaAxes": 1,
+      "figmaBooleans": 0,
+      "mappedCount": 1,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 2,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "size",
+        "basePath"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTHeader",
+      "type": "figma-mapped",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTInput",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 12,
+      "mappedCount": 8,
+      "figmaOnlyCount": 9,
+      "vueOnlyCount": 21,
+      "coverage": 47,
+      "figmaOnly": [
+        "Tags#4281:31",
+        "Info icon#4283:93",
+        "Preview#4284:0",
+        "Clear text#4284:31",
+        "Refresh#4284:62",
+        "Load#4284:93",
+        "Send/Return#4284:124",
+        "AI+Emoji#4369:0",
+        "Underline Caption#4281:0"
+      ],
+      "vueOnly": [
+        "id",
+        "modelValue",
+        "maxLength",
+        "min",
+        "max",
+        "autocomplete",
+        "allowedInput",
+        "debounceTime",
+        "isDouble",
+        "slugify",
+        "slugifyChar",
+        "invalidFormatError",
+        "rows",
+        "placeholder",
+        "readOnly",
+        "fullWidth",
+        "autoTextDirection",
+        "step",
+        "autoCompleteSuggestions",
+        "isRich",
+        "toolbarItems"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTLogo",
+      "type": "figma-mapped",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 3,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "variant",
+        "size",
+        "ariaLabel"
+      ],
+      "populated": false
+    },
+    {
+      "name": "FTModal",
+      "type": "figma-mapped",
+      "figmaAxes": 1,
+      "figmaBooleans": 5,
+      "mappedCount": 1,
+      "figmaOnlyCount": 5,
+      "vueOnlyCount": 6,
+      "coverage": 17,
+      "figmaOnly": [
+        "Alert box#2828:0",
+        "Toggles#2828:4",
+        "Input field#2828:8",
+        "Secondary Button#2828:12",
+        "Select all option#3089:0"
+      ],
+      "vueOnly": [
+        "closeOnBackdrop",
+        "disableClose",
+        "title",
+        "showOverflow",
+        "cssClass",
+        "disableEsc"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTOptionsSelector",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 6,
+      "mappedCount": 2,
+      "figmaOnlyCount": 6,
+      "vueOnlyCount": 3,
+      "coverage": 25,
+      "figmaOnly": [
+        "Image#4370:31",
+        "Icon#4370:37",
+        "xmark#4370:43",
+        "flag#4371:49",
+        "Toggle#4373:0",
+        "Number#4373:7"
+      ],
+      "vueOnly": [
+        "options",
+        "label",
+        "isRequired"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTPaging",
+      "type": "figma-mapped",
+      "figmaAxes": 1,
+      "figmaBooleans": 0,
+      "mappedCount": 2,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 10,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "totalItemsCount",
+        "pageSize",
+        "modelValue",
+        "pagingOptions",
+        "showPagingOptions",
+        "scrollableContainerSelector",
+        "outsideBoard",
+        "alwaysShowPageSize",
+        "showLastPage",
+        "showFirstPage"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTPanel",
+      "type": "figma-mapped",
+      "figmaAxes": 1,
+      "figmaBooleans": 0,
+      "mappedCount": 1,
+      "figmaOnlyCount": 2,
+      "vueOnlyCount": 6,
+      "coverage": 33,
+      "figmaOnly": [
+        "Side - Width",
+        "Panel header#4117:35"
+      ],
+      "vueOnly": [
+        "title",
+        "subTitle",
+        "noHeader",
+        "fullHeight",
+        "flexBody",
+        "slimHeader"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTRadio",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 0,
+      "mappedCount": 4,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 5,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "modelValue",
+        "value",
+        "trueValue",
+        "falseValue",
+        "flipped"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTSelect",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 2,
+      "mappedCount": 3,
+      "figmaOnlyCount": 3,
+      "vueOnlyCount": 12,
+      "coverage": 50,
+      "figmaOnly": [
+        "Leading Icon#4276:0",
+        "Tags#4281:31",
+        "Info icon#4283:93"
+      ],
+      "vueOnly": [
+        "modelValue",
+        "mode",
+        "showSearch",
+        "boxed",
+        "mini",
+        "allowClear",
+        "size",
+        "placeholder",
+        "className",
+        "focusBorder",
+        "autoFocus",
+        "scrollableContainerSelector"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTSideMenu",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 2,
+      "vueOnlyCount": 5,
+      "coverage": 0,
+      "figmaOnly": [
+        "Level",
+        "Section"
+      ],
+      "vueOnly": [
+        "topItems",
+        "bottomItems",
+        "clocks",
+        "showLogo",
+        "ariaLabel"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTSpinner",
+      "type": "figma-mapped",
+      "figmaAxes": 1,
+      "figmaBooleans": 4,
+      "mappedCount": 1,
+      "figmaOnlyCount": 5,
+      "vueOnlyCount": 1,
+      "coverage": 17,
+      "figmaOnly": [
+        "Size",
+        "CTA#3691:0",
+        "Learn more link#3691:6",
+        "Description#3783:7",
+        "Extras#4325:0"
+      ],
+      "vueOnly": [
+        "duration"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTTable",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 0,
+      "mappedCount": 2,
+      "figmaOnlyCount": 1,
+      "vueOnlyCount": 14,
+      "coverage": 67,
+      "figmaOnly": [
+        "Type"
+      ],
+      "vueOnly": [
+        "withPaging",
+        "heads",
+        "items",
+        "defaultPageSize",
+        "showLastPage",
+        "showFirstPage",
+        "storeSortKey",
+        "defaultSortKey",
+        "defaultSortOrder",
+        "totalItems",
+        "isWrapped",
+        "simplePagination",
+        "page",
+        "disableDefaultClasses"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTTabs",
+      "type": "figma-mapped",
+      "figmaAxes": 2,
+      "figmaBooleans": 3,
+      "mappedCount": 4,
+      "figmaOnlyCount": 3,
+      "vueOnlyCount": 1,
+      "coverage": 57,
+      "figmaOnly": [
+        "Alert circle#2148:0",
+        "Count#2148:4",
+        "Icon#2197:0"
+      ],
+      "vueOnly": [
+        "tabs"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTTag",
+      "type": "figma-mapped",
+      "figmaAxes": 4,
+      "figmaBooleans": 2,
+      "mappedCount": 9,
+      "figmaOnlyCount": 1,
+      "vueOnlyCount": 3,
+      "coverage": 90,
+      "figmaOnly": [
+        "Solid Colour"
+      ],
+      "vueOnly": [
+        "color",
+        "removable",
+        "ariaLabel"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTToggle",
+      "type": "figma-mapped",
+      "figmaAxes": 3,
+      "figmaBooleans": 0,
+      "mappedCount": 5,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 1,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "ariaLabel"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTTooltip",
+      "type": "figma-mapped",
+      "figmaAxes": 1,
+      "figmaBooleans": 0,
+      "mappedCount": 8,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 15,
+      "coverage": 100,
+      "figmaOnly": [],
+      "vueOnly": [
+        "theme",
+        "disableClickAway",
+        "offsetSkid",
+        "offsetDistance",
+        "hover",
+        "arrow",
+        "arrowPadding",
+        "disabled",
+        "openDelay",
+        "closeDelay",
+        "interactive",
+        "content",
+        "show",
+        "locked",
+        "zIndex"
+      ],
+      "populated": true
+    },
+    {
+      "name": "FTConfirm",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTFloatingLabel",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTIcon",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTMarkdownText",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTNavbar",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTPageLayout",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTRichText",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTSlidingPanel",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    },
+    {
+      "name": "FTSplitView",
+      "type": "code-only",
+      "figmaAxes": 0,
+      "figmaBooleans": 0,
+      "mappedCount": 0,
+      "figmaOnlyCount": 0,
+      "vueOnlyCount": 0,
+      "coverage": null,
+      "figmaOnly": [],
+      "vueOnly": [],
+      "populated": false
+    }
+  ]
+}

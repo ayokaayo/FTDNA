@@ -11,8 +11,8 @@
 - [ ] **Generate component docs for top 10 components**
   Run `figma_generate_component_doc` (systemName: "FT DNA") on the same core sets. Structured markdown with anatomy, tokens, typography, states. Save to `inventory/` as our DIY Code Connect docs layer.
 
-- [ ] **Run design parity check on FTButton**
-  First candidate — already exists in vue-components-lib. Run `figma_check_design_parity` with Figma node (91:8327) vs Vue source spec. Establish the workflow for ongoing parity checks after each Vue component build.
+- [x] **Run design parity check on FTButton** *(2026-03-26)*
+  Completed via meta.json population + `npm run audit:parity`. FTButton coverage: 88% (1 Figma-only gap: Size, 11 Vue-only props). Parity report script established for ongoing checks.
 
 - [ ] **Address design system audit findings (score: 61/100)**
   Weakest areas: Accessibility 37/100 (contrast), Token Architecture 53/100 (hardcoded values), Component Metadata 57/100. Priority: fix contrast at component level (pink button 3.2:1, input icons 2.9:1, gray subtext 3.0:1) — these cascade to all composed pages.
