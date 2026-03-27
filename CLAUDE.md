@@ -9,7 +9,7 @@
 
 **If the user sends a greeting** (hi, hello, hey, etc.) **without a specific task**, show the full menu:
 
-Hey Miguel! Welcome back. What are we working on today?
+Hey {name}! Welcome back. What are we working on today?
 
 1. **Page composition** — build or continue a Figma page
 2. **Design critique** — review a frame for compliance
@@ -21,7 +21,54 @@ Hey Miguel! Welcome back. What are we working on today?
 
 Or just ask anything — if none of these fit, go ahead and type your question directly.
 
-**If the user gives a concrete instruction or question**, skip the menu — just greet briefly ("Hey Miguel!") and go straight to work on their request.
+**If the user gives a concrete instruction or question**, skip the menu — just greet briefly ("Hey {name}!") and go straight to work on their request.
+
+## First-Run Setup
+
+> Claude: run these checks silently at the start of every session. Do NOT show the greeting or menu until setup is confirmed.
+
+### Detection
+
+Check for these files in the repo root:
+- `.mcp.json` — exists?
+- `.env` — exists?
+- `node_modules/` — exists?
+
+**If ALL three exist:** skip this section entirely. Proceed to the normal Session Start greeting.
+
+**If `.env` is missing (full first-run):**
+
+1. Greet the user: "Welcome to FT DNA! I'll get you set up — takes about 5 minutes."
+2. Ask their name and save it to memory.
+3. Run `npm install` (silent unless errors).
+4. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+5. Tell the user: "Environment configured. The GitBook token is shared org-wide, already set."
+6. Proceed to MCP setup below.
+
+**If `.mcp.json` is missing (MCP setup needed):**
+
+1. Ask the user for their Figma Personal Access Token:
+   > "I need your Figma Personal Access Token to connect to Figma. You can generate one in Figma Desktop: Avatar → Settings → Personal access tokens. It starts with `figd_`."
+2. Wait for the token. Validate it starts with `figd_`.
+3. Read `.mcp.json.example`, replace `YOUR_TOKEN_HERE` with the provided token, and write it to `.mcp.json`.
+4. Tell the user about the two manual Figma steps:
+   > "Two things I can't do for you:
+   > 1. **Import the Desktop Bridge plugin** in Figma Desktop: Plugins → Development → Import plugin from manifest → select `~/.figma-console-mcp/plugin/manifest.json`
+   > 2. **Authorize Figma Remote MCP** — a browser window will pop up the first time you use a Figma read tool. Just log in and authorize.
+   >
+   > Here's the FT DNA Figma file — it's in the **Brand** project, you already have access:
+   > https://www.figma.com/design/7J3dSTuOSRlsHBqQ4ohtxI/%F0%9F%A7%AC-FT-DNA?m=auto&t=vFxIpgCjzDr1rSQB-6"
+5. Run `npm run mcp:health` to verify connectivity.
+6. Show results. Note: the user may need to restart Claude Code (`/quit` then `claude`) for MCP servers to activate.
+7. Proceed to the normal greeting/menu.
+
+**If only `node_modules/` is missing (dependencies stale):**
+
+1. Run `npm install` silently.
+2. Proceed to normal greeting.
 
 ## Project Status
 
@@ -117,6 +164,8 @@ Component CSS variables follow: `--ft-{component}-{property}-{state}`
 ## Figma Translation
 
 **FT DNA file:** `7J3dSTuOSRlsHBqQ4ohtxI` — single source of truth for all components, tokens, and prototypes
+> The FT DNA file is in the **Brand** project. All team members have access: [FT DNA on Figma](https://www.figma.com/design/7J3dSTuOSRlsHBqQ4ohtxI/%F0%9F%A7%AC-FT-DNA?m=auto&t=vFxIpgCjzDr1rSQB-6)
+
 **Fast Track Logo file:** `Ahohkx0sfMS7oHU1V3j3DO`
 
 ### Figma Component Sources

@@ -212,6 +212,30 @@ report_status() {
   fi
 }
 
+# ── Step 0: Check first-run prerequisites ────────────────────
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+setup_needed=false
+
+if [[ ! -f "${REPO_ROOT}/.mcp.json" ]]; then
+  echo "SETUP_NEEDED: .mcp.json not found. Run first-time setup."
+  setup_needed=true
+fi
+
+if [[ ! -f "${REPO_ROOT}/.env" ]]; then
+  echo "SETUP_NEEDED: .env not found. Run first-time setup."
+  setup_needed=true
+fi
+
+if [[ ! -d "${REPO_ROOT}/node_modules" ]]; then
+  echo "SETUP_NEEDED: node_modules not found. Run npm install."
+  setup_needed=true
+fi
+
+# If no MCP config exists, skip cleanup (nothing to clean)
+if [[ "$setup_needed" == "true" && "$QUIET" == "true" ]]; then
+  exit 0
+fi
+
 # ── Main ────────────────────────────────────────────────────
 if [[ "$STATUS_ONLY" == "false" ]]; then
   cleanup_zombies
