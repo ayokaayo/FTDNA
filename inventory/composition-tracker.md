@@ -105,7 +105,11 @@
 | Icon toolbar strip | Yes (`addToolbar`) | Yes (All Activities) | T3 |
 | Multi-panel stacking | Yes (`clonePanel`) | Yes (Localisation, Dashboard) | T2 |
 | Slide-in overlay | Yes (from-scratch recipe) | Yes (Activity Create, New Segment) | T3 |
-| Block Selector grid | No | Yes (Activity Create) | T3 |
+| Block Selector grid | Yes (R20) | Yes (Activity Create, AI Settings) | T3/T8 |
+| Tab-box-index | Yes (R19, R21) | Yes (Users & Permissions, AI Settings) | T8 |
+| Panel Header component | Yes (R22) | Yes (all SLIDEIN panels) | T8 |
+| Radio button component | Yes (R24) | Yes (Comm Profile slide-in) | T8 |
+| Filter tags in panel header | Yes (R23) | Yes (All Activities, Collections) | T8 |
 | Metric card row | No | — | — (planned) |
 | Split-panel layout | No | — | — (planned) |
 | Card grid | No | — | — (planned) |

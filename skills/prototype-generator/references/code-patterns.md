@@ -1,7 +1,7 @@
 # Code Patterns
 
 > Build engine for the prototype-generator skill. Helper library + pattern recipes.
-> Last updated: 2026-03-24
+> Last updated: 2026-03-30
 
 ---
 
@@ -77,7 +77,7 @@ List every element from the reference screenshot. Map each to:
 
 ### Gate 3: Plan Verification — Check Against Rules
 
-Before writing code, verify against the Rules Reference (§R1-R15) at the bottom of this file.
+Before writing code, verify against the Rules Reference (§R1-R24) at the bottom of this file.
 
 ### Gate 4: Build
 
@@ -134,24 +134,29 @@ async function bindStroke(node, vid) {
 }
 
 // --- Layer 2: Initialization (call once per execution) ---
-let _base, _hdr, _row, ROW = {}, _tag, _tab, _input, _btn, _pag;
+let _base, _hdr, _row, ROW = {}, _tag, _tab, _input, _btn, _pag, _panelHdr, _radio;
 async function init() {
   // Fonts — load all upfront, never again per-cell
+  let faLoaded = false;
   await Promise.all([
     figma.loadFontAsync({family:'Inter',style:'Regular'}),
     figma.loadFontAsync({family:'Inter',style:'Bold'}),
     figma.loadFontAsync({family:'Inter',style:'Medium'}),
-    figma.loadFontAsync({family:'Font Awesome 6 Pro',style:'Solid'}).catch(()=>{}),
+    figma.loadFontAsync({family:'Font Awesome 6 Pro',style:'Solid'}).then(()=>{faLoaded=true}).catch(()=>{}),
   ]);
   // Components — parallel fetch
   const ids = {
     base:'94:21370', hdr:'91:39176', row:'91:39179', tag:'91:10023',
     tab:'91:19098', input:'91:6537', btn:'91:8299', pag:'92:40394',
+    panelHdr:'92:46640', // Panel Header component set (R22)
+    radio:'91:8595',     // Radio button component set (R24)
   };
-  const [base,hdr,row,tag,tab,input,btn,pag] = await Promise.all(
+  const [base,hdr,row,tag,tab,input,btn,pag,panelHdr,radio] = await Promise.all(
     Object.values(ids).map(id => figma.getNodeByIdAsync(id))
   );
   _base=base; _hdr=hdr; _row=row; _tag=tag; _tab=tab; _input=input; _btn=btn; _pag=pag;
+  _panelHdr = panelHdr; // Panel Header set — use _panelHdr.children.find(v => v.name.includes('Default'))
+  _radio = radio;       // Radio set — Checked: _radio.children.find(v => v.name.includes('Checked') && v.name.includes('Default'))
   // Pre-resolve row variants into lookup map
   const typeMap = {
     'Text':'text','Text+leading icon':'texticon','Text+trailing icon':'texttrailing',
@@ -475,6 +480,8 @@ async function reattach(ids) {
 | `createRow` | `(name, parent)` → frame | Create horizontal auto-layout row |
 | `bindFill` | `(node, V.xxx)` | Bind colour variable to fill |
 | `detach` | `(node)` → frame | Safe detach (no-op if already frame) |
+| `_panelHdr` | Component set `92:46640` | Panel Header — 4 variants. Default = `Property 1=Default`. Properties: `Search#4635:14`, `Toggle#4635:15`, `Action Icons#4635:12`, `Info icon#4635:17`, `Right side options#4635:16`, `Description#4635:13`. Text: `Title` (20px bold), `Sub-Title` (14px regular). **Always use this for panel headers — never build from primitives (R22).** |
+| `_radio` | Component set `91:8595` | Radio button — 5 variants: `Type=Checked/Unchecked`, `Status=Default/Disabled/Hover`. Text property: `Text#9:9`. Usage: `_radio.children.find(v => v.name.includes('Checked') && v.name.includes('Default')).createInstance()`, then `inst.setProperties({'Text#9:9': 'Label'})`. Place in horizontal row, `itemSpacing = 32`. **Always use component — never build from primitives (R24).** |
 
 ---
 
@@ -645,6 +652,10 @@ contentArea.layoutSizingVertical = 'FILL';    // fills remaining height below he
 contentArea.primaryAxisAlignItems = 'MIN';    // top-aligned
 
 // Step 4: Build Standard Panels (white cards with border)
+// RULE R22: Always use Panel Header COMPONENT (`92:46640`), never primitive text.
+// _panelHdr is already cached by init() — no need to fetch again.
+const _phDefault = _panelHdr.children.find(v => v.name.includes('Default'));
+
 async function buildPanel(parent, title, subtitle) {
   const p = figma.createFrame();
   p.name = 'Standard Panel'; p.layoutMode = 'VERTICAL'; p.itemSpacing = 0;
@@ -653,19 +664,25 @@ async function buildPanel(parent, title, subtitle) {
   parent.appendChild(p);
   p.layoutSizingHorizontal = 'FILL'; p.layoutSizingVertical = 'HUG';
 
-  // Panel header (title + subtitle)
-  const ph = figma.createFrame();
-  ph.name = 'Panel Header'; ph.layoutMode = 'VERTICAL'; ph.itemSpacing = 4;
-  ph.paddingTop = 20; ph.paddingBottom = 16; ph.paddingLeft = 24; ph.paddingRight = 24;
-  ph.fills = []; p.appendChild(ph);
-  ph.layoutSizingHorizontal = 'FILL'; ph.layoutSizingVertical = 'HUG';
-  const tN = figma.createText();
-  tN.fontName = { family: 'Inter', style: 'Bold' }; tN.fontSize = 16;
-  tN.characters = title; ph.appendChild(tN); await bindFill(tN, V.mono700);
+  // Panel Header — COMPONENT INSTANCE (not primitives)
+  const ph = _phDefault.createInstance();
+  p.appendChild(ph);
+  ph.layoutSizingHorizontal = 'FILL';
+  ph.setProperties({
+    'Search#4635:14': false,
+    'Toggle#4635:15': false,
+    'Action Icons#4635:12': false,
+    'Info icon#4635:17': false,
+    'Right side options#4635:16': false,
+  });
+  if (subtitle !== false) ph.setProperties({ 'Description#4635:13': true });
+  else ph.setProperties({ 'Description#4635:13': false });
+
+  const titleNode = ph.findOne(n => n.type === 'TEXT' && n.name === 'Title');
+  if (titleNode && title) { await figma.loadFontAsync(titleNode.fontName); titleNode.characters = title; }
   if (subtitle) {
-    const sN = figma.createText();
-    sN.fontName = { family: 'Inter', style: 'Regular' }; sN.fontSize = 14;
-    sN.characters = subtitle; ph.appendChild(sN); await bindFill(sN, V.mono500);
+    const subNode = ph.findOne(n => n.type === 'TEXT' && n.name === 'Sub-Title');
+    if (subNode) { await figma.loadFontAsync(subNode.fontName); subNode.characters = subtitle; }
   }
 
   // Content area inside panel
@@ -674,7 +691,7 @@ async function buildPanel(parent, title, subtitle) {
   c.paddingTop = 0; c.paddingBottom = 24; c.paddingLeft = 24; c.paddingRight = 24;
   c.fills = []; p.appendChild(c);
   c.layoutSizingHorizontal = 'FILL'; c.layoutSizingVertical = 'HUG';
-  return { panel: p, content: c };
+  return { panel: p, panelHeader: ph, content: c };
 }
 
 // Step 5: Add Input Fields to panels
@@ -992,12 +1009,12 @@ const f2 = dropdown.createInstance(); formRow.appendChild(f2); f2.layoutSizingHo
 |---|---|
 | R1 | Panel spacing = **32px** between panels (always) |
 | R2 | Panel width = **1700px FIXED** (unless slide-in or split panel) |
-| R3 | Panel corner radius = **0** (never rounded) |
+| R3 | Panel corner radius = **0** for bootstrapped pages (standard shell). **8px** for SLIDEIN panels (white cards on mono-200 bg). |
 | R4 | Content frame = **FILL height, top-centre aligned** (`primaryAxisAlignItems: MIN`) |
 | R5 | Sort icons = **HIDDEN by default** (only show when brief explicitly asks) |
 | R6 | Search input = **350px** when standalone |
 | R7 | Icon buttons = **Status=default** (never hover/focused) |
-| R8 | Tabs = **outside panels**, 32px gap between tabs |
+| R8 | Tabs = **outside panels**. `itemSpacing = 32` between tab items within the tab bar. Gap between tab bar and panel below = **16px** (standard content column spacing, see R19). |
 | R9 | CTA text = **sentence case** ("Add Player", not "ADD PLAYER") |
 | R10 | All fills/strokes = **variable-bound** (bindFill/bindStroke, never hardcode RGB) |
 | R11 | Build on **Pastebin page** (not Sandbox) |
@@ -1006,3 +1023,11 @@ const f2 = dropdown.createInstance(); formRow.appendChild(f2); f2.layoutSizingHo
 | R14 | Header cell widths **must match** data cell widths (FILL↔FILL, FIXED↔FIXED) |
 | R15 | Realistic data from **FT iGaming context** (player names, triggers, segments) |
 | R16 | **Use components** — never build from primitives when a library component exists. Cards, panels, inputs, buttons must be component instances. |
+| R17 | **GRID cards = 4 per row** — card width formula: `Math.floor((gridWidth - 3 * 16) / 4)`. Standard content width (1636px inside 1700px panel with padding) yields ~397px per card. Always use `layoutWrap = 'WRAP'`, `itemSpacing = 16`, `counterAxisSpacing = 16`. Cards are `FIXED` width, `HUG` height with `minHeight = 220`. |
+| R18 | **Button variant names use `Size=default`** — not `Size=M`. Correct lookups: `Type=main, Status=default, Size=default, Leading icon=No` (pink), `Type=sub, Status=default, Size=default, Leading icon=No` (dark/black), `Type=icon, Status=default, Size=M, Leading icon=No` (icon-only — this one uses `Size=M`). |
+| R19 | **Tab container** = 1700px wide, `primaryAxisAlignItems = 'MIN'` (left-aligned), `itemSpacing = 32` between tab items. Gap between tab container and panel below = **16px** (standard content column spacing). Tab instances from `tab-box-index` (`91:19098`): `Type=tab-box-index, Status=Selected` for active, `Status=Default` for inactive. |
+| R20 | **Block Selector** component (`91:8712`) — 6 variants. Properties: `Image#37:184`, `Icon#37:183`, `xmark#37:181`, `flag#37:182`, `Toggle#37:185`, `Number#37:186`. Override the text node named `"Origin name"` for the label. Use for origin/market selection grids (e.g. Activity Builder Segment section). |
+| R21 | **Tab-box-index duotone icons** — Each tab-box-index instance has two icon text layers: `icon-primary#` (main icon glyph) and `icon-secondary##` (secondary/accent glyph). Both are FA text nodes. Override via `setText(tab, 'icon-primary#', '\uf1b0')` or similar. Cloud MCP cannot render FA6 Pro — icons will degrade to placeholder glyphs but structural placement is correct. |
+| R22 | **Panel Header = COMPONENT `92:46640`, never primitives.** 4 variants, default = `Property 1=Default`. Boolean properties: `Search#4635:14`, `Toggle#4635:15`, `Action Icons#4635:12`, `Info icon#4635:17`, `Right side options#4635:16`, `Description#4635:13`. Text overrides: `Title` (bold 20px), `Sub-Title` (regular 14px). Always use component instance — never create text frames manually for panel headers. |
+| R23 | **Filter tags + action icons = inside Panel Header**, not as separate rows. When a page needs filter tags (ACTIVE/DRAFT/etc.) and/or action icon buttons, they go inside the Panel Header's `Search + Action Icons` area — search on left, filter tags + icon buttons on right. Never create separate stacked rows below the panel header for these elements. Reference: All Activities page pattern. |
+| R24 | **Radio Button = COMPONENT (`91:8595`), never primitives.** 5 variants: `Type=Checked/Unchecked`, `Status=Default/Disabled/Hover`. Text property: `Text#9:9` — override via `setProperties({'Text#9:9': 'Option label'})`. Always use component instances for radio buttons. Never build from ellipses + text. Place in a horizontal row with `itemSpacing = 32`. |
