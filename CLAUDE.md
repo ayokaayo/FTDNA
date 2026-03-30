@@ -247,8 +247,23 @@ npm run mcp:status     # Connection status only (no cleanup)
 ## MCP Connectivity
 
 Two Figma MCP servers are configured in `.mcp.json`:
-- **figma-remote-mcp** — Figma's official cloud server (read-only, 22 tools)
-- **figma-console-mcp** — Desktop Bridge plugin (read/write, 90+ tools, local WebSocket)
+- **figma-remote-mcp** — Figma's official cloud server (read + write via `use_figma`, cloud-hosted)
+- **figma-console-mcp** — Desktop Bridge plugin (90+ tools, screenshots, console monitoring, local WebSocket)
+
+### Which tool to use
+
+| Task | Tool | Server |
+|------|------|--------|
+| **Build / create / bulk write** | `use_figma` | figma-remote-mcp |
+| **Read designs / Code Connect** | `get_design_context` | figma-remote-mcp |
+| **Search components** | `search_design_system` | figma-remote-mcp |
+| **Screenshot / visual verify** | `figma_take_screenshot` | figma-console-mcp |
+| **Console monitoring / debug** | `figma_watch_console` | figma-console-mcp |
+| **Surgical single-node edits** | `figma_move_node`, `figma_set_fills`, etc. | figma-console-mcp |
+
+**Default to `use_figma`** for all write operations. It runs in the cloud (no Desktop Bridge needed), supports batch operations in a single call, and uses the same Plugin API as `figma_execute`. The Helper Library preamble works identically in both — just pass the `fileKey` parameter.
+
+**Fall back to `figma_execute`** (via figma-console-mcp) only when you need screenshot verification mid-build, console log access, or the Desktop Bridge's granular inspection tools.
 
 A `SessionStart` hook runs `mcp-health.sh --quiet` automatically to clean zombie processes.
 

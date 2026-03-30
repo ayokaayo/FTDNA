@@ -164,7 +164,7 @@ Two collections discovered from the template bindings:
 - **Type:** Local COMPONENT with all local children
 - **Children:** side menu (local `92:46353`), Page Header (local `97:90645`), Frame 1317 > Standard Panel (local `92:46584`)
 
-> **Legacy seed:** The old seed instance `3:5535` on Sandbox still exists but is deprecated. Use the Base Template component instead.
+> **Legacy seed:** The old seed instance `3:5535` has been deleted from Figma. Always use the Base Template component `94:21370` instead.
 
 ### Instance Workflow
 

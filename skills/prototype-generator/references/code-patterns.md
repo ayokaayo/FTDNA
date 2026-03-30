@@ -7,8 +7,12 @@
 
 ## ⛔ Pre-Build Protocol (MANDATORY — execute before ANY Figma work)
 
-> **This is not optional.** Every gate must pass before `figma_execute` is called.
+> **This is not optional.** Every gate must pass before `use_figma` (or `figma_execute`) is called.
 > Each gate produces visible output in the conversation. No silent skipping.
+>
+> **Tool choice:** Default to `use_figma` (cloud, no Desktop Bridge needed, supports batch operations).
+> Use `figma_execute` only when you need mid-build screenshots or console debugging.
+> The Helper Library preamble works identically in both tools.
 
 ### Gate 0: STOP — Do I Have What I Need?
 
@@ -77,9 +81,10 @@ Before writing code, verify against the Rules Reference (§R1-R15) at the bottom
 
 ### Gate 4: Build
 
-- Prepend the Helper Library to every `figma_execute` call
+- Prepend the Helper Library to every `use_figma` / `figma_execute` call
+- Pass the FT DNA `fileKey` when using `use_figma`
 - Call `await init()` first, then use helpers
-- Screenshot after each phase
+- Screenshot after each phase (via `figma_take_screenshot` from figma-console-mcp)
 
 ### Gate 5: Post-Build Verification
 
@@ -99,13 +104,14 @@ If any check fails → fix before presenting to user.
 
 ## Helper Library (INJECTABLE PREAMBLE)
 
-> Copy this entire block as the prefix of every `figma_execute` call.
+> Copy this entire block as the prefix of every `use_figma` or `figma_execute` call.
 > Call `await init()` once at the top of your build code.
+> Both tools execute Plugin API JavaScript — the preamble is identical for either.
 
 ```javascript
 // ═══════════════════════════════════════════════════
 // FT DNA Build Helpers v1.0
-// Prepend to every figma_execute call
+// Prepend to every use_figma / figma_execute call
 // ═══════════════════════════════════════════════════
 
 // --- Layer 1: Variables & Binding ---

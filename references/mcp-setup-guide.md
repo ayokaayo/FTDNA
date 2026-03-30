@@ -8,15 +8,20 @@ Two MCP servers work together:
 
 | Server | What it does | Connection |
 |---|---|---|
-| **Figma Remote MCP** (official) | Read designs, screenshots, Code Connect | Cloud (Figma's servers) |
-| **Figma Console MCP** (Desktop Bridge) | Create/edit designs, manage variables, build prototypes | Local WebSocket via Figma plugin |
+| **Figma Remote MCP** (official) | Read + write designs (`use_figma`), Code Connect, search | Cloud (Figma's servers) |
+| **Figma Console MCP** (Desktop Bridge) | Screenshots, console monitoring, granular inspection tools | Local WebSocket via Figma plugin |
+
+> **As of March 2026:** Figma's official MCP now supports write access via `use_figma`. This is the default tool for all build/create operations. The Desktop Bridge is still needed for screenshots, debugging, and single-node inspection — but it's no longer required for writing to the canvas.
 
 ## Prerequisites
 
-- **Figma Desktop** app (not browser)
+**Required (for read + write via cloud):**
 - **Claude Code** CLI installed
+- **Figma account** with full edit access to the FT DNA file (not dev seat)
+
+**Optional (for screenshots + debugging):**
+- **Figma Desktop** app (not browser)
 - **Node.js** 18+ (`node --version`)
-- **Figma account** with edit access to the FT DNA file
 
 ---
 
