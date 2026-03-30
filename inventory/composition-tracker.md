@@ -2,7 +2,7 @@
 
 > Tracks page generation progress: which pages are built, which patterns are codified, reproduction test results.
 > Updated after every page build session.
-> Last updated: 2026-03-23
+> Last updated: 2026-03-30
 
 ---
 
@@ -11,7 +11,7 @@
 | Metric | Value |
 |---|---|
 | Pages composed | 24 / 48 (+ 3 blocked) |
-| Layout types verified | 0 / 8 |
+| Layout types verified | 8 / 8 (all PASS) |
 | Code patterns proven | 19 / 23 |
 | Reproduction tests passed | 8 / 8 |
 
@@ -21,15 +21,15 @@
 
 | Layout | Code | Pages in platform | Pages composed | Verified? | Patterns codified? |
 |---|---|---|---|---|---|
-| Simple List | `LIST-SIMPLE` | ~14 | 4 | No | Partial |
-| List + Tabs | `LIST-TAB` | 3 | 3 | No | Yes |
-| List + Tabs + Toolbar | `LIST-FULL` | 2 | 1 | No | Partial |
-| Settings Form | `FORM` | ~4 | 3 | No | Yes |
-| Dashboard | `DASH` | 5 | 1 | No | Partial |
+| Simple List | `LIST-SIMPLE` | ~14 | 4 | **PASS** (2026-03-30) | Yes |
+| List + Tabs | `LIST-TAB` | 3 | 3 | **PASS** (2026-03-30) | Yes |
+| List + Tabs + Toolbar | `LIST-FULL` | 2 | 1 | **PASS** (2026-03-30) | Yes |
+| Settings Form | `FORM` | ~4 | 3 | **PASS** (2026-03-30) | Yes |
+| Dashboard | `DASH` | 5 | 1 | **PASS** (2026-03-30) | Yes |
 | Detail Page | `DETAIL` | ~5 | 0 (1 mapped) | No | Partial |
-| Slide-In | `SLIDEIN` | ~8 | 2 | No | Partial |
-| Hub | `HUB` | ~1 | 1 | No | Yes |
-| Grid / Nested | `GRID` / `LIST-NESTED` | ~2 | 1 | No | Partial |
+| Slide-In | `SLIDEIN` | ~8 | 2 | **PASS** (2026-03-30) | Yes |
+| Hub | `HUB` | ~1 | 1 | **PASS** (2026-03-30) | Yes |
+| Grid / Nested | `GRID` / `LIST-NESTED` | ~2 | 1 | **PASS** (2026-03-30) | Yes |
 
 **Verified** = a fresh Claude session can reproduce the page cold from a brief.
 **Patterns codified** = composition rules written back into page-patterns.md + code-patterns.md.
@@ -69,6 +69,14 @@
 | 23 | Trigger Events | LIST-SIMPLE | T5 | Done | Yes | PASS | Figma Pastebin `216:80023`. Breadcrumb/1 "Trigger Events", "Create Event" CTA. Panel: title+search (no subtitle), table 6 cols (Id/Name/Notification Type/Description/Triggers Count/Enabled), 10 rows, no pagination. |
 | 24 | Player Features | LIST-SIMPLE (multi) | T5 | Done | Yes | PASS | Figma Pastebin `216:81175`. Breadcrumb/2 (Singularity Model > Player Features), "New Player Feature" CTA. 2 panels: Panel 1 "Features to Install" (2 cols, 1 row), Panel 2 "Player Features" (4 cols, 7 rows, pagination "7/8"). Proves multi-panel LIST-SIMPLE. |
 | 25 | Segment Fields | LIST-TAB | T5 | Done | Yes | PASS | Figma Pastebin `216:83645`. Breadcrumb/1 "Segment Fields", "New Smart Segment" CTA. 3 tabs (Smart Segments/Segment Fields/Calculated). Panel: search, table 5 cols (Status dot/Name/Label/Description/Segments Count), 13 rows. |
+| — | **Cold Verification: Content Features** | LIST-SIMPLE | Cold | PASS | Yes | PASS | Cold test of LIST-SIMPLE layout. Fresh session, brief only. Breadcrumb swap to Nav/1 fixed mid-test (all "Level 1" nodes set to same value). |
+| — | **Cold Verification: Segment Fields** | LIST-TAB | Cold | PASS | Yes | PASS | Cold test of LIST-TAB layout. Fresh session, brief only. Nav/1 breadcrumb fix validated. |
+| — | **Cold Verification: Broadcast Settings** | FORM | Cold | PASS | Yes | PASS | Cold test of FORM layout. New brief written. 3 sections, 2-col layout, toggles. Zero issues on first build. |
+| — | **Cold Verification: All Activities** | LIST-FULL | Cold | PASS | Yes | PASS | Cold test of LIST-FULL layout. Figma `367:1085`. New brief written. Tabs + toolbar + search + filter tags + 8 rows + pagination. FA icons placeholder (cloud MCP limitation). All structural elements correct. |
+| — | **Cold Verification: Integration Settings** | HUB | Cold | PASS | Yes | PASS | Cold test of HUB layout. Figma `396:544`. 3 panels with nav card rows using Placeholder Size=M (extras disabled). Full-detach bootstrap with children[] index access. Clean: icon + title + desc, no flags/counts. |
+| — | **Cold Verification: Content Variables** | GRID | Cold | PASS | Yes | PASS | Cold test of GRID layout. Figma `371:1781`. Wrapping grid (4+2), card text overrides, search, Nav/2 breadcrumb all correct. Same card-markets cosmetic limitation. |
+| — | **Cold Verification: CRM Dashboard** | DASH | Cold | PASS | Yes | PASS | Cold test of DASH layout. Figma `372:2097`. Top-level tabs + 3 stacked panels + sub-tabs inside Panel 2 + table + empty states + display count. Predicted high-risk, passed clean. |
+| — | **Cold Verification: New Segment** | SLIDEIN | Cold | PASS | Yes | PASS | Cold test of SLIDEIN layout. Figma `404:484`. From-scratch recipe: header `92:46212` + `buildPanel()` + `addInput()`. 4 panels (General, Conditions, Player Origins, Markets). Block Selectors 360px fixed width (3/row), single icon type per panel. Mono-200 bg, white panel cards. |
 
 ---
 
@@ -96,7 +104,7 @@
 | Red text indicators | Yes | Yes (Triggers) | T1 |
 | Icon toolbar strip | Yes (`addToolbar`) | Yes (All Activities) | T3 |
 | Multi-panel stacking | Yes (`clonePanel`) | Yes (Localisation, Dashboard) | T2 |
-| Slide-in overlay | No (use QA templates) | Yes (Activity Create) | T3 |
+| Slide-in overlay | Yes (from-scratch recipe) | Yes (Activity Create, New Segment) | T3 |
 | Block Selector grid | No | Yes (Activity Create) | T3 |
 | Metric card row | No | — | — (planned) |
 | Split-panel layout | No | — | — (planned) |

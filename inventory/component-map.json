@@ -4,7 +4,7 @@
     "sourceLibrary": "FT DNA (7J3dSTuOSRlsHBqQ4ohtxI)",
     "vuePlaybook": "components.fasttrack.dev",
     "totalFigmaComponents": 839,
-    "totalVueComponents": 20,
+    "totalVueComponents": 22,
     "totalVueComposables": 1,
     "vuePrefix": "FT"
   },
@@ -244,11 +244,11 @@
       "name": "Tag",
       "figmaSection": "Tags and statuses",
       "figmaVariantCount": 49,
-      "vueComponent": null,
-      "vueExists": false,
-      "status": "figma-only",
-      "priority": "medium",
-      "notes": "49 tag and status variants. No dedicated Vue component. Consider if separate Tag component needed or part of other components"
+      "vueComponent": "FTTag",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "49 tag and status variants. Vue FTTag component exists on doc site. Audit needed for variant parity (color, size, icon options)"
     },
     {
       "name": "Tooltip",
@@ -264,11 +264,11 @@
       "name": "Toggle",
       "figmaSection": "Toggles for modal",
       "figmaVariantCount": 12,
-      "vueComponent": null,
-      "vueExists": false,
-      "status": "figma-only",
-      "priority": "medium",
-      "notes": "12 toggle switch variants for modals. No dedicated Vue component. Verify if needed as standalone or modal-specific"
+      "vueComponent": "FTToggle",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "12 toggle switch variants. Vue FTToggle component exists on doc site. Audit needed for checked/unchecked/disabled state parity"
     },
     {
       "name": "Card",
@@ -299,6 +299,26 @@
       "status": "exists-needs-audit",
       "priority": "high",
       "notes": "76 quick access variants. Maps to FTOptionsSelector; verify all item types and interactions"
+    },
+    {
+      "name": "Radio Group",
+      "figmaSection": "Selection",
+      "figmaVariantCount": 53,
+      "vueComponent": "FTRadioGroup",
+      "vueExists": true,
+      "status": "exists-needs-audit",
+      "priority": "high",
+      "notes": "Vue FTRadioGroup wraps FTRadio buttons in a group. Listed on doc site. Figma uses individual Radio instances — no group component in Figma"
+    },
+    {
+      "name": "Rich Text",
+      "figmaSection": null,
+      "figmaVariantCount": 0,
+      "vueComponent": "FTRichText",
+      "vueExists": true,
+      "status": "vue-only",
+      "priority": "medium",
+      "notes": "Vue FTRichText editor component on doc site. No direct Figma counterpart — rich text editing is represented as generic text areas in Figma"
     }
   ],
   "unmappedFigmaSections": [
@@ -367,27 +387,35 @@
       "status": "exists-needs-audit",
       "priority": "high",
       "notes": "Vue has specific Confirm component. Verify if distinct from FTModal or if it's a Modal variant"
+    },
+    {
+      "name": "Rich Text",
+      "vueComponent": "FTRichText",
+      "figmaCounterpart": null,
+      "status": "vue-only",
+      "priority": "medium",
+      "notes": "Rich text editor. No Figma component — represented as generic text areas in design"
     }
   ],
   "summary": {
-    "totalMappedComponents": 20,
-    "figmaOnlyComponents": 9,
-    "vueOnlyComponents": 1,
+    "totalMappedComponents": 22,
+    "figmaOnlyComponents": 7,
+    "vueOnlyComponents": 2,
     "syncStatus": {
       "synced": 0,
-      "existsNeedsAudit": 20,
-      "figmaOnly": 9,
-      "vueOnly": 1,
+      "existsNeedsAudit": 22,
+      "figmaOnly": 7,
+      "vueOnly": 2,
       "deprecated": 0
     },
     "priorityBreakdown": {
       "critical": 3,
-      "high": 15,
-      "medium": 9,
+      "high": 17,
+      "medium": 8,
       "low": 4
     },
     "coverageMetrics": {
-      "vueComponentsCovered": "20/20 (100%)",
+      "vueComponentsCovered": "22/22 (100%)",
       "figmaComponentsCovered": "610/839 (72.7%)",
       "unmappedFigmaComponents": 229,
       "overallCoverage": "72.7%"

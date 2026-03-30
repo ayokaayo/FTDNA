@@ -72,19 +72,22 @@ Check for these files in the repo root:
 
 ## Project Status
 
-**Version:** 0.4.7
-**Last updated:** 2026-03-26
+**Version:** 0.4.9
+**Last updated:** 2026-03-30
 
 | Track | Status | Detail |
 |---|---|---|
 | Platform scanner | Done | `scan.js` discovers 34 pages, saves DOM structure to `scan-manifest.json`. Screenshots on demand via `snap.js`. |
 | Page composition | 24/48 pages (8 repro-tested) | LIST-SIMPLE, LIST-TAB, LIST-FULL, FORM, HUB, SLIDEIN, DASH, LIST-NESTED, GRID proven. 3 blocked (missing components). |
 | Build engine | v2.0 regression-tested | Minimal detach (Page Header INSTANCE always, Panel Header INSTANCE unless search). `swapComponent()` for breadcrumb levels. `buildDataRow()` auto-handles 6 non-text cell types. `setShell()` supports `secondaryCta`. GRID recipe uses `card-markets` component. Full regression: 14 doc issues fixed, 7 render tests passed (73/75). |
+| Cold verification | **8/8 tested (all PASS)** | LIST-SIMPLE, LIST-TAB, FORM, LIST-FULL, DASH, GRID, SLIDEIN, HUB all pass cold. SLIDEIN uses from-scratch recipe with header `92:46212`. HUB uses Placeholder Size=M as nav cards (extras disabled). |
+| Breadcrumb components | Done | Nav/3 (`359:2`) and Nav/4 (`359:93`) created in Figma. `setShell()` navMap covers levels 1-4. component-ids.md + code-patterns.md updated. |
 | Component audit | Done | 22 meta.json populated with variants, propMap, unmapped. Parity report: `npm run audit:parity`. 50 Figma-only gaps, 133 Vue-only gaps identified. |
-| Code Connect | Not started | Unblocked — depends on populated meta.json (done). |
+| Code Connect | N/A (Enterprise only) | Replaced by component-catalog.md + components.fasttrack.dev doc site + parity audit. |
 | Design critique | Done | Compact summary output as default. Colour variables documented in `component-ids.md`. |
 
-**What's next:** Content Variables (GRID), Manage Unsubscribe Pages (LIST-NESTED), remaining page briefs + screenshots. Navigation card component needed for HUB pattern.
+**What's next:** Scale page production (24 remaining). All 8 layout types pass cold verification. Component-map.json drift fixed (Tag/Toggle/RadioGroup/RichText corrected).
+**Known constraint:** Cloud MCP (`use_figma`) cannot render Font Awesome 6 Pro icons — builds degrade to placeholder glyphs. Desktop Bridge has full font support.
 **Regression report:** `.fasttrack/regression-report.md`
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`
 **Page progress:** `inventory/composition-tracker.md`

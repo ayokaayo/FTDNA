@@ -224,26 +224,30 @@ async function setShell(refs, cfg) {
   if (cfg.title) setText(refs.panelHeader, 'Title', cfg.title, 'Bold');
   if (cfg.subtitle) setText(refs.panelHeader, 'Sub-Title', cfg.subtitle);
   if (cfg.subtitle === false) { const sn = refs.panelHeader.findOne(n => n.name === 'Sub-Title'); if (sn) sn.visible = false; }
-  // Breadcrumb — swap component for level count, then set texts. Page Header stays INSTANCE.
+  // Breadcrumb — swap to the correct Nav/N component, then set level texts.
+  // Nav components: Nav/1 (1 level), Nav/2 (2, default), Nav/3 (3), Nav/4 (4), Nav/5+ exists too.
+  // Structure: each has N-1 parent slots (Unselected) + 1 current-page slot (Selected, always last).
+  // Text nodes named "Level 1" — parents are indices 0..N-2, current page is last index.
   if (cfg.breadcrumb) {
     const bc = refs.header.findOne(n => n.name && n.name.includes('Breadcrumb Navigation'));
     if (bc && bc.type === 'INSTANCE') {
-      // Swap to Nav/1 for single-level breadcrumbs
-      if (cfg.breadcrumb.length === 1) {
-        const nav1 = await figma.getNodeByIdAsync('134:84755');
-        bc.swapComponent(nav1);
+      const navMap = { 1:'134:84755', 2:'94:21125', 3:'359:2', 4:'359:93' };
+      const levels = cfg.breadcrumb.length;
+      const targetId = navMap[levels];
+      if (targetId && levels !== 2) { // Nav/2 is the default — only swap if different
+        const target = await figma.getNodeByIdAsync(targetId);
+        if (target) bc.swapComponent(target);
       }
-      // Set breadcrumb level texts
-      const bcTexts = bc.findAll(n => n.type === 'TEXT');
-      let levelIdx = 0;
-      for (const t of bcTexts) {
+      // Set text: collect "Level 1" nodes, assign parents from front, current page from back.
+      // Nav/1 special case: only 1 visible slot but all nodes share same name — set all to same value.
+      const levelNodes = bc.findAll(n => n.type === 'TEXT' && n.name === 'Level 1');
+      const last = levelNodes.length - 1;
+      for (let i = 0; i < levelNodes.length; i++) {
+        const t = levelNodes[i];
         try { await figma.loadFontAsync(t.fontName); } catch(e) { continue; }
-        if (t.characters.match(/^Level \d+$/)) {
-          if (levelIdx < cfg.breadcrumb.length) {
-            t.characters = cfg.breadcrumb[levelIdx];
-          }
-          levelIdx++;
-        }
+        if (levels === 1) { t.characters = cfg.breadcrumb[0]; }                   // Nav/1: set all to same
+        else if (i === last) { t.characters = cfg.breadcrumb[levels - 1]; }       // current page (last)
+        else if (i < levels - 1) { t.characters = cfg.breadcrumb[i]; }            // parent levels
       }
     }
   }
@@ -569,62 +573,270 @@ const p2 = await clonePanel(refs.main, 'Section Title', 'Section subtitle');
 
 ### SLIDEIN
 
-Use Quick Access templates for slide-ins — clone then **detach before customizing**.
+> **Build from scratch — do NOT clone templates.** Template cloning fails via cloud MCP (compound instance IDs break cross-call references). This recipe builds the slide-in from components.
+>
+> **Header component:** `92:46212` — "Header - slide in modal". Instantiate directly, no detach needed.
+> Text edits work on the instance: title (`Level 1`), tag (`Tag text#26:8`), button text (`Button text`).
+>
+> **Key gotcha:** After setting `layoutMode = 'VERTICAL'` on the outer frame, the height collapses to HUG.
+> You MUST set `screen.layoutSizingVertical = 'FIXED'` and then `screen.resize(width, 1080)`.
 
 ```javascript
 await init();
-// Clone from Quick Access
-const qaSource = await figma.getNodeByIdAsync('92:54631'); // LVL1 shell (or 92:55549 for LVL2)
 const pb = figma.root.children.find(p => p.name.includes('Pastebin'));
 await figma.setCurrentPageAsync(pb);
-const clone = qaSource.clone();
-pb.appendChild(clone); clone.x = 0; clone.y = 0;
 
-// CRITICAL: detach before any text/property edits — instance edits are silently ignored
-const screen = clone.detachInstance();
-screen.name = 'My Slide-in Page';
+// Step 1: Outer frame — FIXED height, mono-200 bg (f5f5f5)
+const screen = figma.createFrame();
+pb.appendChild(screen); screen.x = 0; screen.y = 0;
+screen.name = 'My Slide-In';
+screen.layoutMode = 'VERTICAL'; screen.itemSpacing = 0;
+await bindFill(screen, V.mono200);            // ← mono-200 bg, NOT white
+screen.layoutSizingVertical = 'FIXED';        // ← MUST be before resize
+screen.resize(1250, 1300);                    // LVL1 = 1250, LVL2 = 1125. Extend height for content.
 
-// Now you can find and edit text nodes, panels, etc.
-const slideIn = screen.findOne(n => n.name && n.name.includes('Slide in modal'));
-// ... customize panels, text, inputs
+// Step 2: Header — instantiate component (no detach needed)
+const headerComp = await figma.getNodeByIdAsync('92:46212');
+const header = headerComp.createInstance();
+screen.appendChild(header);
+header.layoutSizingHorizontal = 'FILL';
+
+// Title
+const titleNode = header.findOne(n => n.type === 'TEXT' && n.name === 'Level 1');
+if (titleNode) { await figma.loadFontAsync(titleNode.fontName); titleNode.characters = 'Entity Name'; }
+
+// Show tag (hidden by default) — color with variable
+const tag = header.findOne(n => n.name === 'Tag' && n.type === 'INSTANCE');
+if (tag) { tag.visible = true; tag.setProperties({'Tag text#26:8': 'ID-001'}); await bindFill(tag, V.green200); }
+
+// CTA buttons — hide icon frame + kebab for simple slide-ins
+const rightArea = header.findOne(n => n.name === 'Right - CTA and icons');
+if (rightArea) {
+  const iconFrame = rightArea.findOne(n => n.name === 'Frame 1505');
+  if (iconFrame) iconFrame.visible = false;
+  const allBtns = rightArea.children.filter(n => n.name === 'button-btn');
+  let textBtnIdx = 0;
+  for (const btn of allBtns) {
+    const bt = btn.findOne(n => n.type === 'TEXT' && n.name === 'Button text');
+    if (bt) {
+      textBtnIdx++;
+      if (textBtnIdx === 1) btn.visible = false;             // hide alt button
+      if (textBtnIdx === 2) {
+        btn.visible = true;
+        await figma.loadFontAsync(bt.fontName);
+        bt.characters = 'Save';                               // main CTA
+      }
+    } else {
+      btn.visible = false;                                    // hide kebab
+    }
+  }
+}
+
+// Step 3: Content area (transparent — panels provide white bg)
+const contentArea = figma.createFrame();
+contentArea.name = 'Frame 1317';              // ← match reference naming
+contentArea.layoutMode = 'VERTICAL'; contentArea.itemSpacing = 32;
+contentArea.paddingTop = 32; contentArea.paddingBottom = 32;
+contentArea.paddingLeft = 32; contentArea.paddingRight = 32;
+contentArea.fills = [];
+screen.appendChild(contentArea);
+contentArea.layoutSizingHorizontal = 'FILL';
+contentArea.layoutSizingVertical = 'FILL';    // fills remaining height below header
+contentArea.primaryAxisAlignItems = 'MIN';    // top-aligned
+
+// Step 4: Build Standard Panels (white cards with border)
+async function buildPanel(parent, title, subtitle) {
+  const p = figma.createFrame();
+  p.name = 'Standard Panel'; p.layoutMode = 'VERTICAL'; p.itemSpacing = 0;
+  await bindFill(p, V.white); p.cornerRadius = 8;
+  await bindStroke(p, V.mono300); p.strokeWeight = 1;
+  parent.appendChild(p);
+  p.layoutSizingHorizontal = 'FILL'; p.layoutSizingVertical = 'HUG';
+
+  // Panel header (title + subtitle)
+  const ph = figma.createFrame();
+  ph.name = 'Panel Header'; ph.layoutMode = 'VERTICAL'; ph.itemSpacing = 4;
+  ph.paddingTop = 20; ph.paddingBottom = 16; ph.paddingLeft = 24; ph.paddingRight = 24;
+  ph.fills = []; p.appendChild(ph);
+  ph.layoutSizingHorizontal = 'FILL'; ph.layoutSizingVertical = 'HUG';
+  const tN = figma.createText();
+  tN.fontName = { family: 'Inter', style: 'Bold' }; tN.fontSize = 16;
+  tN.characters = title; ph.appendChild(tN); await bindFill(tN, V.mono700);
+  if (subtitle) {
+    const sN = figma.createText();
+    sN.fontName = { family: 'Inter', style: 'Regular' }; sN.fontSize = 14;
+    sN.characters = subtitle; ph.appendChild(sN); await bindFill(sN, V.mono500);
+  }
+
+  // Content area inside panel
+  const c = figma.createFrame();
+  c.name = 'content'; c.layoutMode = 'VERTICAL'; c.itemSpacing = 16;
+  c.paddingTop = 0; c.paddingBottom = 24; c.paddingLeft = 24; c.paddingRight = 24;
+  c.fills = []; p.appendChild(c);
+  c.layoutSizingHorizontal = 'FILL'; c.layoutSizingVertical = 'HUG';
+  return { panel: p, content: c };
+}
+
+// Step 5: Add Input Fields to panels
+const inputSet = await figma.getNodeByIdAsync('91:6537');
+
+async function addInput(parent, label, variantStr, value, opts = {}) {
+  const filled = !!value;
+  const comp = inputSet.children.find(v =>
+    v.name.includes(variantStr) && v.name.includes(filled ? 'default-filled' : 'default-empty'));
+  if (!comp) return null;
+  const inst = comp.createInstance();
+  parent.appendChild(inst); inst.layoutSizingHorizontal = 'FILL';
+  inst.setProperties({ 'AI+Emoji#4369:0': false });
+  const lbl = inst.findOne(n => n.type === 'TEXT' && n.name === 'Label text here');
+  if (lbl) { await figma.loadFontAsync(lbl.fontName); lbl.characters = label; }
+  if (value) {
+    const ph = inst.findOne(n => n.type === 'TEXT' && n.name === 'Placeholder');
+    if (ph) { await figma.loadFontAsync(ph.fontName); ph.characters = value; }
+  }
+  if (opts.required) inst.setProperties({ 'Required#4285:155': true });
+  return inst;
+}
+
+const p1 = await buildPanel(contentArea, 'General', 'Enter the basic segment information');
+await addInput(p1.content, 'Segment Name', 'Text input', 'Reactivation Q1 2025', { required: true });
+await addInput(p1.content, 'Description', 'Text Area', 'Target churned players from last 90 days');
+// ... more panels
 ```
 
-**Templates:** `92:54631` (LVL1 shell), `92:55549` (LVL2 shell), `92:56151` (SDT full comp), `92:56159` (Recurring full comp).
+**Key differences from v1 recipe:**
+- **Background:** `V.mono200` (not white) — panels are white cards ON the gray bg
+- **Panels:** `buildPanel()` creates Standard Panel frames with white fill + mono-300 border + 8px radius
+- **Panel Header:** Primitive title + subtitle (bold 16px + regular 14px), 24px horizontal padding
+- **Content area inside panels:** 24px padding, 16px itemSpacing, HUG height
+- **Input Fields:** Use `addInput()` helper — finds filled/empty variant, overrides label + value, disables AI+Emoji
+- **Block Selector text override:** Target `"Origin name"` text node (NOT `"Block selector"`)
+- **Block Selector sizing:** Set `layoutSizingHorizontal = 'FIXED'` + `resize(360, height)` for 3 per row. Show only ONE icon type per panel: Origins → `Icon=true, flag=false`; Markets → `flag=true, Icon=false`
+- **Height:** Extend beyond 1080px if content requires — slide-ins scroll in the platform
+
+**Header component anatomy (`92:46212`):**
+```
+Header - slide in modal
+├── Left - Breadcrumb Navigation
+│   ├── v7-icon (xmark — close button)
+│   └── Breadcrumb INSTANCE
+│       ├── "Level 1" TEXT — entity name / title
+│       ├── Tag INSTANCE (hidden by default) — entity ID
+│       └── v7-icon (chevron, hidden)
+└── Right - CTA and icons
+    ├── Frame 1505 (3 icon buttons — info, history, lock)
+    ├── button-btn (alt CTA — text button)
+    ├── button-btn (main CTA — text button, pink)
+    └── button-btn (kebab — icon-only, ellipsis-vertical)
+```
+
+**For full-page + slide-in composites** (background page + overlay + slide-in):
+```
+Root frame (1920 × 1080, layoutMode: 'NONE')
+├── Background page (full page, e.g. All Activities)
+├── Overlay blur-small (92:55554) — 614px, positioned left of slide-in
+└── Slide-in (1250px, positioned right: x=670, y=0)
+```
+
+**Reference templates (for visual comparison only — do NOT clone):**
+`92:54631` (LVL1), `92:55549` (LVL2), `92:56151` (SDT full), `92:56159` (Recurring full).
 
 ### HUB (Navigation Cards)
 
-> **Component gap:** No navigation card component exists in the library. HUB cards require centered icon + title + description layout, which doesn't match any existing card variant. This recipe uses `clonePanel()` for the panel structure and `card-markets` (`92:46824`) for cards where the layout fits. For centered icon cards (Integration Settings style), primitives are still needed until a navigation card component is created.
+> Uses **Placeholder Size=M** (`92:49611`, variant `Size=M`) as navigation cards with extras disabled. Each card gets: centered icon + bold title + description, mono-100 bg, 8px radius, mono-300 border. No new component needed — Placeholder with `Extras=false` is the nav card.
 
 ```javascript
 await init();
-const refs = await bootstrapScreen('Integration Settings — HUB', 0, 0);
-await setShell(refs, { breadcrumb: ['Integration Settings'], cta: false });
-refs.main.itemSpacing = 32;
-// Remove default panel — HUB uses multiple panels
-refs.panel.remove();
 
-// Each category is a panel with cards inside
-const p1 = await clonePanel(refs.main, 'Tools & Guides', 'All you need for integration');
-await bindFill(p1.panel, V.white); p1.panel.strokes = []; p1.panel.cornerRadius = 0;
+// Full-detach bootstrap (see §Gotcha: full detach child indices)
+const baseComp = await figma.getNodeByIdAsync('94:21370');
+const inst = baseComp.createInstance();
+pb.appendChild(inst);
+const screen = inst.detachInstance();
+screen.name = 'Page Name — HUB';
 
-// Card row inside content
-const cardRow = figma.createFrame();
-cardRow.name = 'Card Row'; cardRow.layoutMode = 'HORIZONTAL'; cardRow.itemSpacing = 16;
-cardRow.paddingTop = 16; cardRow.paddingBottom = 16; cardRow.paddingLeft = 16; cardRow.paddingRight = 16;
-cardRow.fills = []; p1.content.appendChild(cardRow);
-cardRow.layoutSizingHorizontal = 'FILL'; cardRow.layoutSizingVertical = 'HUG';
+// children[0]=side menu, children[1]=Page Header, children[2]=Frame 1317 (main)
+const phInst = screen.children[1];
+phInst.detachInstance();
+const ph = screen.children[1];
 
-// Use card-markets for data cards, or build centered icon cards:
-const _card = await figma.getNodeByIdAsync('92:46824');
-const cardV = _card.children.find(v => v.name.includes('type=default') && v.name.includes('state=default'));
-const card = cardV.createInstance(); cardRow.appendChild(card);
-card.layoutSizingHorizontal = 'FILL';
-// Override title + description
-const titleN = card.findOne(n => n.type === 'TEXT' && n.parent?.name === 'Frame 1388' && n.fontName?.style === 'Bold');
-if (titleN) { await figma.loadFontAsync(titleN.fontName); titleN.characters = 'Integration Hub'; }
-const descN = card.findOne(n => n.type === 'TEXT' && n.characters === 'All players registered in Ontario Canada');
-if (descN) { await figma.loadFontAsync(descN.fontName); descN.characters = 'Validate and test your integration'; }
+// Breadcrumb → Nav/1
+const oldBC = ph.children[0];
+const nav1Comp = await figma.getNodeByIdAsync('134:84755');
+const nav1 = nav1Comp.createInstance();
+ph.insertChild(0, nav1); nav1.layoutSizingHorizontal = 'FILL'; oldBC.remove();
+const txts = nav1.findAll(n => n.type === 'TEXT' && n.name === 'Level 1');
+for (const t of txts) { await figma.loadFontAsync(t.fontName); t.characters = 'Integration Settings'; }
+
+// Hide CTA area
+const rightArea = ph.children[1];
+for (const child of rightArea.children) { child.visible = false; }
+
+// Main content area
+const mainFrame = screen.children[2];
+mainFrame.name = 'main'; mainFrame.itemSpacing = 32;
+mainFrame.paddingTop = 24; mainFrame.paddingBottom = 24;
+mainFrame.paddingLeft = 24; mainFrame.paddingRight = 24;
+mainFrame.children[0].remove(); // remove default Standard Panel
+
+// Placeholder Size=M for nav cards
+const phSet = await figma.getNodeByIdAsync('92:49611');
+const phM = phSet.children.find(v => v.name === 'Size=M');
+
+// Helper: panel with nav cards
+async function navPanel(parent, title, subtitle, cards) {
+  const p = figma.createFrame();
+  p.name = title; p.layoutMode = 'VERTICAL'; p.itemSpacing = 0;
+  await bindFill(p, V.white); p.strokes = []; p.cornerRadius = 8;
+  parent.appendChild(p);
+  p.layoutSizingHorizontal = 'FILL'; p.layoutSizingVertical = 'HUG';
+
+  // Panel header (primitive — not the Panel Header component)
+  const h = figma.createFrame();
+  h.name = 'Panel Header'; h.layoutMode = 'VERTICAL'; h.itemSpacing = 4;
+  h.paddingTop = 24; h.paddingBottom = 8; h.paddingLeft = 24; h.paddingRight = 24;
+  h.fills = []; p.appendChild(h);
+  h.layoutSizingHorizontal = 'FILL'; h.layoutSizingVertical = 'HUG';
+  const tN = figma.createText();
+  tN.fontName = { family: 'Inter', style: 'Bold' }; tN.fontSize = 16;
+  tN.characters = title; h.appendChild(tN); await bindFill(tN, V.mono700);
+  const sN = figma.createText();
+  sN.fontName = { family: 'Inter', style: 'Regular' }; sN.fontSize = 14;
+  sN.characters = subtitle; h.appendChild(sN); await bindFill(sN, V.mono500);
+
+  // Card row
+  const row = figma.createFrame();
+  row.name = 'Card Row'; row.layoutMode = 'HORIZONTAL'; row.itemSpacing = 16;
+  row.paddingTop = 16; row.paddingBottom = 24; row.paddingLeft = 24; row.paddingRight = 24;
+  row.fills = []; p.appendChild(row);
+  row.layoutSizingHorizontal = 'FILL'; row.layoutSizingVertical = 'HUG';
+
+  for (const c of cards) {
+    const card = phM.createInstance();
+    row.appendChild(card); card.layoutSizingHorizontal = 'FILL';
+    card.setProperties({
+      'CTA#3691:0': false, 'Learn more link#3691:6': false,
+      'Extras#4325:0': false, 'Description#3783:7': true,
+    });
+    const allT = card.findAll(n => n.type === 'TEXT');
+    const hN = allT.find(n => n.characters.includes('Heading'));
+    if (hN) { await figma.loadFontAsync(hN.fontName); hN.characters = c.title; }
+    const dN = allT.find(n => n.characters.includes('Description text'));
+    if (dN) { await figma.loadFontAsync(dN.fontName); dN.characters = c.desc; }
+    card.cornerRadius = 8;
+    await bindStroke(card, V.mono300); card.strokeWeight = 1;
+  }
+}
+
+await navPanel(mainFrame, 'Tools & Guides', 'All you need for integration', [
+  { title: 'Integration Hub', desc: 'Validate and test your integration' },
+  { title: 'API Docs', desc: 'Full reference for all endpoints' },
+  { title: 'Developer Guide', desc: 'Step-by-step guides and tutorials' },
+]);
+// ... more panels
 ```
+
+**Gotcha: full-detach child indices.** After `inst.detachInstance()`, the Base Template becomes a plain frame. Children are accessed by index: `[0]` = side menu, `[1]` = Page Header, `[2]` = Frame 1317 (main content). Don't use `findOne('main')` — the frame is named `Frame 1317` internally.
 
 ### DASH (Multi-panel dashboard)
 

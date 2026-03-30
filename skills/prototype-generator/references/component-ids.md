@@ -20,6 +20,8 @@
 | Flag | `97:71963` | Country=country name (lowercase, e.g. "united kingdom") |
 | Left - Breadcrumb Nav/1 | `134:84755` | Single-level breadcrumb (for pages with no parent) |
 | Left - Breadcrumb Nav/2 | `94:21125` | Two-level breadcrumb (default in Base Template) |
+| Left - Breadcrumb Nav/3 | `359:2` | Three-level breadcrumb |
+| Left - Breadcrumb Nav/4 | `359:93` | Four-level breadcrumb |
 | Block Selector | `91:8712` | Selected/Unselected × Default/Hover/Disabled |
 | Checkbox | `91:8542` | Checked/Unchecked × Default/Disabled/Hover |
 | Radio | `91:8595` | Checked/Unchecked × Default/Disabled/Hover |
@@ -31,6 +33,11 @@
 | card - rewards | `92:46874` | 2 variants — image + title + description + origins footer |
 | Action block | `92:55559` | 14 variants — Email/SMS/Push/Slack/Webhook/Bonus/etc. |
 | Actions Panel | `92:56107` | Empty/Fill variants for CRM action grids |
+| Header - slide in modal | `92:46212` | SINGLE COMPONENT (not a set) — use `createInstance()` directly. Contains: Left (xmark close + Breadcrumb with title + hidden Tag) + Right (Frame 1505 icon buttons + alt btn + main btn + kebab). Title node: `"Level 1"`. Tag: hidden by default, enable with `visible = true` + `setProperties({'Tag text#26:8': 'ID'})`. LVL1 width = 1250px, LVL2 = 1125px. |
+| Activity Builder (SDT) — full page | `92:56151` | MASTER — full slide-in composite (Specific Date and Time). Header + 4 panels. **Manual paste only.** |
+| Activity Builder (Recurring) — full page | `92:56159` | MASTER — full slide-in composite (Recurring/Automated). **Manual paste only.** |
+| Activity Builder (SDT) — panel | `92:54684` | MASTER — individual panel component for SDT variant. Useful for composing custom slide-ins. |
+| Activity Builder (Recurring) — panel | `92:55332` | MASTER — individual panel component for Recurring variant. Useful for composing custom slide-ins. |
 
 ## Row Type Selection (Tables)
 
@@ -65,8 +72,8 @@ All row types have `Position=EVEN` and `Position=ODD` variants for zebra stripin
 |-----------|-----------------|-------------------|------|
 | Panel Header | Title | `"Title"` | Inter Bold |
 | Panel Header | Subtitle | `"Sub-Title"` | Inter Regular |
-| Page Header | Breadcrumb levels | `"Level 1"`, `"Level 2"` etc. (match by content) | Inter Regular/Bold |
-| Page Header | Single breadcrumb | Use `Left - Breadcrumb Navigation/1` (`134:84755`) for 1-level pages | Inter Bold |
+| Page Header | Breadcrumb levels | All text nodes named `"Level 1"` — parents = indices 0..N-2, current page = last index | Inter Bold |
+| Page Header | Breadcrumb swap | Swap component by level count: Nav/1 `134:84755`, Nav/2 `94:21125` (default), Nav/3 `359:2`, Nav/4 `359:93` | — |
 | Page Header | CTA button | `"Button text"` (match by content) | Inter Bold |
 | Page Header | Heading | `"Heading"` (match by content) | Inter Regular |
 | Tab | Title | `"text goes here"` inside `"tab title and alert circle"` frame | Inter Bold |
@@ -276,6 +283,8 @@ The Placeholder component (`92:49611`) is used for empty states inside panels.
 **Variants:** `Size=XS/S/M/L/XL [icon]/XL [GIF]`
 
 **Simple empty state:** Use `Size=M`, disable all booleans except heading. Override heading text via `findOne(n => n.name.includes('Heading'))`.
+
+**Navigation card (HUB pages):** Use `Size=M` with `Extras=false`, `CTA=false`, `Learn more link=false`, `Description=true`. Override heading + description text. Add `cornerRadius=8`, `strokeWeight=1`, bind stroke to `mono-300`. This replaces the need for a dedicated nav card component.
 
 ```javascript
 const placeholderSet = await figma.getNodeByIdAsync('92:49611');
