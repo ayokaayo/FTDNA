@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// snap.js — Screenshot FT UX pages, save locally, paste to Figma via Claude
+// snap.js — Screenshot FT pages from any environment (UX, CF Pages, prototype)
 //
 // Usage:
 //   node scripts/snap.js --login              Open browser to authenticate
@@ -8,6 +8,8 @@
 //   node scripts/snap.js <url|path>           Screenshot a page (connects to running browser)
 //   node scripts/snap.js <url> --full         Full-page screenshot
 //   node scripts/snap.js <url> --name foo     Custom filename
+//   node scripts/snap.js <path> --proto       Screenshot from CF Pages prototype environment
+//   node scripts/snap.js <path> --compare     Screenshot both real + prototype, side by side
 
 import puppeteer from 'puppeteer-core';
 import { join, dirname } from 'path';
@@ -16,7 +18,9 @@ import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const BASE = 'https://ux.ft-crm.com/v2/';
+const BASE_UX = 'https://ux.ft-crm.com/v2/';
+const BASE_PROTO = 'https://feature-dev-0000-ftdna-proto.backoffice-v2.pages.dev/';
+const BASE = BASE_UX; // default
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PROFILE = join(__dirname, '..', '.browser-profile');
 const OUT = join(__dirname, '..', 'references', 'screenshots');
@@ -27,6 +31,8 @@ const args = process.argv.slice(2);
 const login = args.includes('--login');
 const start = args.includes('--start');
 const stop = args.includes('--stop');
+const proto = args.includes('--proto');
+const compare = args.includes('--compare');
 const nameIdx = args.indexOf('--name');
 const name = nameIdx > -1 ? args[nameIdx + 1] : null;
 const target = args.find(a => !a.startsWith('--') && a !== name);
@@ -78,7 +84,9 @@ async function waitForLogin(page) {
     const check = setInterval(async () => {
       try {
         const u = page.url();
-        if (u.startsWith(BASE) && !u.includes('login') && !u.includes('auth')) {
+        const isLoggedIn = !u.includes('login') && !u.includes('auth') && !u.includes('signin') && !u.includes('oldlogin');
+        const isOnApp = u.startsWith(BASE_UX) || u.includes('backoffice-v2.pages.dev');
+        if (isOnApp && isLoggedIn) {
           clearInterval(check);
           clearTimeout(timeout);
           resolve();
@@ -146,11 +154,9 @@ async function main() {
   }
 
   if (!target) {
-    console.error('Usage: node scripts/snap.js <path|url> [--name file] [--full] [--login] [--start] [--stop]');
+    console.error('Usage: node scripts/snap.js <path|url> [--name file] [--full] [--proto] [--compare] [--login] [--start] [--stop]');
     process.exit(1);
   }
-
-  const url = target.startsWith('http') ? target : BASE + target;
 
   // Try to connect to running browser first
   let browser = await connectToRunning();
@@ -162,29 +168,47 @@ async function main() {
     launched = true;
   }
 
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1920, height: 1080 });
-  await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+  const fullPage = args.includes('--full');
 
-  // Check if session expired
-  const landed = page.url();
-  if (landed.includes('login') || landed.includes('auth') || landed.includes('signin')) {
-    console.error('Session expired — please login in the browser window...');
-    await waitForLogin(page);
-    // Re-navigate to target
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+  async function takeScreenshot(pageUrl, slug, suffix = '') {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.goto(pageUrl, { waitUntil: 'networkidle2', timeout: 60000 });
+
+    // Check if session expired
+    const landed = page.url();
+    if (landed.includes('login') || landed.includes('auth') || landed.includes('signin') || landed.includes('oldlogin')) {
+      console.error(`Session expired on ${pageUrl} — please login in the browser window...`);
+      await waitForLogin(page);
+      await page.goto(pageUrl, { waitUntil: 'networkidle2', timeout: 60000 });
+    }
+
+    const filename = suffix ? `${slug}${suffix}` : slug;
+    const out = join(OUT, slug, filename + '.png');
+    mkdirSync(dirname(out), { recursive: true });
+    await page.screenshot({ path: out, fullPage });
+    console.log(out);
+    await page.close();
+    return out;
   }
 
-  // Take screenshot — saves as {slug}/{slug}.png (folder per page)
   const slug = name || slugify(target);
-  const out = join(OUT, slug, slug + '.png');
-  mkdirSync(dirname(out), { recursive: true });
-  const fullPage = args.includes('--full');
-  await page.screenshot({ path: out, fullPage });
-  console.log(out);
 
-  // Close the tab but keep browser alive
-  await page.close();
+  if (compare) {
+    // --compare: screenshot both the real page and the prototype
+    const path = target.startsWith('/') ? target.slice(1) : target;
+    const realUrl = BASE_UX + path;
+    const protoUrl = BASE_PROTO + 'prototype/' + path;
+    console.log(`Comparing: ${realUrl} vs ${protoUrl}`);
+    await takeScreenshot(realUrl, slug, '-real');
+    await takeScreenshot(protoUrl, slug, '-proto');
+  } else {
+    // Single screenshot
+    const base = proto ? BASE_PROTO : BASE;
+    const url = target.startsWith('http') ? target : base + target;
+    await takeScreenshot(url, slug);
+  }
+
   browser.disconnect();
 }
 

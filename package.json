@@ -11,6 +11,8 @@
   "scripts": {
     "build:tokens": "node scripts/build-tokens.js",
     "snap": "node scripts/snap.js",
+    "snap:proto": "node scripts/snap.js --proto",
+    "snap:compare": "node scripts/snap.js --compare",
     "snap:login": "node scripts/snap.js --login",
     "snap:paste": "node scripts/figma-paste.js",
     "mcp:health": "bash scripts/mcp-health.sh",
