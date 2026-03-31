@@ -598,7 +598,7 @@ Content Area
 ```
 
 **Composition rules:**
-- Each template section is a white frame (1700px FIXED, 24px padding, cornerRadius 0)
+- Each template section is a white frame (1700px FIXED, 32px padding, cornerRadius 0)
 - Title row: bold 16px title + spacer (FILL) + icon buttons (eye, pen)
 - Mini-table inside section: same Header + Row components as LIST-SIMPLE
 - Count text: 12px Regular mono-600, not pagination component

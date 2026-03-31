@@ -218,6 +218,7 @@ async function bootstrapScreen(name, x, y) {
   const panelHeader = panel.children.find(c => c.name === 'Panel Header');
   const content = panel.children.find(c => c.name === 'content placeholder');
   content.layoutMode = 'VERTICAL'; content.itemSpacing = 0;
+  content.paddingTop = 32; content.paddingBottom = 32; content.paddingLeft = 32; content.paddingRight = 32;
   while (content.children.length > 0) content.children[0].remove();
   // Page Header — INSTANCE (text edits, CTA, breadcrumbs all work without detach)
   const header = screen.children.find(c => c.name === 'Page Header' || c.name === 'Header');
@@ -444,6 +445,7 @@ async function clonePanel(contentFrame, title, subtitle) {
   if (subtitle === false) { const sn = ph.findOne(n => n.name === 'Sub-Title'); if (sn) sn.visible = false; }
   const content = tempPanel.children.find(c => c.name === 'content placeholder');
   content.layoutMode = 'VERTICAL'; content.itemSpacing = 0;
+  content.paddingTop = 32; content.paddingBottom = 32; content.paddingLeft = 32; content.paddingRight = 32;
   while (content.children.length > 0) content.children[0].remove();
   tempPanel.layoutSizingVertical = 'HUG';
   return { panel: tempPanel, panelHeader: ph, content };
@@ -466,7 +468,7 @@ async function reattach(ids) {
 | Helper | Signature | Purpose |
 |---|---|---|
 | `init()` | `await init()` | Load fonts, cache components, build ROW map. **Call once per execution.** |
-| `bootstrapScreen` | `(name, x, y)` → `{screen, main, panel, panelHeader, content, header}` | Instantiate base template, detach, return all refs |
+| `bootstrapScreen` | `(name, x, y)` → `{screen, main, panel, panelHeader, content, header}` | Instantiate base template, detach, return all refs. Content area gets 32px padding on all sides (R25). |
 | `setShell` | `(refs, {breadcrumb, cta, secondaryCta, title, subtitle, search})` | Override header + panel texts. `cta:false` hides buttons. `secondaryCta:'Send Data'` shows the alt button. `search:true` enables panel search. |
 | `buildTable` | `async (columns, data, parent)` → `{headerRow, dataRows}` | Build table with auto-populated cells. `columns`: `[{name, type, width?, icon?, color?}]`. `data`: `[['val','val',...], ...]`. Supported auto-types: `text`, `texticon` (set `icon` in col), `texttrailing`, `number`, `status` (data = variable ID for dot color), `icon` (data = FA icon name, set `color` in col), `tag` (data = tag text), `flags-solo` (data = country name), `ellipsis` (no data needed). For `image`, `action`, `flags` (multi) — still needs manual post-processing. |
 | `addPagination` | `(parent, showing, total)` | Append pagination row |
@@ -688,7 +690,7 @@ async function buildPanel(parent, title, subtitle) {
   // Content area inside panel
   const c = figma.createFrame();
   c.name = 'content'; c.layoutMode = 'VERTICAL'; c.itemSpacing = 16;
-  c.paddingTop = 0; c.paddingBottom = 24; c.paddingLeft = 24; c.paddingRight = 24;
+  c.paddingTop = 32; c.paddingBottom = 32; c.paddingLeft = 32; c.paddingRight = 32;
   c.fills = []; p.appendChild(c);
   c.layoutSizingHorizontal = 'FILL'; c.layoutSizingVertical = 'HUG';
   return { panel: p, panelHeader: ph, content: c };
@@ -811,7 +813,7 @@ async function navPanel(parent, title, subtitle, cards) {
   // Panel header (primitive — not the Panel Header component)
   const h = figma.createFrame();
   h.name = 'Panel Header'; h.layoutMode = 'VERTICAL'; h.itemSpacing = 4;
-  h.paddingTop = 24; h.paddingBottom = 8; h.paddingLeft = 24; h.paddingRight = 24;
+  h.paddingTop = 32; h.paddingBottom = 8; h.paddingLeft = 32; h.paddingRight = 32;
   h.fills = []; p.appendChild(h);
   h.layoutSizingHorizontal = 'FILL'; h.layoutSizingVertical = 'HUG';
   const tN = figma.createText();
@@ -824,7 +826,7 @@ async function navPanel(parent, title, subtitle, cards) {
   // Card row
   const row = figma.createFrame();
   row.name = 'Card Row'; row.layoutMode = 'HORIZONTAL'; row.itemSpacing = 16;
-  row.paddingTop = 16; row.paddingBottom = 24; row.paddingLeft = 24; row.paddingRight = 24;
+  row.paddingTop = 16; row.paddingBottom = 32; row.paddingLeft = 32; row.paddingRight = 32;
   row.fills = []; p.appendChild(row);
   row.layoutSizingHorizontal = 'FILL'; row.layoutSizingVertical = 'HUG';
 
@@ -1031,3 +1033,5 @@ const f2 = dropdown.createInstance(); formRow.appendChild(f2); f2.layoutSizingHo
 | R22 | **Panel Header = COMPONENT `92:46640`, never primitives.** 4 variants, default = `Property 1=Default`. Boolean properties: `Search#4635:14`, `Toggle#4635:15`, `Action Icons#4635:12`, `Info icon#4635:17`, `Right side options#4635:16`, `Description#4635:13`. Text overrides: `Title` (bold 20px), `Sub-Title` (regular 14px). Always use component instance — never create text frames manually for panel headers. |
 | R23 | **Filter tags + action icons = inside Panel Header**, not as separate rows. When a page needs filter tags (ACTIVE/DRAFT/etc.) and/or action icon buttons, they go inside the Panel Header's `Search + Action Icons` area — search on left, filter tags + icon buttons on right. Never create separate stacked rows below the panel header for these elements. Reference: All Activities page pattern. |
 | R24 | **Radio Button = COMPONENT (`91:8595`), never primitives.** 5 variants: `Type=Checked/Unchecked`, `Status=Default/Disabled/Hover`. Text property: `Text#9:9` — override via `setProperties({'Text#9:9': 'Option label'})`. Always use component instances for radio buttons. Never build from ellipses + text. Place in a horizontal row with `itemSpacing = 32`. |
+| R25 | **Panel content padding = 32px all sides.** Content area inside any Standard Panel uses `paddingTop = 32; paddingBottom = 32; paddingLeft = 32; paddingRight = 32`. This creates 32px distance between the Panel Header component and the first content element, and 32px margins from the panel edges. Applies to `bootstrapScreen`, `clonePanel`, and `buildPanel`. Never use 24px — 32px is the foundation spacing for panel content. |
+| R26 | **Action bar layout: info left, actions right, primary CTA rightmost.** Informational elements (tags, counts, status) left-aligned → spacer (FILL) → secondary actions (Reset, Cancel) right-aligned → primary CTA at far right terminal position. Follows F-pattern reading flow. Applies to any panel, widget, or slide-in that has an action bar. Never cluster all buttons on one side with info trailing. |
