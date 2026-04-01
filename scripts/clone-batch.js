@@ -221,11 +221,29 @@ function transformVue(source, pageName, manifest) {
   // 5. Remove import { authenticationAPI }
   script = script.replace(/import\s*\{\s*authenticationAPI\s*\}\s*from\s*['"][^'"]+['"];?\n?/g, '');
 
-  // 6. Remove import { useFlag } or similar feature flag imports
-  script = script.replace(/import\s*\{[^}]*useFlag[^}]*\}\s*from\s*['"][^'"]+['"];?\n?/g, '');
+  // 6. Replace useFlag/useFlagsStatus imports with stubs (don't strip — code references them)
+  script = script.replace(
+    /import\s*\{[^}]*useFlag[^}]*useFlagsStatus[^}]*\}\s*from\s*['"][^'"]+['"];?\n?/g,
+    "const useFlag = () => ({ value: true }); const useFlagsStatus = () => ({ flagsReady: { value: true } });\n"
+  );
+  script = script.replace(
+    /import\s*\{[^}]*useFlagsStatus[^}]*useFlag[^}]*\}\s*from\s*['"][^'"]+['"];?\n?/g,
+    "const useFlag = () => ({ value: true }); const useFlagsStatus = () => ({ flagsReady: { value: true } });\n"
+  );
+  script = script.replace(
+    /import\s*\{\s*useFlag\s*\}\s*from\s*['"][^'"]+['"];?\n?/g,
+    "const useFlag = () => ({ value: true });\n"
+  );
+  script = script.replace(
+    /import\s*\{\s*useFlagsStatus\s*\}\s*from\s*['"][^'"]+['"];?\n?/g,
+    "const useFlagsStatus = () => ({ flagsReady: { value: true } });\n"
+  );
 
-  // 7. Remove import { useProductTracking }
-  script = script.replace(/import\s*\{[^}]*useProductTracking[^}]*\}\s*from\s*['"][^'"]+['"];?\n?/g, '');
+  // 7. Replace useProductTracking with stub
+  script = script.replace(
+    /import\s*\{[^}]*useProductTracking[^}]*\}\s*from\s*['"][^'"]+['"];?\n?/g,
+    "const useProductTracking = () => ({ trackEvent: () => {} });\n"
+  );
 
   // 8. Add ProtoFab import (after last existing import)
   const lastImportIdx = script.lastIndexOf('\nimport ');
