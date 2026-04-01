@@ -86,6 +86,20 @@
       "created": "2026-03-24",
       "updated": "2026-03-24",
       "status": "active"
+    },
+    {
+      "name": "coded-prototype-generator",
+      "path": "skills/coded-prototype-generator",
+      "description": "Generate interactive Vue prototypes deployed on Cloudflare Pages. Clone existing pages with real Vuex data, or build new pages with mock data. Trigger on: build a prototype, code this page, prototype this screen, add a coded prototype, create a Vue prototype.",
+      "author": "miguel-angelo",
+      "domain": ["prototyping", "frontend", "vue"],
+      "autonomy": "semi-auto",
+      "inputs": ["page-name", "screenshot", "figma-url", "description"],
+      "outputs": ["vue-page", "cf-pages-url"],
+      "complexity": "moderate",
+      "created": "2026-04-01",
+      "updated": "2026-04-01",
+      "status": "active"
     }
   ]
 }
