@@ -762,7 +762,7 @@ Root frame (1920 × 1080, layoutMode: 'NONE')
 
 ### HUB (Navigation Cards)
 
-> Uses **Placeholder Size=M** (`92:49611`, variant `Size=M`) as navigation cards with extras disabled. Each card gets: centered icon + bold title + description, mono-100 bg, 8px radius, mono-300 border. No new component needed — Placeholder with `Extras=false` is the nav card.
+> Uses **Placeholder Size=M** (`92:49611`, variant `Size=M`) as navigation cards with extras disabled. Each card gets: centered icon + bold title + description, mono-100 bg, **no stroke, no round corners** (cornerRadius 0). No new component needed — Placeholder with `Extras=false` is the nav card.
 
 ```javascript
 await init();
@@ -842,8 +842,7 @@ async function navPanel(parent, title, subtitle, cards) {
     if (hN) { await figma.loadFontAsync(hN.fontName); hN.characters = c.title; }
     const dN = allT.find(n => n.characters.includes('Description text'));
     if (dN) { await figma.loadFontAsync(dN.fontName); dN.characters = c.desc; }
-    card.cornerRadius = 8;
-    await bindStroke(card, V.mono300); card.strokeWeight = 1;
+    card.cornerRadius = 0; card.strokes = []; // HUB cards: no round corners, no stroke
   }
 }
 
