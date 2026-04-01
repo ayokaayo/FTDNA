@@ -19,6 +19,18 @@ Production-quality Figma frames built from real component instances — side men
 
 ## Decision Engine
 
+### Manifest Path (preferred — manifest entry exists)
+Look up the requested page in `FTDNA/references/page-manifest.json` by route or file path.
+
+**If a matching entry exists with `layout.confidence >= 0.7`:**
+1. Read the manifest entry — it provides layout type, shell metadata (breadcrumbs, CTAs), table columns, tabs, component imports, and Vuex dependencies.
+2. Check `briefs/{page-name}.md` for **overrides only** — construction notes, sample data, pinned Figma node IDs. Do not re-read layout/columns from the brief if the manifest already has them.
+3. Go straight to `code-patterns.md` + `component-ids.md`. Skip `page-patterns.md` and `component-catalog.md`.
+
+**If `layout.confidence < 0.7`:** Fall through to Full Path — the manifest data is unreliable, use `page-patterns.md` to classify manually.
+
+**If no manifest entry exists:** Fall through to Fast Path (brief) or Full Path.
+
 ### Fast Path (brief exists)
 If a brief file exists in `briefs/` for this page → **read the brief first.** It has layout type, columns, data, and construction notes. Then go straight to `code-patterns.md` for implementation snippets and `component-ids.md` for ID lookups. Skip the catalog and patterns files.
 
@@ -152,7 +164,8 @@ Based on the page pattern selected in Step 1:
 
 | Priority | File | Location | When to read |
 |----------|------|----------|-------------|
-| P0 | `briefs/*.md` | Skill-local | **FIRST** — if a brief exists for this page, it has everything |
+| P0 | `references/page-manifest.json` | Repo root | **PREFERRED** — unified manifest with layout, shell, columns, tabs for 284 pages |
+| P0 | `briefs/*.md` | Skill-local | **Overrides / fallback** — construction notes, sample data, pinned Figma node IDs |
 | P1 | `references/component-ids.md` | Skill-local | **ALWAYS** — IDs, variants, text overrides, gotchas (compact) |
 | P1 | `references/code-patterns.md` | Skill-local | **ALWAYS** — proven code snippets for each composition pattern |
 | P2 | `references/page-patterns.md` | Repo root | **WHEN NEEDED** — jump to the specific layout type section only |

@@ -18,7 +18,8 @@
     "mcp:health": "bash scripts/mcp-health.sh",
     "mcp:status": "bash scripts/mcp-health.sh --status",
     "audit:parity": "node scripts/parity-report.js",
-    "scan:source": "node scripts/scan-source.js"
+    "scan:source": "node scripts/scan-source.js",
+    "gen:tracker": "node scripts/gen-tracker.js"
   },
   "dependencies": {
     "puppeteer-core": "^24.0.0"

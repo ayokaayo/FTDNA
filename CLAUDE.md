@@ -72,25 +72,27 @@ Check for these files in the repo root:
 
 ## Project Status
 
-**Version:** 0.5.0
-**Last updated:** 2026-03-30
+**Version:** 0.6.0
+**Last updated:** 2026-04-01
 
 | Track | Status | Detail |
 |---|---|---|
 | Platform scanner | Done | `scan.js` discovers 34 pages, saves DOM structure to `scan-manifest.json`. Screenshots on demand via `snap.js`. |
+| Source scanner | **Done** | `scan-source.js` reads 284 Vue page files from backoffice-v2, extracts components, Vuex/Pinia deps, bus events, layout type, table columns, breadcrumbs, CTAs. Outputs `references/page-manifest.json` (325KB). 80% layout classification for routed pages. |
+| Coded prototypes | **Active** | 9 prototypes on CF Pages (`feature/DEV-0000-FTDNA-prototypes`). `coded-prototype-generator` skill proven with cold test. Clone path (Vuex) and build path (mock data) both working. |
 | Page composition | 36/48 pages (8 repro-tested) | All 9 LIST-SIMPLE done. 9/10 LIST-TAB done. LIST-FULL, FORM, HUB, GRID/LIST-NESTED all complete. DASH 2/3. SLIDEIN proven. 3 blocked (missing components). 3/5 custom done (Users & Permissions, Query Editor, AI Settings). |
-| Build engine | v2.0 regression-tested | Minimal detach (Page Header INSTANCE always, Panel Header INSTANCE unless search). `swapComponent()` for breadcrumb levels. `buildDataRow()` auto-handles 6 non-text cell types. `setShell()` supports `secondaryCta`. GRID recipe uses `card-markets` component. Panel Header (`92:46640`) and Radio (`91:8595`) added to `init()` pre-cache. Rules R17–R24 codified (tab-box-index, Block Selector, duotone icons, Panel Header as component, filter placement inside panel header, Radio as component). Full regression: 14 doc issues fixed, 7 render tests passed (73/75). |
-| Cold verification | **8/8 tested (all PASS)** | LIST-SIMPLE, LIST-TAB, FORM, LIST-FULL, DASH, GRID, SLIDEIN, HUB all pass cold. SLIDEIN uses from-scratch recipe with header `92:46212`. HUB uses Placeholder Size=M as nav cards (extras disabled). |
-| Breadcrumb components | Done | Nav/3 (`359:2`) and Nav/4 (`359:93`) created in Figma. `setShell()` navMap covers levels 1-4. component-ids.md + code-patterns.md updated. |
+| Build engine | v2.0 regression-tested | Minimal detach (Page Header INSTANCE always, Panel Header INSTANCE unless search). `swapComponent()` for breadcrumb levels. `buildDataRow()` auto-handles 6 non-text cell types. `setShell()` supports `secondaryCta`. GRID recipe uses `card-markets` component. Panel Header (`92:46640`) and Radio (`91:8595`) added to `init()` pre-cache. Rules R17–R24 codified. Full regression: 14 doc issues fixed, 7 render tests passed (73/75). |
+| Cold verification | **8/8 tested (all PASS)** | LIST-SIMPLE, LIST-TAB, FORM, LIST-FULL, DASH, GRID, SLIDEIN, HUB all pass cold. |
 | Component audit | Done | 22 meta.json populated with variants, propMap, unmapped. Parity report: `npm run audit:parity`. 50 Figma-only gaps, 133 Vue-only gaps identified. |
 | Code Connect | N/A (Enterprise only) | Replaced by component-catalog.md + components.fasttrack.dev doc site + parity audit. |
 | Design critique | Done | Compact summary output as default. Colour variables documented in `component-ids.md`. |
 
-**What's next:** 12 pages remaining. Standard layout types exhausted. Custom: 3/5 done (Users & Permissions, Query Editor, AI Settings built in T8). Remaining: 2 DETAIL (blocked — 6 missing components), 2 custom/blocked (Oracle needs Chat components, Media Library needs Split Panel/Folder Tree), 1 DASH (Performance Dashboard — empty state, skippable). Next priority: component creation sprint to unblock DETAIL + remaining custom pages.
+**What's next:** Unified manifest powers both generators. Brief migration (thin 17 briefs to override-only). Expand coded prototype coverage. Component creation sprint to unblock DETAIL + remaining custom pages.
 **Known constraint:** Cloud MCP (`use_figma`) cannot render Font Awesome 6 Pro icons — builds degrade to placeholder glyphs. Desktop Bridge has full font support.
 **Regression report:** `.fasttrack/regression-report.md`
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`
 **Page progress:** `inventory/composition-tracker.md`
+**Unified manifest plan:** `.claude/plans/soft-chasing-dream.md`
 
 ---
 
@@ -111,7 +113,7 @@ FTDNA/
 ├── references/      → Shared context (component-catalog.md, page-patterns.md)
 ├── templates/       → Vue component, test, and docs templates
 ├── assets/logos/    → FastTrack brand SVGs
-├── scripts/         → build-tokens.js, snap.js (screenshots), scan.js (page discovery), figma-paste.js
+├── scripts/         → build-tokens.js, snap.js (screenshots), scan.js (page discovery), scan-source.js (Vue source analysis), figma-paste.js
 ├── .fasttrack/      → Vue-lib rules reference, plans
 └── .workspace/      → Scratch space (gitignored)
 ```
@@ -204,7 +206,8 @@ Skills are Claude instruction packages in `skills/`. Registry: `skills/registry.
 | `prd-writer` | product-management | Write, review, or refactor PRDs |
 | `skill-architect` | meta | Create new production-ready skills |
 | `design-critique` | product-design | Review designs for compliance and quality |
-| `prototype-generator` | prototyping | Generate branded Figma prototypes from briefs |
+| `prototype-generator` | prototyping | Generate branded Figma prototypes from briefs or manifest |
+| `coded-prototype-generator` | prototyping | Generate interactive Vue prototypes on CF Pages |
 | `kb` | knowledge-management | Search the GitBook knowledgebase for platform answers |
 | `tutor` | training | Teach FT CRM knowledge — adaptive, source-grounded tutoring with quizzes and scenarios |
 
@@ -226,6 +229,7 @@ The component is staged locally in the vue-lib checkout before being pushed as a
 
 | Decision | Choice | Context |
 |----------|--------|---------|
+| Unified manifest | `page-manifest.json` | Single source for both generators; `scan-source.js` auto-generates from Vue source |
 | Prototype approach | V2 Hybrid (clone + instances) | `importComponentByKeyAsync()` times out; clone from seed is instant |
 | Seed instance | **Deprecated** — was `3:5535`, now deleted | Builds use Base Template `94:21370` via `bootstrapScreen()` or Quick Access clones |
 | Base Template | Component `94:21370` on Workbench | Use `createInstance()` for new prototypes |
@@ -243,6 +247,8 @@ npm run snap --stop    # Stop persistent browser
 npm run snap <path>    # Screenshot a page (e.g. /v2/segments)
 npm run snap:paste <img>  # Copy screenshot to clipboard + paste into Figma
 node scripts/scan.js   # Discover all platform pages → scan-manifest.json + page-inventory.md
+npm run scan:source    # Analyze Vue source files → page-manifest.json (284 pages)
+npm run gen:tracker    # Auto-generate composition-tracker.md from manifest
 npm run mcp:health     # Kill zombie MCP processes + connection report
 npm run mcp:status     # Connection status only (no cleanup)
 ```

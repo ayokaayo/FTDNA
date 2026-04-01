@@ -7,33 +7,52 @@ description: Generate interactive Vue prototypes deployed on Cloudflare Pages. T
 
 Build Vue prototype pages in `backoffice-v2` on branch `feature/DEV-0000-FTDNA-prototypes`. Deployed automatically via CF Pages.
 
-## Decision: Clone or Build?
+## Step 0: Consult the Page Manifest
 
-```
-Does the page already exist in backoffice-v2/src/components/pages/?
-  YES → Clone path (real data)
-  NO  → Build path (mock data)
-```
+**Always start here.** Read `references/page-manifest.json` and find the entry by page name or route.
+
+The `codedPrototype.strategy` field decides what to do:
+
+| Strategy | Action |
+|----------|--------|
+| `clone` | Copy production file, strip non-essentials (see Clone Path) |
+| `build` | No production page — create with mock data (see Build Path) |
+| `exists` | Already built — skip unless the user asks for a rebuild |
+| `skip` | Too complex or blocked — tell the user why and stop |
+
+The manifest gives you everything up front — no searching needed:
+
+- **`source.filePath`** — exact production file for clone path
+- **`components.imports`** — complete import list (strip `InfoLink` per clone rules)
+- **`state.vuex.dispatches`** — store dispatches to keep in `mounted()`
+- **`state.vuex.getters`** — getters the page reads from
+- **`state.bus`** — bus events the page emits
+- **`layout.type`** — use to pick the closest reference for build path
+- **`shell.cta`** — header CTA text and variant
+- **`shell.breadcrumbs`** — breadcrumb labels
+
+Only fall back to manual file search if the page is missing from the manifest.
 
 ---
 
 ## Clone Path (existing page)
 
-1. **Find the production page** in `backoffice-v2/src/components/pages/`
+1. **Open `source.filePath`** from the manifest (e.g. `src/components/pages/PlayerOrigins.vue`)
 2. **Read the entire file** — template, script, style
 3. **Copy to** `src/components/pages/Prototypes/{Name}.vue`
 4. **Strip:**
    - Permission checks (`hasPermission()` v-if guards → remove or replace with `true`)
-   - `InfoLink` components and imports
+   - `InfoLink` components and imports (manifest lists these — skip them)
    - Product tracking (`useProductTracking`)
    - Direct API calls for write operations (save/delete) — keep reads
    - Route-based state management (`handleRouteChange`, `$route.params`)
    - i18n `$t()` calls → replace with plain English strings
 5. **Keep:**
    - Template structure, components, slots — exactly as production
-   - Vuex `mapGetters` and store getters
-   - Store `dispatch` calls in `mounted()` — data won't load without them
-   - Component imports (Board, Tabs, ActivityGroup, Panel, etc.)
+   - Vuex `mapGetters` and store getters (manifest `state.vuex.getters` lists them)
+   - Store `dispatch` calls in `mounted()` — keep exactly what `state.vuex.dispatches` lists
+   - Component imports — use `components.imports` from manifest, minus stripped items
+   - Bus events — emit what `state.bus` lists
    - Computed properties for filtering/sorting/pagination
    - All CSS/LESS — copy verbatim including `@import` statements
 6. **Wire it** (see Wiring section below)
@@ -61,11 +80,11 @@ If the page uses side panels managed by a parent component (BoardWrapper, Layout
 
 ## Build Path (new page)
 
-1. **Find the closest existing prototype** by layout type:
-   - Table page → read `Prototypes/Triggers.vue` (mock data pattern)
-   - Complex list → read `Prototypes/AllActivities.vue`
-   - Side panel page → read `Prototypes/CommunicationProfiles.vue`
-   - Slide-in → read `Prototypes/ActivityBuilder.vue`
+1. **Use `layout.type` from manifest** to pick the closest existing prototype:
+   - `LIST-SIMPLE` / `LIST-TAB` → read `Prototypes/Triggers.vue` (mock data pattern)
+   - `LIST-FULL` → read `Prototypes/AllActivities.vue`
+   - `LIST-SIMPLE` with side panel → read `Prototypes/CommunicationProfiles.vue`
+   - `SLIDEIN` → read `Prototypes/ActivityBuilder.vue`
 2. **Find the closest production page** by layout type — use its component patterns, NOT briefs or reference docs
 3. **Create mock data** in `src/mocks/prototypes/{name}.json`
 4. **Build the Vue page** using `<script setup lang="ts">`, importing mock data
