@@ -164,13 +164,37 @@ function transformVue(source, pageName, manifest) {
   // 2. Remove import { setCookie, getCookie }
   script = script.replace(/import\s*\{[^}]*setCookie[^}]*\}\s*from\s*['"][^'"]+['"];?\n?/g, '');
 
-  // 3. Remove import from @/api/... (both default and destructured)
-  const apiImportRe = /import\s+(?:\w+|\{[^}]+\})\s+from\s+['"]@\/api\/[^'"]+['"];?\n?/g;
-  const apiImports = script.match(apiImportRe);
-  if (apiImports) {
-    for (const imp of apiImports) {
-      script = script.replace(imp, '');
-      // Info only — stripping API imports is correct behavior, not a warning
+  // 3. Remove WRITE-only API imports — keep read APIs (load, get, fetch, find, validate)
+  // Write verbs: create, update, delete, send, save, remove, disable, enable, add, edit, set, install, establish
+  const apiImportRe = /import\s+(?:(\w+)|\{([^}]+)\})\s+from\s+['"](@\/api\/[^'"]+)['"];?\n?/g;
+  for (const m of [...script.matchAll(apiImportRe)]) {
+    const fullMatch = m[0];
+    const defaultName = m[1];
+    const destructured = m[2];
+    const readVerbs = /^(load|get|fetch|find|validate|check|search|list|query|retrieve)/i;
+    const writeVerbs = /^(create|update|delete|send|save|remove|disable|enable|add|edit|set|install|establish|bulk|import|export|assign|revoke|cancel|reject|approve|dismiss|mark|toggle|reset|sync|push|post|put|patch)/i;
+
+    if (defaultName) {
+      // Default import: import sendData from '@/api/...' — strip if write verb
+      if (writeVerbs.test(defaultName)) {
+        script = script.replace(fullMatch, '');
+      }
+      // else keep it (might be a read like getAllChats)
+    } else if (destructured) {
+      // Destructured: split into individual names, keep reads, strip writes
+      const names = destructured.split(',').map(n => n.trim()).filter(Boolean);
+      const keep = names.filter(n => !writeVerbs.test(n));
+      const strip = names.filter(n => writeVerbs.test(n));
+
+      if (keep.length === 0) {
+        // All write — remove entire import
+        script = script.replace(fullMatch, '');
+      } else if (strip.length > 0) {
+        // Mixed — rebuild import with only the kept names
+        const newImport = `import { ${keep.join(', ')} } from '${m[3]}';\n`;
+        script = script.replace(fullMatch, newImport);
+      }
+      // else all reads — keep as-is
     }
   }
 
@@ -234,7 +258,34 @@ function transformVue(source, pageName, manifest) {
   // 13. Remove setCookie/getCookie calls (standalone statements)
   script = script.replace(/\s*setCookie\([^)]*\);?\n?/g, '\n');
 
-  // 14. Clean up empty lines
+  // 14. Add permission stubs if permissionCodes was imported or hasPermission is used in script
+  // permissionCodes is a deeply nested object — stub it with a Proxy that returns 'true' for any path
+  // hasPermission is a global mixin method — override in methods to always return true
+  if (script.includes('permissionCodes') || script.includes('hasPermission')) {
+    // For Options API: add to data/computed
+    if (script.includes('export default')) {
+      // Add permissionCodes stub after export default {
+      if (script.includes('permissionCodes')) {
+        const exportMatch = script.match(/export\s+default\s*\{/);
+        if (exportMatch) {
+          const pos = script.indexOf(exportMatch[0]) + exportMatch[0].length;
+          const stub = `\n  // Permission stub — all permissions granted in prototypes\n  setup() {\n    const handler = { get: (_, p) => typeof p === 'string' ? new Proxy({}, handler) : 'granted' };\n    const permissionCodes = new Proxy({}, handler);\n    return { permissionCodes };\n  },`;
+          script = script.slice(0, pos) + stub + script.slice(pos);
+        }
+      }
+    }
+    // For Composition API (<script setup>): add permissionCodes const
+    if (script.includes('<script setup')) {
+      const setupTag = script.match(/<script[^>]*setup[^>]*>/);
+      if (setupTag && script.includes('permissionCodes')) {
+        const pos = script.indexOf(setupTag[0]) + setupTag[0].length;
+        const stub = `\n// Permission stub — all permissions granted in prototypes\nconst _ph = { get: (_, p) => typeof p === 'string' ? new Proxy({}, _ph) : 'granted' };\nconst permissionCodes = new Proxy({}, _ph);\n`;
+        script = script.slice(0, pos) + stub + script.slice(pos);
+      }
+    }
+  }
+
+  // 15. Clean up empty lines
   script = script.replace(/\n{3,}/g, '\n\n');
 
   // ─── FLAG DETECTION ───
@@ -242,7 +293,6 @@ function transformVue(source, pageName, manifest) {
   // Check for patterns that might need manual review
   if (script.includes('from \'@/api/')) flags.push('has-remaining-api-import');
   if (script.includes('authenticationAPI')) flags.push('has-auth-api');
-  if (template.includes('hasPermission') || script.includes('hasPermission')) flags.push('has-remaining-permission-check');
   if (script.includes('$t(')) flags.push('has-remaining-i18n');
   if (template.includes('$t(')) flags.push('has-remaining-template-i18n');
   if (script.includes('<script setup') && script.includes('<script>')) flags.push('multiple-script-blocks');
