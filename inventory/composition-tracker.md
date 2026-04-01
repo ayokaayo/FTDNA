@@ -10,7 +10,7 @@
 | Total routed pages | 113 |
 | Layout classified | 90/113 (80%) |
 | With Figma brief | 15 |
-| With coded prototype | 4 |
+| With coded prototype | 48 |
 | High confidence (≥0.8) | 44 |
 
 ## Section Breakdown
@@ -29,14 +29,14 @@
 
 | Layout | Count | With Brief | With Prototype | Example |
 |--------|-------|------------|----------------|---------|
-| LIST-SIMPLE | 34 | 9 | 3 | sendout-dashboard |
-| UNKNOWN | 23 | 3 | 1 | quality-assurance |
-| FORM | 20 | 1 | 0 | lifecycle-engagements |
-| DASH | 16 | 0 | 0 | oracle |
+| LIST-SIMPLE | 34 | 9 | 15 | sendout-dashboard |
+| UNKNOWN | 23 | 3 | 18 | quality-assurance |
+| FORM | 20 | 1 | 9 | lifecycle-engagements |
+| DASH | 16 | 0 | 4 | oracle |
 | SLIDEIN | 10 | 0 | 0 | conversion-funnel-dashboard |
-| LIST-TAB | 7 | 0 | 0 | archive |
+| LIST-TAB | 7 | 0 | 1 | archive |
 | LIST-FULL | 1 | 1 | 0 | activities |
-| HUB | 1 | 1 | 0 | integration |
+| HUB | 1 | 1 | 1 | integration |
 | DETAIL | 1 | 0 | 0 | player-profile |
 
 ## All Routed Pages
@@ -44,118 +44,118 @@
 | # | Page | Section | Layout | Confidence | Brief | Prototype | Complexity |
 |---|------|---------|--------|------------|-------|-----------|------------|
 | 1 | Activities & Projects | CRM | LIST-FULL | 0.90 | ✓ | ✗ | high |
-| 2 | Archive | CRM | LIST-TAB | 0.85 | ✗ | ✗ | medium |
+| 2 | Archive | CRM | LIST-TAB | 0.85 | ✗ | ✓ | medium |
 | 3 | Dashboard | CRM | LIST-SIMPLE | 0.85 | ✓ | ✗ | high |
 | 4 | Email Templates | CRM | LIST-TAB | 0.85 | ✗ | ✗ | high |
 | 5 | Lifecycle Automation | CRM | FORM | 0.60 | ✗ | ✗ | medium |
 | 6 | Projects | CRM | LIST-TAB | 0.85 | ✗ | ✗ | high |
-| 7 | QA Portal | CRM | UNKNOWN | 0.30 | ✓ | ✗ | low |
+| 7 | QA Portal | CRM | UNKNOWN | 0.30 | ✓ | ✓ | low |
 | 8 | Segments | CRM | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 9 | Test Users | CRM | LIST-SIMPLE | 0.85 | ✓ | ✗ | medium |
 | 10 | Triggers | CRM | LIST-SIMPLE | 0.85 | ✓ | ✓ | high |
 | 11 | Fast Track AI | Fast Track AI | DASH | 0.70 | ✗ | ✗ | high |
 | 12 | Dashboards | Insights & Analytics | LIST-TAB | 0.85 | ✗ | ✗ | high |
 | 13 | Explore | Insights & Analytics | DASH | 0.70 | ✗ | ✗ | medium |
-| 14 | Explore | Insights & Analytics | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 14 | Explore | Insights & Analytics | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 15 | Performance Dashboard | Insights & Analytics | SLIDEIN | 0.70 | ✗ | ✗ | medium |
 | 16 | Query Editor | Insights & Analytics | LIST-SIMPLE | 0.85 | ✗ | ✗ | medium |
 | 17 | AI Settings | Settings | FORM | 0.50 | ✗ | ✗ | high |
 | 18 | Communication Profiles | Settings | LIST-SIMPLE | 0.85 | ✓ | ✓ | medium |
-| 19 | Integration | Settings | HUB | 0.90 | ✓ | ✗ | low |
+| 19 | Integration | Settings | HUB | 0.90 | ✓ | ✓ | low |
 | 20 | Manage Action Types | Settings | LIST-SIMPLE | 0.85 | ✓ | ✗ | medium |
-| 21 | Manage Segment Fields | Settings | FORM | 0.50 | ✓ | ✗ | low |
+| 21 | Manage Segment Fields | Settings | FORM | 0.50 | ✓ | ✓ | low |
 | 22 | Manage Trigger Events | Settings | LIST-SIMPLE | 0.85 | ✓ | ✗ | medium |
 | 23 | Manage Unsubscribe Pages | Settings | SLIDEIN | 0.70 | ✗ | ✗ | medium |
 | 24 | Player Origins | Settings | LIST-SIMPLE | 0.85 | ✗ | ✓ | high |
 | 25 | Users & Permissions | Settings | LIST-TAB | 0.85 | ✗ | ✗ | medium |
-| 26 | Action Groups | Singularity Model | DASH | 0.70 | ✗ | ✗ | low |
-| 27 | Action Groups | Singularity Model | FORM | 0.50 | ✗ | ✗ | low |
-| 28 | Archive | Singularity Model | FORM | 0.50 | ✗ | ✗ | low |
-| 29 | Collections | Singularity Model | DASH | 0.70 | ✗ | ✗ | low |
-| 30 | Collections | Singularity Model | FORM | 0.50 | ✗ | ✗ | low |
-| 31 | Content Features | Singularity Model | UNKNOWN | 0.30 | ✓ | ✗ | low |
+| 26 | Action Groups | Singularity Model | DASH | 0.70 | ✗ | ✓ | low |
+| 27 | Action Groups | Singularity Model | FORM | 0.50 | ✗ | ✓ | low |
+| 28 | Archive | Singularity Model | FORM | 0.50 | ✗ | ✓ | low |
+| 29 | Collections | Singularity Model | DASH | 0.70 | ✗ | ✓ | low |
+| 30 | Collections | Singularity Model | FORM | 0.50 | ✗ | ✓ | low |
+| 31 | Content Features | Singularity Model | UNKNOWN | 0.30 | ✓ | ✓ | low |
 | 32 | Dashboard | Singularity Model | LIST-SIMPLE | 0.85 | ✓ | ✗ | medium |
 | 33 | Feature Types | Singularity Model | LIST-SIMPLE | 0.85 | ✓ | ✗ | medium |
 | 34 | Player Features | Singularity Model | LIST-SIMPLE | 0.85 | ✓ | ✗ | high |
-| 35 | Player Features | Singularity Model | UNKNOWN | 0.30 | ✓ | ✗ | low |
+| 35 | Player Features | Singularity Model | UNKNOWN | 0.30 | ✓ | ✓ | low |
 | 36 | Localisation | Tools | DASH | 0.70 | ✗ | ✗ | medium |
-| 37 | Academy | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 37 | Academy | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 38 | Ad Platforms | — | SLIDEIN | 0.70 | ✗ | ✗ | medium |
 | 39 | Alliance | — | UNKNOWN | 0.30 | ✗ | ✗ | medium |
-| 40 | Automated Self Test | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 40 | Automated Self Test | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 41 | Bonus Details | — | DASH | 0.70 | ✗ | ✗ | high |
-| 42 | Bonuses Index | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 42 | Bonuses Index | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 43 | Bonuses List | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | medium |
 | 44 | Branding Studio | — | FORM | 0.50 | ✗ | ✗ | high |
 | 45 | Broadcasting | — | SLIDEIN | 0.70 | ✗ | ✗ | medium |
 | 46 | Bulk Expiry | — | FORM | 0.50 | ✗ | ✗ | medium |
-| 47 | Challenges Index | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 47 | Challenges Index | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 48 | Computation | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | high |
 | 49 | Content Library Action Group Version | — | DASH | 0.70 | ✗ | ✗ | high |
 | 50 | Content Library Collection Version | — | SLIDEIN | 0.70 | ✗ | ✗ | high |
 | 51 | Create Edit Pick And Win | — | FORM | 0.50 | ✗ | ✗ | medium |
 | 52 | Create Edit Tournament | — | FORM | 0.75 | ✗ | ✗ | high |
-| 53 | Create Role Page | — | FORM | 0.60 | ✗ | ✗ | low |
+| 53 | Create Role Page | — | FORM | 0.60 | ✗ | ✓ | low |
 | 54 | Create Team Page | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | medium |
 | 55 | Create User Page | — | SLIDEIN | 0.70 | ✗ | ✗ | medium |
-| 56 | Credit Challenge Page | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 57 | Currencies | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 56 | Credit Challenge Page | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
+| 57 | Currencies | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 58 | Custom Variables | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | medium |
 | 59 | Dashboards | — | DASH | 0.70 | ✗ | ✗ | high |
 | 60 | Data Migration | — | FORM | 0.50 | ✗ | ✗ | medium |
 | 61 | Edit Calendar Door | — | SLIDEIN | 0.70 | ✗ | ✗ | medium |
-| 62 | Edit Challenge | — | FORM | 0.75 | ✗ | ✗ | low |
+| 62 | Edit Challenge | — | FORM | 0.75 | ✗ | ✓ | low |
 | 63 | Edit Level System | — | DASH | 0.70 | ✗ | ✗ | medium |
 | 64 | Edit My Rewards | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | high |
 | 65 | Edit Page | — | FORM | 0.75 | ✗ | ✗ | medium |
 | 66 | Edit Promotional Calendar | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | high |
 | 67 | Edit Wheel | — | DASH | 0.70 | ✗ | ✗ | medium |
 | 68 | Error Page | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 69 | F T Git Book Resource Page | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 70 | F T Git Book Resource Page Root | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 71 | Git Book Search | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 72 | Integration Hub | — | FORM | 0.50 | ✗ | ✗ | low |
+| 69 | F T Git Book Resource Page | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
+| 70 | F T Git Book Resource Page Root | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
+| 71 | Git Book Search | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
+| 72 | Integration Hub | — | FORM | 0.50 | ✗ | ✓ | low |
 | 73 | Jackpots Index | — | LIST-TAB | 0.85 | ✗ | ✗ | medium |
 | 74 | Level Configuration | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | medium |
-| 75 | Level Systems | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 75 | Level Systems | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 76 | Lifecycle Engagements New | — | DASH | 0.70 | ✗ | ✗ | high |
 | 77 | Lifecycle Version Edit | — | FORM | 0.60 | ✗ | ✗ | high |
 | 78 | Lifecycle View | — | DASH | 0.70 | ✗ | ✗ | high |
-| 79 | Live Data Feed | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 79 | Live Data Feed | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 80 | Login | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 81 | Map Games | — | FORM | 0.50 | ✗ | ✗ | low |
-| 82 | Menu Items Index | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
-| 83 | Mini Games Index | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 84 | My Rewards | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 81 | Map Games | — | FORM | 0.50 | ✗ | ✓ | low |
+| 82 | Menu Items Index | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
+| 83 | Mini Games Index | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
+| 84 | My Rewards | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 85 | No Permission | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
 | 86 | Objectives | — | SLIDEIN | 0.70 | ✗ | ✗ | medium |
-| 87 | Oracle History | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 87 | Oracle History | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 88 | Page Not Found | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
 | 89 | Pages Index | — | LIST-TAB | 0.85 | ✗ | ✗ | medium |
-| 90 | Pending Bonuses | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
-| 91 | Pick And Win Index | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 90 | Pending Bonuses | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
+| 91 | Pick And Win Index | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 92 | Player Profile | — | DETAIL | 0.90 | ✗ | ✗ | high |
-| 93 | Prediction Model Installer | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 93 | Prediction Model Installer | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 94 | Project Details | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | high |
-| 95 | Projects New | — | DASH | 0.70 | ✗ | ✗ | low |
-| 96 | Promotional Calendars | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
-| 97 | Self Optimizing Activities | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
+| 95 | Projects New | — | DASH | 0.70 | ✗ | ✓ | low |
+| 96 | Promotional Calendars | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
+| 97 | Self Optimizing Activities | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
 | 98 | Shop Item Details Page | — | SLIDEIN | 0.70 | ✗ | ✗ | medium |
-| 99 | Shop Items Page | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 99 | Shop Items Page | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 100 | Shop Page Details | — | DASH | 0.70 | ✗ | ✗ | medium |
 | 101 | Shop Page Item Details | — | DASH | 0.70 | ✗ | ✗ | medium |
-| 102 | Shop Pages | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 102 | Shop Pages | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 103 | Singularity Market Create Edit | — | FORM | 0.60 | ✗ | ✗ | medium |
-| 104 | Singularity Markets | — | UNKNOWN | 0.30 | ✗ | ✗ | low |
-| 105 | Singularity New Feature | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 104 | Singularity Markets | — | UNKNOWN | 0.30 | ✗ | ✓ | low |
+| 105 | Singularity New Feature | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 106 | Team Details | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | medium |
-| 107 | Test Integration | — | FORM | 0.75 | ✗ | ✗ | low |
-| 108 | Tournaments Index | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | low |
+| 107 | Test Integration | — | FORM | 0.75 | ✗ | ✓ | low |
+| 108 | Tournaments Index | — | LIST-SIMPLE | 0.85 | ✗ | ✓ | low |
 | 109 | Translations | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | high |
 | 110 | User Details | — | SLIDEIN | 0.70 | ✗ | ✗ | high |
 | 111 | User Role | — | FORM | 0.60 | ✗ | ✗ | medium |
 | 112 | Virtual Currency Page | — | LIST-SIMPLE | 0.85 | ✗ | ✗ | medium |
-| 113 | Wheels Index | — | DASH | 0.70 | ✗ | ✗ | low |
+| 113 | Wheels Index | — | DASH | 0.70 | ✗ | ✓ | low |
 
 ---
 
