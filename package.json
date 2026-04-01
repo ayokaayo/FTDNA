@@ -17,7 +17,8 @@
     "snap:paste": "node scripts/figma-paste.js",
     "mcp:health": "bash scripts/mcp-health.sh",
     "mcp:status": "bash scripts/mcp-health.sh --status",
-    "audit:parity": "node scripts/parity-report.js"
+    "audit:parity": "node scripts/parity-report.js",
+    "scan:source": "node scripts/scan-source.js"
   },
   "dependencies": {
     "puppeteer-core": "^24.0.0"
