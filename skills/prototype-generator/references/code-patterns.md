@@ -806,22 +806,26 @@ const phM = phSet.children.find(v => v.name === 'Size=M');
 async function navPanel(parent, title, subtitle, cards) {
   const p = figma.createFrame();
   p.name = title; p.layoutMode = 'VERTICAL'; p.itemSpacing = 0;
-  await bindFill(p, V.white); p.strokes = []; p.cornerRadius = 8;
+  await bindFill(p, V.white); p.strokes = []; p.cornerRadius = 0;
   parent.appendChild(p);
   p.layoutSizingHorizontal = 'FILL'; p.layoutSizingVertical = 'HUG';
 
-  // Panel header (primitive — not the Panel Header component)
-  const h = figma.createFrame();
-  h.name = 'Panel Header'; h.layoutMode = 'VERTICAL'; h.itemSpacing = 4;
-  h.paddingTop = 32; h.paddingBottom = 8; h.paddingLeft = 32; h.paddingRight = 32;
-  h.fills = []; p.appendChild(h);
-  h.layoutSizingHorizontal = 'FILL'; h.layoutSizingVertical = 'HUG';
-  const tN = figma.createText();
-  tN.fontName = { family: 'Inter', style: 'Bold' }; tN.fontSize = 16;
-  tN.characters = title; h.appendChild(tN); await bindFill(tN, V.mono700);
-  const sN = figma.createText();
-  sN.fontName = { family: 'Inter', style: 'Regular' }; sN.fontSize = 14;
-  sN.characters = subtitle; h.appendChild(sN); await bindFill(sN, V.mono500);
+  // Panel Header — use the REAL component (92:46640), never primitive text
+  const phSet = await figma.getNodeByIdAsync('92:46640');
+  const phDefault = phSet.children.find(v => v.name.includes('Default'));
+  const h = phDefault.createInstance();
+  p.appendChild(h); h.layoutSizingHorizontal = 'FILL';
+  h.setProperties({
+    'Search#4635:14': false, 'Action Icons#4635:12': false,
+    'Toggle#4635:15': false, 'Right side options#4635:16': false,
+    'Info icon#4635:17': false, 'Description#4635:13': !!subtitle,
+  });
+  const tN = h.findOne(n => n.type === 'TEXT' && n.name === 'Title');
+  if (tN) { await figma.loadFontAsync(tN.fontName); tN.characters = title; }
+  if (subtitle) {
+    const sN = h.findOne(n => n.type === 'TEXT' && n.name === 'Sub-Title');
+    if (sN) { await figma.loadFontAsync(sN.fontName); sN.characters = subtitle; }
+  }
 
   // Card row
   const row = figma.createFrame();
