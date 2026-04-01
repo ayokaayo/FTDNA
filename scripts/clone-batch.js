@@ -145,6 +145,19 @@ function transformVue(source, pageName, manifest) {
 
   // ─── SCRIPT TRANSFORMS ───
 
+  // 0. Fix relative imports — ./Sibling.vue must become @/components/pages/{OriginalDir}/Sibling.vue
+  // because the prototype lives in Prototypes/ not the original directory
+  const sourceDir = manifest.source?.filePath?.replace(/\/[^/]+$/, '') || '';
+  if (sourceDir.includes('/')) {
+    script = script.replace(
+      /from\s+['"]\.\/([^'"]+)['"]/g,
+      (match, file) => {
+        if (file === 'ProtoFab.vue') return match; // Keep ProtoFab relative
+        return `from '@/${sourceDir}/${file}'`;
+      }
+    );
+  }
+
   // 1. Remove import InfoLink
   script = script.replace(/import\s+InfoLink\s+from\s+['"][^'"]+['"];?\n?/g, '');
 
@@ -257,17 +270,16 @@ function wireRoute(routerSource, pageName, kebabName) {
     result = result.slice(0, exportIdx) + importLine + '\n' + result.slice(exportIdx);
   }
 
-  // Add route before the closing ], of prototype routes
-  // Find the last prototype route entry and insert after it
+  // Add route before the closing ], of the Layout children array
+  // Find the FIRST ], after the prototype marker — that's the section close
   const protoMarker = '// ─── Prototype routes';
   const markerIdx = result.indexOf(protoMarker);
   if (markerIdx !== -1 && !result.includes(`prototype/${kebabName}`)) {
-    // Find the last route closing }, before the ],
     const afterMarker = result.slice(markerIdx);
-    const closingBracket = afterMarker.lastIndexOf('],');
+    const closingBracket = afterMarker.indexOf('],');
     if (closingBracket !== -1) {
       const insertPos = markerIdx + closingBracket;
-      result = result.slice(0, insertPos) + routeBlock + '\n' + result.slice(insertPos);
+      result = result.slice(0, insertPos) + routeBlock + '\n      ' + result.slice(insertPos);
     }
   }
 
