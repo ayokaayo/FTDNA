@@ -293,32 +293,9 @@ function transformVue(source, pageName, manifest) {
   // 13. Remove setCookie/getCookie calls (standalone statements)
   script = script.replace(/\s*setCookie\([^)]*\);?\n?/g, '\n');
 
-  // 14. Add permission stubs if permissionCodes was imported or hasPermission is used in script
-  // permissionCodes is a deeply nested object — stub it with a Proxy that returns 'true' for any path
-  // hasPermission is a global mixin method — override in methods to always return true
-  if (script.includes('permissionCodes') || script.includes('hasPermission')) {
-    // For Options API: add to data/computed
-    if (script.includes('export default')) {
-      // Add permissionCodes stub after export default {
-      if (script.includes('permissionCodes')) {
-        const exportMatch = script.match(/export\s+default\s*\{/);
-        if (exportMatch) {
-          const pos = script.indexOf(exportMatch[0]) + exportMatch[0].length;
-          const stub = `\n  // Permission stub — all permissions granted in prototypes\n  setup() {\n    const handler = { get: (_, p) => typeof p === 'string' ? new Proxy({}, handler) : 'granted' };\n    const permissionCodes = new Proxy({}, handler);\n    return { permissionCodes };\n  },`;
-          script = script.slice(0, pos) + stub + script.slice(pos);
-        }
-      }
-    }
-    // For Composition API (<script setup>): add permissionCodes const
-    if (script.includes('<script setup')) {
-      const setupTag = script.match(/<script[^>]*setup[^>]*>/);
-      if (setupTag && script.includes('permissionCodes')) {
-        const pos = script.indexOf(setupTag[0]) + setupTag[0].length;
-        const stub = `\n// Permission stub — all permissions granted in prototypes\nconst _ph = { get: (_, p) => typeof p === 'string' ? new Proxy({}, _ph) : 'granted' };\nconst permissionCodes = new Proxy({}, _ph);\n`;
-        script = script.slice(0, pos) + stub + script.slice(pos);
-      }
-    }
-  }
+  // 14. permissionCodes + hasPermission: handled by global mixin (globalMixins.js)
+  // Do NOT add stubs — the mixin provides permissionCodes in data() and hasPermission in methods.
+  // Adding a setup() Proxy conflicts with the mixin data and causes runtime errors.
 
   // 15. Clean up empty lines
   script = script.replace(/\n{3,}/g, '\n\n');
