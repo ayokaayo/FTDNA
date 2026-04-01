@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-04-01T18:08:53.616Z",
-  "sourceCommit": "e4da5fd9f2",
+  "generatedAt": "2026-04-01T18:43:08.666Z",
+  "sourceCommit": "df1f7ef60a",
   "backofficeRoot": "../backoffice-v2",
   "totalPages": 284,
   "pages": [
@@ -383,8 +383,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/SendoutDashboard.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -551,8 +551,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/FtemailTemplates.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -659,8 +659,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/LifecycleEngagements.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -789,8 +789,8 @@
       "tabComponent": "Tabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ProjectsList.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -1082,8 +1082,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/TestUsers.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -1356,8 +1356,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Oracle.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -1482,8 +1482,8 @@
       "tabComponent": "Tabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/DataStudioDefault.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -1577,8 +1577,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Build.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -1755,8 +1755,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ConversionFunnelDashboard.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -1874,8 +1874,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/FtqueryEditor.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -1996,8 +1996,8 @@
       "tabComponent": "FTTabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Aituning.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -2333,8 +2333,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ActionNotificationTypesManager.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -2415,8 +2415,8 @@
       "tabComponent": "Tabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/SegmentFieldsManager.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -2551,8 +2551,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/TriggerEvents.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -2660,8 +2660,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/UnsubPages.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -2895,8 +2895,8 @@
       "tabComponent": "FTTabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/RolesAndPermissions.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -3471,8 +3471,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Dashboard.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -3597,8 +3597,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/SingularityFeatureTypes.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -3727,8 +3727,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/SingularityFeature.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -3874,8 +3874,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/UserPreferences.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -4023,8 +4023,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/AdPlatforms.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -4114,8 +4114,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Alliance.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -4379,8 +4379,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/BonusDetails.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -4558,8 +4558,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/BonusesList.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -4694,8 +4694,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/BrandingStudio.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -4792,8 +4792,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Broadcasting.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -4870,8 +4870,8 @@
       "tabComponent": "Tabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/BulkExpiry.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -5064,8 +5064,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Computation.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -5209,8 +5209,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ContentLibraryActionGroupVersion.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -5346,8 +5346,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ContentLibraryCollectionVersion.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -5458,8 +5458,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/CreateEditPickAndWin.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -5586,8 +5586,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/CreateEditTournament.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -5792,8 +5792,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/CreateTeamPage.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -5907,8 +5907,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/CreateUserPage.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -5963,8 +5963,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/CreditChallengePage.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -6047,8 +6047,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Currencies.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -6158,8 +6158,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/CustomVariables.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -6299,8 +6299,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Dashboards.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -6392,8 +6392,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/DataMigration.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -6497,8 +6497,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/EditCalendarDoor.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -6563,8 +6563,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/EditChallenge.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -6669,8 +6669,8 @@
       "tabComponent": "FTTabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/EditLevelSystem.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -6834,8 +6834,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/EditMyRewards.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -6924,8 +6924,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/EditPage.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -7062,8 +7062,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/EditPromotionalCalendar.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -7183,8 +7183,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/EditWheel.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -7290,8 +7290,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/FtgitBookResourcePage.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -7592,8 +7592,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/JackpotsIndex.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -7736,8 +7736,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/LevelConfiguration.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -7808,8 +7808,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/LevelSystems.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -7975,8 +7975,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/LifecycleEngagementsNew.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -8180,8 +8180,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/LifecycleVersionEdit.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -8317,8 +8317,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/LifecycleView.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -8534,8 +8534,8 @@
       "tabComponent": "FTTabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/MapGames.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -8905,8 +8905,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Objectives.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -9122,8 +9122,8 @@
       "tabComponent": "Tabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/PagesIndex.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -9463,8 +9463,8 @@
       "tabComponent": "FTTabs",
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/PlayerProfile.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -9631,8 +9631,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ProjectDetails.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -9786,8 +9786,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/PromotionalCalendars.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -9935,8 +9935,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ShopItemDetailsPage.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -10149,8 +10149,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ShopPageDetails.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -10258,8 +10258,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/ShopPageItemDetails.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -10436,8 +10436,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/SingularityMarketCreateEdit.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -10514,8 +10514,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/SingularityMarkets.vue",
         "complexity": "low"
       },
       "figmaPrototype": {
@@ -10734,8 +10734,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/TeamDetails.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -11022,8 +11022,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/Translations.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -11150,8 +11150,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/UserDetails.vue",
         "complexity": "high"
       },
       "figmaPrototype": {
@@ -11251,8 +11251,8 @@
       "tabComponent": null,
       "panels": null,
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/UserRole.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {
@@ -11352,8 +11352,8 @@
         }
       ],
       "codedPrototype": {
-        "strategy": "clone",
-        "prototypeFile": null,
+        "strategy": "exists",
+        "prototypeFile": "src/components/pages/Prototypes/VirtualCurrencyPage.vue",
         "complexity": "medium"
       },
       "figmaPrototype": {

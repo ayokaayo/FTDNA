@@ -145,15 +145,32 @@ function transformVue(source, pageName, manifest) {
 
   // ─── SCRIPT TRANSFORMS ───
 
-  // 0. Fix relative imports — ./Sibling.vue must become @/components/pages/{OriginalDir}/Sibling.vue
+  // 0. Fix relative imports — ./Sibling.vue and ../../path must become absolute @/ paths
   // because the prototype lives in Prototypes/ not the original directory
   const sourceDir = manifest.source?.filePath?.replace(/\/[^/]+$/, '') || '';
   if (sourceDir.includes('/')) {
+    // Strip leading 'src/' from sourceDir since @/ already maps to src/
+    const atDir = sourceDir.replace(/^src\//, '');
+
+    // Fix ./Sibling.vue → @/{atDir}/Sibling.vue
     script = script.replace(
       /from\s+['"]\.\/([^'"]+)['"]/g,
       (match, file) => {
-        if (file === 'ProtoFab.vue') return match; // Keep ProtoFab relative
-        return `from '@/${sourceDir}/${file}'`;
+        if (file === 'ProtoFab.vue') return match;
+        return `from '@/${atDir}/${file}'`;
+      }
+    );
+    // Fix ../path and ../../path → resolve against source directory
+    script = script.replace(
+      /from\s+['"](\.\.\/[^'"]+)['"]/g,
+      (match, relPath) => {
+        const parts = atDir.split('/');
+        const relParts = relPath.split('/');
+        for (const p of relParts) {
+          if (p === '..') parts.pop();
+          else if (p !== '.') parts.push(p);
+        }
+        return `from '@/${parts.join('/')}'`;
       }
     );
   }
