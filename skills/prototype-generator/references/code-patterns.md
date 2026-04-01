@@ -214,7 +214,7 @@ async function bootstrapScreen(name, x, y) {
   // Detach Standard Panel (need to add content children)
   const panel = detach(main.children.find(c => c.name === 'Standard Panel'));
   panel.layoutSizingHorizontal = 'FIXED'; panel.resize(1700, panel.height);
-  // Panel Header — stays as INSTANCE (text edits work). Detach later in setShell only if search is needed.
+  // Panel Header — stays as INSTANCE always. Search enabled via boolean property, no detach needed.
   const panelHeader = panel.children.find(c => c.name === 'Panel Header');
   const content = panel.children.find(c => c.name === 'content placeholder');
   content.layoutMode = 'VERTICAL'; content.itemSpacing = 0;
@@ -296,25 +296,22 @@ async function setShell(refs, cfg) {
       }
     }
   }
-  // Search in panel header — requires detaching Panel Header (can't insertChild inside instance)
-  if (cfg.search) {
-    if (refs.panelHeader.type === 'INSTANCE') {
-      refs.panelHeader = detach(refs.panelHeader); // Detach only when search is needed
+  // Panel Header properties — use component booleans, never detach
+  // Component: 92:46640 (Default variant)
+  // Properties: Description, Search, Action Icons, Toggle, Right side options, Info icon
+  if (refs.panelHeader.type === 'INSTANCE') {
+    const props = {};
+    props['Description#4635:13'] = cfg.subtitle !== false && !!cfg.subtitle;
+    props['Info icon#4635:17'] = false;
+    if (cfg.search) {
+      props['Right side options#4635:16'] = true;
+      props['Search#4635:14'] = true;
+      props['Action Icons#4635:12'] = false;
+      props['Toggle#4635:15'] = false;
+    } else {
+      props['Right side options#4635:16'] = false;
     }
-    const sf = refs.panelHeader.findOne(n => n.name === 'Search + Action Icons');
-    if (sf) {
-      sf.visible = true;
-      const tg = sf.findOne(n => n.name === 'Toggle'); if (tg) tg.visible = false;
-      const ai = sf.findOne(n => n.name === 'Action icons'); if (ai) ai.visible = false;
-      const sv = _input.children.find(v => v.name.includes('Type=Search,') && v.name.includes('default-empty'));
-      const old = sf.findOne(n => n.name === 'Input Fields');
-      if (old && sv) {
-        const ns = sv.createInstance();
-        sf.insertChild(sf.children.indexOf(old), ns); old.remove();
-        ns.layoutSizingHorizontal = 'FIXED'; ns.resize(350, ns.height);
-        ns.setProperties({'Label#4339:0': false, 'AI+Emoji#4369:0': false});
-      }
-    }
+    refs.panelHeader.setProperties(props);
   }
 }
 
