@@ -11,7 +11,7 @@ Two MCP servers work together:
 | **Figma Remote MCP** (official) | Read + write designs (`use_figma`), Code Connect, search | Cloud (Figma's servers) |
 | **Figma Console MCP** (Desktop Bridge) | Screenshots, console monitoring, granular inspection tools | Local WebSocket via Figma plugin |
 
-> **As of March 2026:** Figma's official MCP now supports write access via `use_figma`. This is the default tool for all build/create operations. The Desktop Bridge is still needed for screenshots, debugging, and single-node inspection — but it's no longer required for writing to the canvas.
+> Figma's official MCP supports write access via `use_figma` (since March 2026). This is the default tool for all build/create operations. The Desktop Bridge is still needed for screenshots, debugging, and single-node inspection — but it's no longer required for writing to the canvas.
 
 ## Prerequisites
 

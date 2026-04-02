@@ -1,18 +1,18 @@
 # FT DNA — AI Rules
 # This file is automatically loaded by Cursor IDE and compatible VS Code extensions.
 # For the complete vue-components-lib reference, see .fasttrack/rules.md
+# For full AI context, see CLAUDE.md (loaded automatically by Claude Code).
 
 ## Project Context
 
 You are working in FT DNA, the FastTrack platform's unified workspace. This repo contains design tokens, component inventory, AI skills, and reference documentation. It does NOT contain Vue components — those live in `../vue-components-lib/`.
 
 - **Design tokens**: `tokens/` (W3C JSON) → `dist/` (generated CSS/SCSS/TS)
-- **Component inventory**: `inventory/` (Figma ↔ Vue mapping, gap analysis)
-- **AI Skills**: `skills/` (prd-writer, design-critique, prototype-generator, skill-architect)
-- **Shared references**: `references/` (component-catalog.md, page-patterns.md)
+- **Component inventory**: `inventory/` (Figma ↔ Vue mapping, gap analysis, parity reports)
+- **AI Skills**: `skills/` (prototype-generator, coded-prototype-generator, design-critique, prd-writer, kb, tutor, skill-architect)
+- **Shared references**: `references/` (component-catalog.md, page-patterns.md, vue-pattern-reference.md, mcp-setup-guide.md)
 - **Templates**: `templates/` (Vue component, test, docs templates)
-- **Session memory**: `memory/claude.md`
-- **Figma MCP**: configured in `.mcp.json`
+- **Figma MCP**: configured in `.mcp.json` (two servers: figma-remote-mcp + figma-console-mcp)
 
 ## ABSOLUTE RULES — Never Break These
 
@@ -69,8 +69,7 @@ Figma uses parameterized naming: Type=value, Status=value, Size=value
 - Color values → map to --ft-color-* semantic tokens
 - Spacing → map to CSS variables
 
-**FT DNA Figma file (primary):** `7J3dSTuOSRlsHBqQ4ohtxI`
-**DSP-Master file (legacy):** `tyhDN8pjR0WM048BYhEa1Q`
+**FT DNA Figma file:** `7J3dSTuOSRlsHBqQ4ohtxI`
 **Fast Track Logo file:** `Ahohkx0sfMS7oHU1V3j3DO`
 
 ## Skills System
@@ -78,13 +77,28 @@ Figma uses parameterized naming: Type=value, Status=value, Size=value
 Skills are Claude instruction packages in `skills/`. Registry: `skills/registry.json`.
 
 Available skills:
-- **prd-writer** — Write/review/refactor PRDs
-- **skill-architect** — Create new skills (the skill factory)
+- **prototype-generator** — Generate branded Figma prototypes from briefs
+- **coded-prototype-generator** — Generate interactive Vue prototypes on CF Pages
 - **design-critique** — Review designs for compliance and quality
-- **prototype-generator** — Generate Figma prototypes from briefs
+- **prd-writer** — Write/review/refactor PRDs
+- **kb** — Search the GitBook knowledgebase for platform answers
+- **tutor** — Adaptive FT CRM tutoring with quizzes and scenarios
+- **skill-architect** — Create new skills (the skill factory)
 
 ## Commands
 
 ```bash
-npm run build:tokens   # Rebuild CSS/SCSS/TS from token JSON
+npm run build:tokens        # Rebuild CSS/SCSS/TS from token JSON
+npm run snap -- <path>       # Screenshot a platform page
+npm run snap:login           # Open browser for CRM authentication
+npm run snap:proto           # Screenshot prototype pages
+npm run snap:compare         # Compare before/after screenshots
+npm run snap:paste <img>     # Paste screenshot into Figma
+npm run scan:source          # Analyze Vue source files → page-manifest.json
+npm run gen:tracker          # Auto-generate composition-tracker.md
+npm run audit:parity         # Compare Figma vs Vue component specs
+npm run mcp:health           # MCP connectivity check + cleanup
+npm run mcp:status           # MCP status only
+node scripts/scan.js         # Discover platform pages → scan-manifest.json
+node scripts/clone-batch.js  # Batch-clone Vue pages for coded prototypes
 ```

@@ -12,12 +12,15 @@
 Hey {name}! Welcome back. What are we working on today?
 
 1. **Page composition** — build or continue a Figma page
-2. **Design critique** — review a frame for compliance
-3. **Screenshot & scan** — capture platform pages
-4. **Tutor** — learn FT CRM concepts
-5. **Component work** — generate or audit Vue components
-6. **Status check** — show current project progress
-7. **Create a Task in ClickUp** — log a new task to the board
+2. **Coded prototype** — generate an interactive Vue prototype on CF Pages
+3. **Design critique** — review a frame for compliance
+4. **Screenshot & scan** — capture platform pages
+5. **KB search** — search the FastTrack knowledgebase
+6. **Tutor** — learn FT CRM concepts
+7. **Component work** — generate or audit Vue components
+8. **PRD** — write or review a product requirements doc
+9. **Status check** — show current project progress
+10. **Create a Task in ClickUp** — log a new task to the board (requires ClickUp MCP — see Cowork connector setup)
 
 Or just ask anything — if none of these fit, go ahead and type your question directly.
 
@@ -26,6 +29,7 @@ Or just ask anything — if none of these fit, go ahead and type your question d
 ## First-Run Setup
 
 > Claude: run these checks silently at the start of every session. Do NOT show the greeting or menu until setup is confirmed.
+> For the human-readable version of these steps, see `SETUP.md`.
 
 ### Detection
 
@@ -54,16 +58,24 @@ Check for these files in the repo root:
    > "I need your Figma Personal Access Token to connect to Figma. You can generate one in Figma Desktop: Avatar → Settings → Personal access tokens. It starts with `figd_`."
 2. Wait for the token. Validate it starts with `figd_`.
 3. Read `.mcp.json.example`, replace `YOUR_TOKEN_HERE` with the provided token, and write it to `.mcp.json`.
-4. Tell the user about the two manual Figma steps:
-   > "Two things I can't do for you:
-   > 1. **Import the Desktop Bridge plugin** in Figma Desktop: Plugins → Development → Import plugin from manifest → select `~/.figma-console-mcp/plugin/manifest.json`
-   > 2. **Authorize Figma Remote MCP** — a browser window will pop up the first time you use a Figma read tool. Just log in and authorize.
+4. Tell the user:
+   > "Figma connected. One thing to know:
+   > - **Figma Remote MCP** (read + write) — a browser window will pop up the first time you use a Figma tool. Just log in and authorize. This only happens once.
+   >
+   > **Optional** (for screenshots and console debugging):
+   > - **Desktop Bridge plugin** — install `figma-console-mcp` globally, then import the plugin in Figma Desktop. See `SETUP.md` for steps.
    >
    > Here's the FT DNA Figma file — it's in the **Brand** project, you already have access:
    > https://www.figma.com/design/7J3dSTuOSRlsHBqQ4ohtxI/%F0%9F%A7%AC-FT-DNA?m=auto&t=vFxIpgCjzDr1rSQB-6"
 5. Run `npm run mcp:health` to verify connectivity.
 6. Show results. Note: the user may need to restart Claude Code (`/quit` then `claude`) for MCP servers to activate.
-7. Proceed to the normal greeting/menu.
+7. Mention optional extras:
+   > "Two optional things depending on what you'll be working on:
+   > - **Coded prototypes** need the `backoffice-v2` repo cloned as a sibling directory (`../backoffice-v2`).
+   > - **ClickUp integration** needs the ClickUp MCP connector (set up via Cowork connectors).
+   >
+   > Full setup reference: `SETUP.md`. All available commands: `README.md`."
+8. Proceed to the normal greeting/menu.
 
 **If only `node_modules/` is missing (dependencies stale):**
 
@@ -72,8 +84,8 @@ Check for these files in the repo root:
 
 ## Project Status
 
-**Version:** 0.6.0
-**Last updated:** 2026-04-01
+**Version:** 0.7.0
+**Last updated:** 2026-04-02
 
 | Track | Status | Detail |
 |---|---|---|
@@ -83,7 +95,7 @@ Check for these files in the repo root:
 | Page composition | 36/48 pages (8 repro-tested) | All 9 LIST-SIMPLE done. 9/10 LIST-TAB done. LIST-FULL, FORM, HUB, GRID/LIST-NESTED all complete. DASH 2/3. SLIDEIN proven. 3 blocked (missing components). 3/5 custom done (Users & Permissions, Query Editor, AI Settings). |
 | Build engine | v2.0 regression-tested | Minimal detach (Page Header INSTANCE always, Panel Header INSTANCE unless search). `swapComponent()` for breadcrumb levels. `buildDataRow()` auto-handles 6 non-text cell types. `setShell()` supports `secondaryCta`. GRID recipe uses `card-markets` component. Panel Header (`92:46640`) and Radio (`91:8595`) added to `init()` pre-cache. Rules R17–R24 codified. Full regression: 14 doc issues fixed, 7 render tests passed (73/75). |
 | Cold verification | **8/8 tested (all PASS)** | LIST-SIMPLE, LIST-TAB, FORM, LIST-FULL, DASH, GRID, SLIDEIN, HUB all pass cold. |
-| Component audit | Done | 22 meta.json populated with variants, propMap, unmapped. Parity report: `npm run audit:parity`. 50 Figma-only gaps, 133 Vue-only gaps identified. |
+| Component audit | Done | Parity report: `npm run audit:parity`. Component data tracked in `inventory/component-map.json` and `inventory/parity-report.json`. 50 Figma-only gaps, 133 Vue-only gaps identified. |
 | Code Connect | N/A (Enterprise only) | Replaced by component-catalog.md + components.fasttrack.dev doc site + parity audit. |
 | Design critique | Done | Compact summary output as default. Colour variables documented in `component-ids.md`. |
 
@@ -92,7 +104,7 @@ Check for these files in the repo root:
 **Regression report:** `.fasttrack/regression-report.md`
 **Full plan:** `.fasttrack/plans/v1-completion-plan.md`
 **Page progress:** `inventory/composition-tracker.md`
-**Unified manifest plan:** `.claude/plans/soft-chasing-dream.md`
+**Coded prototypes plan:** `.fasttrack/plans/coded-prototypes-plan.md`
 
 ---
 
@@ -110,10 +122,10 @@ FTDNA/
 ├── dist/            → Generated CSS, SCSS, TypeScript from tokens
 ├── inventory/       → Component audit, gap analysis, Figma-to-Vue tracking
 ├── skills/          → Claude AI skills + registry.json
-├── references/      → Shared context (component-catalog.md, page-patterns.md)
+├── references/      → Shared context (component-catalog.md, page-patterns.md, vue-pattern-reference.md)
 ├── templates/       → Vue component, test, and docs templates
 ├── assets/logos/    → FastTrack brand SVGs
-├── scripts/         → build-tokens.js, snap.js (screenshots), scan.js (page discovery), scan-source.js (Vue source analysis), figma-paste.js
+├── scripts/         → build-tokens.js, snap.js, scan.js, scan-source.js, clone-batch.js, gen-tracker.js, parity-report.js, figma-paste.js, mcp-health.sh
 ├── .fasttrack/      → Vue-lib rules reference, plans
 └── .workspace/      → Scratch space (gitignored)
 ```
@@ -231,7 +243,6 @@ The component is staged locally in the vue-lib checkout before being pushed as a
 |----------|--------|---------|
 | Unified manifest | `page-manifest.json` | Single source for both generators; `scan-source.js` auto-generates from Vue source |
 | Prototype approach | V2 Hybrid (clone + instances) | `importComponentByKeyAsync()` times out; clone from seed is instant |
-| Seed instance | **Deprecated** — was `3:5535`, now deleted | Builds use Base Template `94:21370` via `bootstrapScreen()` or Quick Access clones |
 | Base Template | Component `94:21370` on Workbench | Use `createInstance()` for new prototypes |
 | Component source | All local in FT DNA Workbench | Single source — no external library dependency |
 | Skills registry | `skills/registry.json` | Machine-readable, auto-populated by skill-architect |
@@ -240,17 +251,21 @@ The component is staged locally in the vue-lib checkout before being pushed as a
 ## Commands
 
 ```bash
-npm run build:tokens   # Rebuild CSS/SCSS/TS from token JSON
-npm run snap --login   # Open browser for CRM authentication
-npm run snap --start   # Launch persistent headless browser
-npm run snap --stop    # Stop persistent browser
-npm run snap <path>    # Screenshot a page (e.g. /v2/segments)
-npm run snap:paste <img>  # Copy screenshot to clipboard + paste into Figma
-node scripts/scan.js   # Discover all platform pages → scan-manifest.json + page-inventory.md
-npm run scan:source    # Analyze Vue source files → page-manifest.json (284 pages)
-npm run gen:tracker    # Auto-generate composition-tracker.md from manifest
-npm run mcp:health     # Kill zombie MCP processes + connection report
-npm run mcp:status     # Connection status only (no cleanup)
+npm run build:tokens          # Rebuild CSS/SCSS/TS from token JSON
+npm run snap -- <path>        # Screenshot a page (e.g. /v2/segments)
+npm run snap:login            # Open browser for CRM authentication
+npm run snap -- --start       # Launch persistent headless browser
+npm run snap -- --stop        # Stop persistent browser
+npm run snap:proto            # Screenshot prototype pages
+npm run snap:compare          # Compare current vs previous screenshot
+npm run snap:paste <img>      # Copy screenshot to clipboard + paste into Figma
+node scripts/scan.js          # Discover all platform pages → scan-manifest.json
+npm run scan:source           # Analyze Vue source files → page-manifest.json (284 pages)
+npm run gen:tracker           # Auto-generate composition-tracker.md from manifest
+npm run audit:parity          # Compare Figma vs Vue component specs
+npm run mcp:health            # Kill zombie MCP processes + connection report
+npm run mcp:status            # Connection status only (no cleanup)
+node scripts/clone-batch.js   # Batch-clone Vue pages for coded prototypes
 ```
 
 ## MCP Connectivity
